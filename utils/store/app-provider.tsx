@@ -28,16 +28,13 @@ const AppStoreProvider = (props: Props): JSX.Element => {
     );
   };
   // save the repositories to the local storage
-  const saveLocalRepositories = (): void => {
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_REPOSITORIES,
-      JSON.stringify(localRepositories)
-    );
+  const saveLocalRepositories = (repos: Repository[]): void => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_REPOSITORIES, JSON.stringify(repos));
   };
   // Set the given repositories in the app store state and save it to local storage
   const setRepositories = (repos: Repository[]): void => {
     setLocalRepositories(repos);
-    saveLocalRepositories();
+    saveLocalRepositories(repos);
   };
 
   // Fetch all github repositories from the current authenticated user

@@ -57,7 +57,10 @@ const Sidebar = () => {
             <Text>No Repositories available</Text>
           )}
           {sortedLocalRepositories.map((obj, index) => (
-            <MenuItem key={index} onClick={() => {}}>
+            <MenuItem
+              key={index}
+              onClick={() => router.push(`/repo/${obj.id}`)}
+            >
               <VStack gap={0}>
                 <Text w="full" fontWeight="semibold">
                   {obj.owner.login}/<strong>{obj.name}</strong>

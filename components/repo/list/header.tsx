@@ -31,7 +31,7 @@ const RepositoryListHeader = (props: Props) => {
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="/repo/add" fontWeight="semibold">
+          <BreadcrumbLink href="/repo" fontWeight="semibold">
             List
           </BreadcrumbLink>
         </BreadcrumbItem>

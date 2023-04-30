@@ -13,7 +13,10 @@ const MenuItem = (props: Props) => {
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
       w="full"
-      onClick={props.onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        props.onClick();
+      }}
     >
       <Flex
         align="center"
