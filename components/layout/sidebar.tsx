@@ -1,0 +1,131 @@
+import React from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react";
+import { FiPlus, FiSettings } from "react-icons/fi";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import MenuItem from "./menu-item";
+import { FaGithub } from "react-icons/fa";
+import { useAppStore } from "@/utils/store/app-context";
+import moment from "moment";
+
+const Sidebar = () => {
+  const router = useRouter();
+  const { localRepositories } = useAppStore();
+  const sortedLocalRepositories = localRepositories.sort((a, b) =>
+    a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+  );
+  const { data: session } = useSession();
+
+  return (
+    <Box
+      bg={useColorModeValue("white", "gray.900")}
+      borderRight="1px"
+      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      w={{ base: "full", md: 72 }}
+      pos="fixed"
+      h="full"
+    >
+      <VStack h="full">
+        <Flex
+          w="full"
+          p={4}
+          borderBottom="1px"
+          borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+        >
+          <Avatar
+            size="sm"
+            name={session?.user?.name ?? undefined}
+            src={session?.user?.image ?? undefined}
+            mr={4}
+          />
+          <Heading as="h3" size="sm" lineHeight={2} textTransform="uppercase">
+            {session?.user?.name ?? "n/a"}
+          </Heading>
+        </Flex>
+
+        <VStack w="full" p={4} pt={4} textAlign="left">
+          {sortedLocalRepositories.length == 0 && (
+            <Text>No Repositories available</Text>
+          )}
+          {sortedLocalRepositories.map((obj, index) => (
+            <MenuItem key={index} onClick={() => {}}>
+              <VStack gap={0}>
+                <Text w="full" fontWeight="semibold">
+                  {obj.owner.login}/<strong>{obj.name}</strong>
+                </Text>
+                <Text
+                  w="full"
+                  style={{ marginTop: 0 }}
+                  fontSize={12}
+                  color="gray.500"
+                >
+                  Last Updated{" "}
+                  {moment(obj.updated_at).format("DD/MM/YYYY HH:mm")}
+                </Text>
+              </VStack>
+            </MenuItem>
+          ))}
+          <Box pt={4} w="full">
+            <Button
+              leftIcon={<FiPlus />}
+              bgGradient="linear(to-r, red.400,pink.400)"
+              color="white"
+              _hover={{
+                bgGradient: "linear(to-r, red.500,pink.500)",
+              }}
+              variant="solid"
+              w="full"
+              onClick={() => router.push("/repo")}
+            >
+              Add Repository
+            </Button>
+          </Box>
+        </VStack>
+
+        <Box flex={1} />
+
+        <VStack w="full" p={4} pt={8} textAlign="left">
+          <Box pt={4} w="full">
+            <Button
+              leftIcon={<FiSettings />}
+              bg="gray.200"
+              color="gray.900"
+              variant="solid"
+              _hover={{
+                bg: "gray.300",
+              }}
+              w="full"
+              onClick={() => router.push("/repo")}
+            >
+              Settings
+            </Button>
+          </Box>
+          <Box pt={4} w="full">
+            <Button
+              leftIcon={<FaGithub />}
+              bg="gray.900"
+              color="white"
+              _hover={{ bg: "gray.700" }}
+              variant="solid"
+              w="full"
+              onClick={() => router.push("/repo")}
+            >
+              Open Source
+            </Button>
+          </Box>
+        </VStack>
+      </VStack>
+    </Box>
+  );
+};
+
+export default Sidebar;

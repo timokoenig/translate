@@ -1,0 +1,32 @@
+{
+  "name": "website-test",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.6.0",
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
+    "@types/node": "18.15.11",
+    "@types/react-dom": "18.0.11",
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
+    "framer-motion": "^10.12.4",
+    "moment": "^2.29.4",
+    "next": "13.3.0",
+    "next-auth": "^4.22.1",
+    "octokit": "^2.0.14",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0"
+  }
+}
