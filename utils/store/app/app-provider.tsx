@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { AppStoreContext } from "./app-context";
-import { Repository } from "../models";
+import { Repository } from "../../models";
 import { Octokit } from "octokit";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";

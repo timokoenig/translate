@@ -1,14 +1,5 @@
-import { useAppStore } from "@/utils/store/app-context";
-import {
-  Heading,
-  Table,
-  TableContainer,
-  Tbody,
-  Th,
-  Thead,
-  Tr,
-  Box,
-} from "@chakra-ui/react";
+import { useAppStore } from "@/utils/store/app/app-context";
+import { Heading, Table, TableContainer, Tbody, Box } from "@chakra-ui/react";
 import ContributorTableRow from "./contributor-table-row";
 
 const ContributorTable = () => {

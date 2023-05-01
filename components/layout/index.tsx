@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import Sidebar from "./sidebar";
-import { useAppStore } from "@/utils/store/app-context";
+import { useAppStore } from "@/utils/store/app/app-context";
 import LoadingIndicator from "../global/loading-indicator";
 
 const Layout = ({ children }: { children: ReactNode }) => {

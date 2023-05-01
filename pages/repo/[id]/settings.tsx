@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Layout from "@/components/layout";
 import { NextPageContext } from "next";
 import { getSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HorizontalLine from "@/components/global/horizontal-line";
 import RepositoryDetailHeader from "@/components/repo/detail/header";
-import { useAppStore } from "@/utils/store/app-context";
+import { useAppStore } from "@/utils/store/app/app-context";
 import { useRouter } from "next/router";
 import ContributorTable from "@/components/repo/settings/contributor-table";
 import { Button, Box, Heading } from "@chakra-ui/react";
@@ -19,12 +20,18 @@ const RepositoryDetail = (props: Props) => {
   const { localRepositories, setLocalRepositories } = useAppStore();
   const repo = localRepositories.find((obj) => obj.id == props.id);
 
-  const onRemoveRepo = () => [
-    setLocalRepositories(localRepositories.filter((obj) => obj.id != props.id)),
-  ];
+  const onRemoveRepo = () => {
+    setLocalRepositories(localRepositories.filter((obj) => obj.id != props.id));
+    router.replace("/");
+  };
+
+  useEffect(() => {
+    if (!repo) {
+      router.replace("/");
+    }
+  }, []);
 
   if (!repo) {
-    router.replace("/");
     return null;
   }
 

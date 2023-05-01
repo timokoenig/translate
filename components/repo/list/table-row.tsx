@@ -1,5 +1,5 @@
 import { Repository } from "@/utils/models";
-import { useAppStore } from "@/utils/store/app-context";
+import { useAppStore } from "@/utils/store/app/app-context";
 import { Button, Td, Tr, Tag } from "@chakra-ui/react";
 import { FiPlus } from "react-icons/fi";
 import moment from "moment";

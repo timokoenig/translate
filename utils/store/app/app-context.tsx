@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Repository } from "../models";
+import { Repository } from "../../models";
 
 type AppStoreContextType = {
   isLoading: boolean;

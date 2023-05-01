@@ -1,4 +1,4 @@
-import { useAppStore } from "@/utils/store/app-context";
+import { useAppStore } from "@/utils/store/app/app-context";
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import RepositoryListRow from "./table-row";
 

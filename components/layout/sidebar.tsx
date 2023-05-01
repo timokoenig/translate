@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import MenuItem from "./menu-item";
 import { FaGithub } from "react-icons/fa";
-import { useAppStore } from "@/utils/store/app-context";
+import { useAppStore } from "@/utils/store/app/app-context";
 import moment from "moment";
 
 const Sidebar = () => {

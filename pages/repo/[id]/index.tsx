@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 import { useState } from "react";
 import HorizontalLine from "@/components/global/horizontal-line";
 import RepositoryDetailHeader from "@/components/repo/detail/header";
-import { useAppStore } from "@/utils/store/app-context";
+import { useAppStore } from "@/utils/store/app/app-context";
 import { useRouter } from "next/router";
 
 type Props = {
