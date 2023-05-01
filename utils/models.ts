@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export type Repository = {
   id: number;
   name: string;
@@ -26,4 +28,22 @@ export type File = {
 export type Translation = {
   key: string;
   value: string;
+};
+
+export type Commit = {
+  sha: string;
+  message: string;
+  patch: string;
+  author: {
+    name: string;
+    email: string;
+    date: moment.Moment;
+    avatar_url: string;
+  };
+  committer: {
+    name: string;
+    email: string;
+    date: moment.Moment;
+    avatar_url: string;
+  };
 };

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { User, File, Translation } from "../../models";
+import { User, File, Translation, Repository, Commit } from "../../models";
 
 type RepoStoreContextType = {
   isLoading: boolean;
@@ -16,6 +16,8 @@ type RepoStoreContextType = {
     newTranslation: Translation
   ) => Promise<void>;
   deleteTranslation: (translation: Translation) => Promise<void>;
+
+  fetchHistory: () => Promise<Commit[]>;
 };
 
 export const RepoStoreContext = createContext<RepoStoreContextType | undefined>(

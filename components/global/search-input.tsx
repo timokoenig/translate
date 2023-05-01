@@ -2,7 +2,7 @@ import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 
 type Props = {
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   onClear: () => void;
   disabled?: boolean;
 };
@@ -13,7 +13,7 @@ const SearchInput = (props: Props) => (
       pr="4.5rem"
       placeholder="Search"
       value={props.value}
-      onChange={(e) => props.onChange(e.target.value)}
+      onChange={(e) => props.onChange && props.onChange(e.target.value)}
       disabled={props.disabled}
     />
     {props.value != "" && (

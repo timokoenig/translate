@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { RepoStoreContext } from "./repo-context";
-import { File, Repository, Translation, User } from "../../models";
+import { Commit, File, Repository, Translation, User } from "../../models";
 import { Octokit } from "octokit";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import moment from "moment";
 
 const TRANSLATION_FILE = "translation.json";
 const GITHUB_API_VERSION = "2022-11-28";
@@ -137,6 +138,66 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     await fetchRepositoryTranslationFile();
   };
 
+  const fetchHistory = async (): Promise<Commit[]> => {
+    const session = await getSession();
+    if (!session) throw new Error("Invalid session");
+
+    const octokit = new Octokit({ auth: session.accessToken });
+    const res = await octokit.request("GET /repos/{owner}/{repo}/commits", {
+      owner: props.repo.owner.login,
+      repo: props.repo.name,
+      headers: {
+        "X-GitHub-Api-Version": GITHUB_API_VERSION,
+      },
+    });
+    const commits = res.data.map((obj) => ({
+      sha: obj.sha,
+      message: obj.commit.message,
+      patch: "",
+      author: {
+        name: obj.commit.author?.name ?? "",
+        email: obj.commit.author?.email ?? "",
+        date: moment(obj.commit.author?.date ?? ""),
+        avatar_url: obj.author?.avatar_url ?? "",
+      },
+      committer: {
+        name: obj.commit.committer?.name ?? "",
+        email: obj.commit.committer?.email ?? "",
+        date: moment(obj.commit.committer?.date ?? ""),
+        avatar_url: obj.committer?.avatar_url ?? "",
+      },
+    }));
+
+    return await Promise.all(
+      commits.map(async (obj) => {
+        const patch = await fetchPathForCommit(obj);
+        return { ...obj, patch };
+      })
+    );
+  };
+
+  const fetchPathForCommit = async (commit: Commit): Promise<string> => {
+    const session = await getSession();
+    if (!session) throw new Error("Invalid session");
+
+    const octokit = new Octokit({ auth: session.accessToken });
+    const res = await octokit.request(
+      "GET /repos/{owner}/{repo}/commits/{ref}",
+      {
+        owner: props.repo.owner.login,
+        repo: props.repo.name,
+        ref: commit.sha,
+        headers: {
+          "X-GitHub-Api-Version": GITHUB_API_VERSION,
+        },
+      }
+    );
+    if (!res.data.files || (res.data.files?.length ?? 0) == 0) {
+      return "";
+    }
+    return res.data.files[0].patch ?? "";
+  };
+
   // Load repository data
   useEffect(() => {
     (async () => {
@@ -156,6 +217,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         addTranslation,
         updateTranslation,
         deleteTranslation,
+        fetchHistory,
       }}
     >
       {props.children}
