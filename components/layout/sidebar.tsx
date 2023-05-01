@@ -55,7 +55,7 @@ const Sidebar = () => {
 
         <VStack w="full" p={4} pt={4} textAlign="left">
           {sortedLocalRepositories.length == 0 && (
-            <Text>No Repositories available</Text>
+            <Text>Add your first repository to start</Text>
           )}
           {sortedLocalRepositories.map((obj, index) => (
             <MenuItem
