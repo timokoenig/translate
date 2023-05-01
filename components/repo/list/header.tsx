@@ -1,13 +1,5 @@
 import SearchInput from "@/components/global/search-input";
-import {
-  Heading,
-  Text,
-  Box,
-  VStack,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from "@chakra-ui/react";
+import { Heading, Text, Box, VStack } from "@chakra-ui/react";
 
 type Props = {
   search: string;
@@ -22,20 +14,6 @@ const RepositoryListHeader = (props: Props) => {
         onChange={props.setSearch}
         onClear={() => props.setSearch("")}
       />
-
-      <Breadcrumb>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/" color="gray.500">
-            Repository
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="/repo" fontWeight="semibold">
-            List
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
 
       <Box mb={10}>
         <Heading size="lg">GitHub Repositories</Heading>

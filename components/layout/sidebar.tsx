@@ -8,6 +8,7 @@ import {
   Text,
   useColorModeValue,
   VStack,
+  Link,
 } from "@chakra-ui/react";
 import { FiPlus, FiSettings } from "react-icons/fi";
 import { useRouter } from "next/router";
@@ -107,20 +108,22 @@ const Sidebar = () => {
                 bg: "gray.300",
               }}
               w="full"
-              onClick={() => router.push("/repo")}
+              onClick={() => router.push("/settings")}
             >
               Settings
             </Button>
           </Box>
           <Box pt={4} w="full">
             <Button
+              as={Link}
               leftIcon={<FaGithub />}
               bg="gray.900"
               color="white"
-              _hover={{ bg: "gray.700" }}
+              _hover={{ bg: "gray.700", textDecoration: "none" }}
               variant="solid"
               w="full"
-              onClick={() => router.push("/repo")}
+              href="https://github.com/timokoenig/translate"
+              target="_blank"
             >
               Open Source
             </Button>
