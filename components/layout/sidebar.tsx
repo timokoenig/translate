@@ -60,6 +60,7 @@ const Sidebar = () => {
           {sortedLocalRepositories.map((obj, index) => (
             <MenuItem
               key={index}
+              isActive={window.location.href.includes(`${obj.id}`)}
               onClick={() => router.push(`/repo/${obj.id}`)}
             >
               <VStack gap={0}>

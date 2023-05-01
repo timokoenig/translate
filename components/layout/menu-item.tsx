@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 type Props = {
   onClick: () => void;
+  isActive: boolean;
   children: ReactNode;
 };
 
@@ -26,9 +27,10 @@ const MenuItem = (props: Props) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "gray.100",
+          bg: "gray.200",
           color: "gray.900",
         }}
+        bg={props.isActive ? "gray.100" : "white"}
       >
         {props.children}
       </Flex>
