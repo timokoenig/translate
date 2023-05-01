@@ -1,6 +1,6 @@
 import { Repository } from "@/utils/models";
 import { useAppStore } from "@/utils/store/app/app-context";
-import { Button, Td, Tr, Tag } from "@chakra-ui/react";
+import { Box, VStack, Text, Button, Td, Tr, Tag } from "@chakra-ui/react";
 import { FiPlus } from "react-icons/fi";
 import moment from "moment";
 
@@ -22,7 +22,12 @@ const RepositoryListRow = (props: Props) => {
   return (
     <Tr>
       <Td>
-        {props.repo.owner.login}/<strong>{props.repo.name}</strong>
+        <VStack alignItems="left">
+          <Text>
+            {props.repo.owner.login}/<strong>{props.repo.name}</strong>
+          </Text>
+          <Text whiteSpace="normal">{props.repo.description}</Text>
+        </VStack>
       </Td>
       <Td>
         {props.repo.private ? (

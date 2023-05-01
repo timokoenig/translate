@@ -4,6 +4,7 @@ export type Repository = {
   id: number;
   name: string;
   full_name: string;
+  description: string | null;
   private: boolean;
   updated_at: string | null;
   pushed_at: string | null;
