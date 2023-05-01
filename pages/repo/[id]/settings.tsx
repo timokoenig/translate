@@ -59,23 +59,6 @@ const RepositoryDetailContent = (props: ContentProps) => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
-  const { req } = context;
-  const session = await getSession({ req });
-
-  if (!session) {
-    return {
-      redirect: { destination: "/signin" },
-    };
-  }
-
-  return {
-    props: {
-      id: Number(context.query.id as string),
-    },
-  };
-}
-
 type Props = {
   id: number;
 };
@@ -101,5 +84,22 @@ const RepoDetailSettings = (props: Props) => {
     </RepoDetailLayout>
   );
 };
+
+export async function getServerSideProps(context: NextPageContext) {
+  const { req } = context;
+  const session = await getSession({ req });
+
+  if (!session) {
+    return {
+      redirect: { destination: "/signin" },
+    };
+  }
+
+  return {
+    props: {
+      id: Number(context.query.id as string),
+    },
+  };
+}
 
 export default RepoDetailSettings;

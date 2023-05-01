@@ -1,5 +1,4 @@
-import NextAuth, { CallbacksOptions } from "next-auth";
-import { JWTOptions } from "next-auth/jwt";
+import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
 const GITHUB_ID = process.env.GITHUB_ID;
@@ -28,7 +27,7 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token, user }: any) {
+    async session({ session, token }: any) {
       // Send properties to the client, like an access_token from a provider.
       session.accessToken = token.accessToken;
       return session;
