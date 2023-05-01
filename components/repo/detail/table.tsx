@@ -5,7 +5,8 @@ import {
   Th,
   Thead,
   Tr,
-  Box,
+  Text,
+  Center,
 } from "@chakra-ui/react";
 import { useRepoStore } from "@/utils/store/repo/repo-context";
 import RepositoryDetailListRow from "./table-row";
@@ -47,6 +48,11 @@ const RepositoryDetailList = (props: Props) => {
             ))}
           </Tbody>
         </Table>
+        {filteredTranslations.length == 0 && (
+          <Center p={8}>
+            <Text>No Translations</Text>
+          </Center>
+        )}
       </TableContainer>
     </>
   );
