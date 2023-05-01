@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Layout from "@/components/layout";
 import { NextPageContext } from "next";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -9,12 +8,13 @@ import { useAppStore } from "@/utils/store/app/app-context";
 import { useRouter } from "next/router";
 import ContributorTable from "@/components/repo/settings/contributor-table";
 import { Button, Box, Heading } from "@chakra-ui/react";
+import RepoDetailLayout from "@/components/repo/detail/layout";
 
 type Props = {
   id: number;
 };
 
-const RepositoryDetail = (props: Props) => {
+const RepositoryDetailContent = (props: Props) => {
   const router = useRouter();
   const [search, setSearch] = useState<string>("");
   const { localRepositories, setLocalRepositories } = useAppStore();
@@ -36,7 +36,7 @@ const RepositoryDetail = (props: Props) => {
   }
 
   return (
-    <Layout>
+    <>
       <RepositoryDetailHeader
         repo={repo}
         searchEnabled={false}
@@ -63,7 +63,7 @@ const RepositoryDetail = (props: Props) => {
           Remove Repository
         </Button>
       </Box>
-    </Layout>
+    </>
   );
 };
 
@@ -84,4 +84,10 @@ export async function getServerSideProps(context: NextPageContext) {
   };
 }
 
-export default RepositoryDetail;
+const RepoDetailSettings = (props: Props) => (
+  <RepoDetailLayout>
+    <RepositoryDetailContent {...props} />
+  </RepoDetailLayout>
+);
+
+export default RepoDetailSettings;

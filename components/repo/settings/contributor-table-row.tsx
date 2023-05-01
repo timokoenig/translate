@@ -1,56 +1,21 @@
-import { Repository } from "@/utils/models";
-import { useAppStore } from "@/utils/store/app/app-context";
-import { Button, Td, Tr } from "@chakra-ui/react";
-import { FiPlus } from "react-icons/fi";
-import moment from "moment";
+import { User } from "@/utils/models";
+import { Avatar, Text, HStack, Heading } from "@chakra-ui/react";
 
 type Props = {
-  repo: Repository;
+  user: User;
 };
 
 const ContributorTableRow = (props: Props) => {
-  const { localRepositories, setLocalRepositories } = useAppStore();
-
-  // Check if user has added this repository already
-  const isAdded =
-    localRepositories.findIndex((obj) => obj.id == props.repo.id) != -1;
-
-  const onAdd = () => {
-    setLocalRepositories([...localRepositories, props.repo]);
-  };
-
   return (
-    <Tr>
-      <Td>
-        {props.repo.owner.login}/<strong>{props.repo.name}</strong>
-      </Td>
-      <Td>{moment(props.repo.updated_at).format("DD/MM/YYYY HH:mm")}</Td>
-      <Td textAlign="right">
-        {isAdded ? (
-          <Button
-            colorScheme="green"
-            variant="ghost"
-            onClick={() => {}}
-            isDisabled
-          >
-            Added
-          </Button>
-        ) : (
-          <Button
-            leftIcon={<FiPlus />}
-            bgGradient="linear(to-r, red.400,pink.400)"
-            color="white"
-            _hover={{
-              bgGradient: "linear(to-r, red.500,pink.500)",
-            }}
-            variant="solid"
-            onClick={onAdd}
-          >
-            Add
-          </Button>
-        )}
-      </Td>
-    </Tr>
+    <HStack gap={14} w="full">
+      <HStack>
+        <Avatar size="sm" name={props.user.login} src={props.user.avatar_url} />
+        <Heading as="h3" size="s">
+          {props.user.login}
+        </Heading>
+      </HStack>
+      <Text>{props.user.contributions} contributions</Text>
+    </HStack>
   );
 };
 

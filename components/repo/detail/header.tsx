@@ -1,5 +1,6 @@
 import SearchInput from "@/components/global/search-input";
 import { Repository } from "@/utils/models";
+import { useRepoStore } from "@/utils/store/repo/repo-context";
 import {
   Heading,
   Box,
@@ -21,6 +22,8 @@ type Props = {
 
 const RepositoryDetailHeader = (props: Props) => {
   const router = useRouter();
+  const { contributors } = useRepoStore();
+
   return (
     <VStack gap={4} w="full" align="flex-start" p={8}>
       <SearchInput
@@ -56,11 +59,13 @@ const RepositoryDetailHeader = (props: Props) => {
           )}
         </Box>
         <AvatarGroup size="md" max={3}>
-          <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-          <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-          <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-          <Avatar name="Prosper Otemuyiwa" src="https://bit.ly/prosper-baba" />
-          <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
+          {contributors.map((contributor, index) => (
+            <Avatar
+              key={index}
+              name={contributor.login}
+              src={contributor.avatar_url}
+            />
+          ))}
         </AvatarGroup>
       </HStack>
     </VStack>

@@ -8,3 +8,10 @@ export type Repository = {
     login: string;
   };
 };
+
+export type User = {
+  id?: number;
+  login?: string;
+  avatar_url?: string;
+  contributions?: number;
+};
