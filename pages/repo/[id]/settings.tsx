@@ -9,36 +9,28 @@ import { useRouter } from "next/router";
 import ContributorTable from "@/components/repo/settings/contributor-table";
 import { Button, Box, Heading } from "@chakra-ui/react";
 import RepoDetailLayout from "@/components/repo/detail/layout";
+import { Repository } from "@/utils/models";
 
-type Props = {
-  id: number;
+type ContentProps = {
+  repo: Repository;
 };
 
-const RepositoryDetailContent = (props: Props) => {
+const RepositoryDetailContent = (props: ContentProps) => {
   const router = useRouter();
   const [search, setSearch] = useState<string>("");
   const { localRepositories, setLocalRepositories } = useAppStore();
-  const repo = localRepositories.find((obj) => obj.id == props.id);
 
   const onRemoveRepo = () => {
-    setLocalRepositories(localRepositories.filter((obj) => obj.id != props.id));
+    setLocalRepositories(
+      localRepositories.filter((obj) => obj.id != props.repo.id)
+    );
     router.replace("/");
   };
-
-  useEffect(() => {
-    if (!repo) {
-      router.replace("/");
-    }
-  }, []);
-
-  if (!repo) {
-    return null;
-  }
 
   return (
     <>
       <RepositoryDetailHeader
-        repo={repo}
+        repo={props.repo}
         searchEnabled={false}
         search={search}
         setSearch={setSearch}
@@ -84,10 +76,30 @@ export async function getServerSideProps(context: NextPageContext) {
   };
 }
 
-const RepoDetailSettings = (props: Props) => (
-  <RepoDetailLayout>
-    <RepositoryDetailContent {...props} />
-  </RepoDetailLayout>
-);
+type Props = {
+  id: number;
+};
+
+const RepoDetailSettings = (props: Props) => {
+  const router = useRouter();
+  const { localRepositories } = useAppStore();
+  const repo = localRepositories.find((obj) => obj.id == props.id);
+
+  useEffect(() => {
+    if (!repo) {
+      router.replace("/");
+    }
+  }, []);
+
+  if (!repo) {
+    return null;
+  }
+
+  return (
+    <RepoDetailLayout repo={repo}>
+      <RepositoryDetailContent repo={repo} />
+    </RepoDetailLayout>
+  );
+};
 
 export default RepoDetailSettings;
