@@ -1,9 +1,8 @@
-import { useAppStore } from "@/utils/store/app/app-context";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import RepositoryListRow from "./table-row";
 import { useRepoStore } from "@/utils/store/repo/repo-context";
 import { useEffect, useState } from "react";
-import { Commit, Repository } from "@/utils/models";
+import { Commit } from "@/utils/models";
 import RepositoryHistoryTableRow from "./table-row";
 import LoadingIndicatorFull from "@/components/global/loading-indicator-full";
 
@@ -27,7 +26,7 @@ const RepositoryHistoryTable = () => {
       setCommits(res);
       setLoading(false);
     })();
-  });
+  }, []);
 
   if (isLoading) {
     return <LoadingIndicatorFull />;

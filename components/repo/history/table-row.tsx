@@ -1,14 +1,25 @@
 import { Commit } from "@/utils/models";
-import {
-  Td,
-  Tr,
-  HStack,
-  Avatar,
-  Heading,
-  VStack,
-  Text,
-} from "@chakra-ui/react";
+import { Td, Tr, HStack, Avatar, Heading, Text } from "@chakra-ui/react";
 import parse from "parse-diff";
+import jsonDiff from "json-diff";
+
+const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
+  const filteredChanges = props.changes.filter(
+    (obj) => !obj.content.includes("No newline at end of file")
+  );
+  const addition = filteredChanges
+    .find((obj) => obj.type == "add")
+    ?.content.substring(1);
+  const deletion = filteredChanges
+    .find((obj) => obj.type == "del")
+    ?.content.substring(1);
+
+  if (!addition || !deletion) return <></>;
+
+  const diff = jsonDiff.diffString(JSON.parse(deletion), JSON.parse(addition));
+
+  return <Text>{diff}</Text>;
+};
 
 type Props = {
   commit: Commit;
@@ -16,21 +27,6 @@ type Props = {
 
 const RepositoryHistoryTableRow = (props: Props) => {
   const patchDiff = parse(props.commit.patch);
-
-  const renderDiff = (diff: parse.File): JSX.Element => (
-    <VStack>
-      {diff.chunks.map((chunk, chunkIndex) => (
-        <VStack key={chunkIndex}>
-          {chunk.changes.map((change, changeIndex) => (
-            <HStack gap={4} key={changeIndex}>
-              <Text fontWeight="semibold">{change.type.toUpperCase()}</Text>
-              <Text>{change.content}</Text>
-            </HStack>
-          ))}
-        </VStack>
-      ))}
-    </VStack>
-  );
 
   return (
     <Tr>
@@ -49,7 +45,9 @@ const RepositoryHistoryTableRow = (props: Props) => {
       <Td>{props.commit.committer.date.format("DD/MM/YYYY HH:mm")}</Td>
       <Td>{props.commit.sha.substring(0, 10)}</Td>
       <Td>
-        <div>{patchDiff.map(renderDiff)}</div>
+        {patchDiff.length > 0 && patchDiff[0].chunks.length > 0 && (
+          <ChangeDiff changes={patchDiff[0].chunks[0].changes} />
+        )}
       </Td>
     </Tr>
   );
