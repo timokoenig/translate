@@ -7,10 +7,12 @@ import {
   Textarea,
   IconButton,
   Input,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { useRepoStore } from "@/utils/store/repo/repo-context";
 import { useEffect, useState } from "react";
+import ConfirmationModal from "@/components/global/modal/confirmation";
 
 type Props = {
   translation: Translation;
@@ -18,6 +20,7 @@ type Props = {
 
 const RepositoryDetailListRow = (props: Props) => {
   const { updateTranslation, deleteTranslation } = useRepoStore();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [translationKey, setTranslationKey] = useState<string>(
     props.translation.key
   );
@@ -120,9 +123,17 @@ const RepositoryDetailListRow = (props: Props) => {
                 colorScheme="red"
                 onClick={(e) => {
                   e.preventDefault();
-                  onDelete();
+                  onOpen();
                 }}
                 isLoading={isLoading}
+              />
+              <ConfirmationModal
+                title="Delete Translation"
+                message={`Do you want to delete '${props.translation.key}'?`}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                onConfirm={onDelete}
               />
             </HStack>
           )}
