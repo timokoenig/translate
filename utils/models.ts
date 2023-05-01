@@ -6,6 +6,7 @@ export type Repository = {
   full_name: string;
   private: boolean;
   updated_at: string | null;
+  pushed_at: string | null;
   owner: {
     login: string;
   };

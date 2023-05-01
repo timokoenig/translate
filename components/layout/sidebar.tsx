@@ -74,7 +74,7 @@ const Sidebar = () => {
                   color="gray.500"
                 >
                   Last Updated{" "}
-                  {moment(obj.updated_at).format("DD/MM/YYYY HH:mm")}
+                  {moment(obj.pushed_at).format("DD/MM/YYYY HH:mm")}
                 </Text>
               </VStack>
             </MenuItem>

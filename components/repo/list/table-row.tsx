@@ -35,7 +35,7 @@ const RepositoryListRow = (props: Props) => {
           </Tag>
         )}
       </Td>
-      <Td>{moment(props.repo.updated_at).format("DD/MM/YYYY HH:mm")}</Td>
+      <Td>{moment(props.repo.pushed_at).format("DD/MM/YYYY HH:mm")}</Td>
       <Td textAlign="right">
         {isAdded ? (
           <Button
