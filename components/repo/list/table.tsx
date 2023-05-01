@@ -7,9 +7,23 @@ type Props = {
 };
 
 const RepositoryList = (props: Props) => {
-  const { remoteRepositories } = useAppStore();
+  const { remoteRepositories, localRepositories } = useAppStore();
   const filteredRepos = remoteRepositories
+    // sort by name
     .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
+    // show added repositories on top
+    .sort((a, b) =>
+      (
+        localRepositories.findIndex((obj) => obj.id == a.id) != -1 &&
+        localRepositories.findIndex((obj) => obj.id == b.id) == -1
+          ? 1
+          : localRepositories.findIndex((obj) => obj.id == a.id) == -1 &&
+            localRepositories.findIndex((obj) => obj.id == b.id) != -1
+      )
+        ? -1
+        : 0
+    )
+    // filter based on users search query
     .filter((obj) => {
       if (props.search == "") return true;
       return obj.full_name.includes(props.search);
