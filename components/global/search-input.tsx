@@ -4,6 +4,7 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   onClear: () => void;
+  disabled?: boolean;
 };
 
 const SearchInput = (props: Props) => (
@@ -13,6 +14,7 @@ const SearchInput = (props: Props) => (
       placeholder="Search"
       value={props.value}
       onChange={(e) => props.onChange(e.target.value)}
+      disabled={props.disabled}
     />
     {props.value != "" && (
       <InputRightElement width="4.5rem">

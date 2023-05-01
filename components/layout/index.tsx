@@ -27,7 +27,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <VStack gap={0}>
       <Box width="full" minH="100vh" style={{ marginTop: "0px" }}>
         <Sidebar />
-        <Box ml={{ base: 0, md: 72 }}>{children}</Box>
+        <Box ml={{ base: 0, md: 72 }} pb={16}>
+          {children}
+        </Box>
       </Box>
     </VStack>
   );

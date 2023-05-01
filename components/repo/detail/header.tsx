@@ -5,49 +5,55 @@ import {
   Box,
   Button,
   VStack,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   AvatarGroup,
   Avatar,
   HStack,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 type Props = {
   repo: Repository;
+  searchEnabled: boolean;
   search: string;
   setSearch: (value: string) => void;
+  showCloseButton?: boolean;
 };
 
 const RepositoryDetailHeader = (props: Props) => {
+  const router = useRouter();
   return (
     <VStack gap={4} w="full" align="flex-start" p={8}>
       <SearchInput
         value={props.search}
         onChange={props.setSearch}
         onClear={() => props.setSearch("")}
+        disabled={!props.searchEnabled}
       />
-
-      <Breadcrumb>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/" color="gray.500">
-            Repository
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href={`/repo/${props.repo.id}`} fontWeight="semibold">
-            Detail
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
 
       <HStack mb={10} w="full">
         <Heading size="lg" fontWeight="normal" flex={1}>
           {props.repo.owner.login}/<strong>{props.repo.name}</strong>
         </Heading>
         <Box pr={5}>
-          <Button variant="outline">Settings</Button>
+          {props.showCloseButton ?? false ? (
+            <Button
+              bgGradient="linear(to-r, red.400,pink.400)"
+              color="white"
+              _hover={{
+                bgGradient: "linear(to-r, red.500,pink.500)",
+              }}
+              onClick={() => router.push(`/repo/${props.repo.id}`)}
+            >
+              Close
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => router.push(`/repo/${props.repo.id}/settings`)}
+            >
+              Settings
+            </Button>
+          )}
         </Box>
         <AvatarGroup size="md" max={3}>
           <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
