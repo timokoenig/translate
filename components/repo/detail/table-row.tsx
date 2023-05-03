@@ -9,11 +9,17 @@ import {
   useDisclosure,
   VStack,
   HStack,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  Button,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { useRepoStore } from "@/utils/store/repo/repo-context";
 import { useEffect, useState } from "react";
 import ConfirmationModal from "@/components/global/modal/confirmation";
+import { FiMoreVertical } from "react-icons/fi";
 
 type Props = {
   translationGroup: TranslationGroup;
@@ -97,7 +103,12 @@ const RepositoryDetailListRow = (props: Props) => {
               <VStack w="full">
                 {translations.filter(translationFilter).map((obj, index) => (
                   <HStack key={index} w="full">
-                    <Text>{obj.lang.toUpperCase()}: </Text>
+                    <Text>
+                      {
+                        getLanguages().find((lang) => lang.code == obj.lang)
+                          ?.emoji
+                      }
+                    </Text>
                     <Textarea
                       value={obj.value}
                       onChange={(e) => {
@@ -118,6 +129,7 @@ const RepositoryDetailListRow = (props: Props) => {
                 ))}
               </VStack>
               <IconButton
+                size="sm"
                 aria-label="Confirm Button"
                 icon={<CheckIcon />}
                 colorScheme="green"
@@ -128,6 +140,7 @@ const RepositoryDetailListRow = (props: Props) => {
                 isLoading={isLoading}
               />
               <IconButton
+                size="sm"
                 aria-label="Close Button"
                 icon={<CloseIcon />}
                 colorScheme="red"
@@ -158,27 +171,50 @@ const RepositoryDetailListRow = (props: Props) => {
                   ))}
               </VStack>
 
-              <IconButton
-                aria-label="Edit Button"
-                icon={<EditIcon />}
-                variant="ghost"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onEdit();
-                }}
-                isLoading={isLoading}
-              />
-              <IconButton
-                aria-label="Delete Button"
-                icon={<DeleteIcon />}
-                variant="ghost"
-                colorScheme="red"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onOpen();
-                }}
-                isLoading={isLoading}
-              />
+              <Popover placement="left-start" computePositionOnMount>
+                <PopoverTrigger>
+                  <IconButton
+                    aria-label="More Button"
+                    icon={<FiMoreVertical />}
+                    variant="ghost"
+                    isLoading={isLoading}
+                  />
+                </PopoverTrigger>
+                <PopoverContent w="auto">
+                  <PopoverBody>
+                    <VStack w="full">
+                      <Button
+                        w="full"
+                        aria-label="Edit Button"
+                        leftIcon={<EditIcon />}
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onEdit();
+                        }}
+                        isLoading={isLoading}
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        aria-label="Delete Button"
+                        leftIcon={<DeleteIcon />}
+                        variant="ghost"
+                        colorScheme="red"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onOpen();
+                        }}
+                        isLoading={isLoading}
+                      >
+                        Delete
+                      </Button>
+                    </VStack>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+
               <ConfirmationModal
                 title="Delete Translation"
                 message={
