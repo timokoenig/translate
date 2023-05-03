@@ -127,7 +127,7 @@ const RepositoryDetailListRow = (props: Props) => {
               />
             </HStack>
           ) : (
-            <HStack w="full" verticalAlign="top">
+            <HStack w="full" alignItems="flex-start">
               <VStack w="full">
                 {props.translationGroup.translations.map((obj, index) => (
                   <HStack key={index} w="full">
