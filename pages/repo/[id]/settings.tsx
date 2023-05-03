@@ -11,6 +11,7 @@ import { Button, Box, Heading } from "@chakra-ui/react";
 import RepoDetailLayout from "@/components/repo/detail/layout";
 import { Repository } from "@/utils/models";
 import CategoryTable from "@/components/settings/category/table";
+import LanguageTable from "@/components/settings/language/table";
 
 type ContentProps = {
   repo: Repository;
@@ -39,6 +40,8 @@ const RepositoryDetailContent = (props: ContentProps) => {
       />
       <HorizontalLine />
       <CategoryTable />
+      <HorizontalLine />
+      <LanguageTable />
       <HorizontalLine />
       <ContributorTable />
       <HorizontalLine />

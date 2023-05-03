@@ -470,6 +470,57 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       return { code: obj, name: obj, emoji: "" };
     });
 
+  const addLanguage = async (language: Language): Promise<void> => {
+    await Promise.all(
+      getCategories().map(async (category) => {
+        const session = await getSession();
+        if (!session) throw new Error("Invalid session");
+
+        const octokit = new Octokit({ auth: session.accessToken });
+        await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+          owner: props.repo.owner.login,
+          repo: props.repo.name,
+          path: `${TRANSLATION_FOLDER}/${language.code}/${category}.json`,
+          message: `[Translate] Add language ${language.code}/${category}`,
+          content: Buffer.from(JSON.stringify({})).toString("base64"),
+          headers: {
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+          },
+        });
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
+  };
+
+  const deleteLanguage = async (language: Language): Promise<void> => {
+    await Promise.all(
+      getCategories().map(async (category) => {
+        const session = await getSession();
+        if (!session) throw new Error("Invalid session");
+
+        const translationFile = translationFiles?.find(
+          (obj) => obj.lang == language.code && obj.nameDisplay == category
+        );
+        if (!translationFile || !translationFile.sha) return;
+
+        const octokit = new Octokit({ auth: session.accessToken });
+        await octokit.request("DELETE /repos/{owner}/{repo}/contents/{path}", {
+          owner: props.repo.owner.login,
+          repo: props.repo.name,
+          path: `${TRANSLATION_FOLDER}/${language.code}/${category}.json`,
+          message: `[Translate] Delete language ${language.code}/${category}`,
+          sha: translationFile.sha,
+          headers: {
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+          },
+        });
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
+  };
+
   const getTranslationGroups = (): TranslationGroup[] => {
     let groups: TranslationGroup[] = [];
 
@@ -545,6 +596,8 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         updateCategory,
         deleteCategory,
         getLanguages,
+        addLanguage,
+        deleteLanguage,
         getTranslationGroups,
       }}
     >

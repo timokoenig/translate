@@ -40,6 +40,8 @@ type RepoStoreContextType = {
   deleteCategory: (category: string) => Promise<void>;
 
   getLanguages: () => Language[];
+  addLanguage: (language: Language) => Promise<void>;
+  deleteLanguage: (language: Language) => Promise<void>;
 
   getTranslationGroups: () => TranslationGroup[];
 };
