@@ -6,10 +6,14 @@ import {
   TranslationFile,
   TranslationGroup,
   Language,
+  Filter,
 } from "../../models";
 
 type RepoStoreContextType = {
   isLoading: boolean;
+
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
 
   baseLanguage: string;
 

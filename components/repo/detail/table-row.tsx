@@ -20,8 +20,12 @@ type Props = {
 };
 
 const RepositoryDetailListRow = (props: Props) => {
-  const { updateTranslationGroup, deleteTranslationGroup, getLanguages } =
-    useRepoStore();
+  const {
+    updateTranslationGroup,
+    deleteTranslationGroup,
+    getLanguages,
+    filter,
+  } = useRepoStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [translationKey, setTranslationKey] = useState<string>(
     props.translationGroup.key
@@ -58,6 +62,13 @@ const RepositoryDetailListRow = (props: Props) => {
     setLoading(false);
   };
 
+  const translationFilter = (translation: Translation): boolean => {
+    if (filter.language && translation.lang != filter.language) {
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
     setTranslationKey(props.translationGroup.key);
     setTranslations(props.translationGroup.translations);
@@ -84,7 +95,7 @@ const RepositoryDetailListRow = (props: Props) => {
           {isEditing ? (
             <HStack w="full">
               <VStack w="full">
-                {translations.map((obj, index) => (
+                {translations.filter(translationFilter).map((obj, index) => (
                   <HStack key={index} w="full">
                     <Text>{obj.lang.toUpperCase()}: </Text>
                     <Textarea
@@ -130,19 +141,21 @@ const RepositoryDetailListRow = (props: Props) => {
           ) : (
             <HStack w="full" alignItems="flex-start">
               <VStack w="full">
-                {props.translationGroup.translations.map((obj, index) => (
-                  <HStack key={index} w="full">
-                    <Text whiteSpace="initial">
-                      {
-                        getLanguages().find((lang) => lang.code == obj.lang)
-                          ?.emoji
-                      }
-                    </Text>
-                    <Text whiteSpace="initial" w="full">
-                      {obj.value}
-                    </Text>
-                  </HStack>
-                ))}
+                {props.translationGroup.translations
+                  .filter(translationFilter)
+                  .map((obj, index) => (
+                    <HStack key={index} w="full">
+                      <Text whiteSpace="initial">
+                        {
+                          getLanguages().find((lang) => lang.code == obj.lang)
+                            ?.emoji
+                        }
+                      </Text>
+                      <Text whiteSpace="initial" w="full">
+                        {obj.value}
+                      </Text>
+                    </HStack>
+                  ))}
               </VStack>
 
               <IconButton

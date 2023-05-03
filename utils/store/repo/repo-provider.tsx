@@ -2,6 +2,7 @@
 import { RepoStoreContext } from "./repo-context";
 import {
   Commit,
+  Filter,
   Language,
   Repository,
   Translation,
@@ -33,6 +34,10 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     TranslationFile[] | null
   >(null);
   const [contributors, setContributors] = useState<User[]>([]);
+  const [filter, setFilter] = useState<Filter>({
+    category: null,
+    language: null,
+  });
 
   // Fetch all repository contributors
   const fetchRepositoryContributors = async (): Promise<void> => {
@@ -429,6 +434,8 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     <RepoStoreContext.Provider
       value={{
         isLoading,
+        filter,
+        setFilter,
         baseLanguage,
         contributors,
         translationFiles,

@@ -17,10 +17,25 @@ type Props = {
 };
 
 const RepositoryDetailList = (props: Props) => {
-  const { getTranslationGroups } = useRepoStore();
+  const { getTranslationGroups, filter } = useRepoStore();
   const filteredTranslationGroup = getTranslationGroups()
-    // sort by key name
-    .sort((a, b) => (a.key > b.key ? 1 : a.key < b.key ? -1 : 0))
+    // filter based on addtional filters
+    .filter((obj) => {
+      if (filter.category && filter.category != obj.category) {
+        // translation is not in category
+        return false;
+      }
+      if (
+        filter.language &&
+        obj.translations.findIndex(
+          (translation) => translation.lang == filter.language
+        ) == -1
+      ) {
+        // translation is not available in given language
+        return false;
+      }
+      return true;
+    })
     // filter based on users search query
     .filter((obj) => {
       if (props.search == "") return true;
@@ -31,11 +46,13 @@ const RepositoryDetailList = (props: Props) => {
             translation.value.includes(props.search)
         ) != -1
       );
-    });
+    })
+    // sort by key name
+    .sort((a, b) => (a.key > b.key ? 1 : a.key < b.key ? -1 : 0));
 
   return (
     <>
-      <Actions />
+      <Actions translationCount={filteredTranslationGroup.length} />
       <TableContainer margin={0} padding={2}>
         <Table variant="simple" margin={0}>
           <Thead>

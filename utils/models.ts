@@ -64,3 +64,8 @@ export type Language = {
   code: string;
   emoji: string;
 };
+
+export type Filter = {
+  category: string | null;
+  language: string | null;
+};
