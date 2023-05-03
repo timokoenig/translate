@@ -361,6 +361,22 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
 
   const getCategories = (): string[] =>
     TranslationHelper.getCategories(translationFiles ?? []);
+
+  const addCategory = async (category: string): Promise<void> => {
+    return;
+  };
+
+  const updateCategory = async (
+    oldCategory: string,
+    newCategory: string
+  ): Promise<void> => {
+    return;
+  };
+
+  const deleteCategory = async (category: string): Promise<void> => {
+    return;
+  };
+
   const getLanguages = (): Language[] =>
     TranslationHelper.getLanguages(translationFiles ?? []).map((obj) => {
       const entry = emojiFlags.find((emoji) => emoji.code == obj);
@@ -446,6 +462,9 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         deleteTranslationGroup,
         fetchHistory,
         getCategories,
+        addCategory,
+        updateCategory,
+        deleteCategory,
         getLanguages,
         getTranslationGroups,
       }}

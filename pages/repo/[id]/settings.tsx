@@ -10,6 +10,7 @@ import ContributorTable from "@/components/repo/settings/contributor-table";
 import { Button, Box, Heading } from "@chakra-ui/react";
 import RepoDetailLayout from "@/components/repo/detail/layout";
 import { Repository } from "@/utils/models";
+import CategoryTable from "@/components/settings/category/table";
 
 type ContentProps = {
   repo: Repository;
@@ -36,6 +37,8 @@ const RepositoryDetailContent = (props: ContentProps) => {
         setSearch={setSearch}
         showCloseButton={true}
       />
+      <HorizontalLine />
+      <CategoryTable />
       <HorizontalLine />
       <ContributorTable />
       <HorizontalLine />

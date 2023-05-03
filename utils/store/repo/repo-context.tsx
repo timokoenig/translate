@@ -37,6 +37,9 @@ type RepoStoreContextType = {
   fetchHistory: () => Promise<Commit[]>;
 
   getCategories: () => string[];
+  addCategory: (category: string) => Promise<void>;
+  updateCategory: (oldCategory: string, newCategory: string) => Promise<void>;
+  deleteCategory: (category: string) => Promise<void>;
 
   getLanguages: () => Language[];
 
