@@ -371,7 +371,10 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           };
         }
 
-        const value = file.data[key];
+        const value =
+          typeof file.data[key] == "string"
+            ? file.data[key]
+            : `${file.data[key]}`;
         if (value) {
           group.translations.push({
             key,
