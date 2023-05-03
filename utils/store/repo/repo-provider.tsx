@@ -360,18 +360,101 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     TranslationHelper.getCategories(translationFiles ?? []);
 
   const addCategory = async (category: string): Promise<void> => {
-    return;
+    await Promise.all(
+      getLanguages().map(async (lang) => {
+        const session = await getSession();
+        if (!session) throw new Error("Invalid session");
+
+        const octokit = new Octokit({ auth: session.accessToken });
+        await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+          owner: props.repo.owner.login,
+          repo: props.repo.name,
+          path: `${TRANSLATION_FOLDER}/${lang.code}/${category}.json`,
+          message: `[Translate] Create category ${lang.code}/${category}`,
+          content: Buffer.from(JSON.stringify({})).toString("base64"),
+          headers: {
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+          },
+        });
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
   };
 
   const updateCategory = async (
     oldCategory: string,
     newCategory: string
   ): Promise<void> => {
-    return;
+    await Promise.all(
+      getLanguages().map(async (lang) => {
+        const session = await getSession();
+        if (!session) throw new Error("Invalid session");
+
+        const octokit = new Octokit({ auth: session.accessToken });
+
+        const translationFile = translationFiles?.find(
+          (obj) => obj.lang == lang.code && obj.nameDisplay == oldCategory
+        );
+        if (!translationFile || !translationFile.sha) return;
+
+        // First create the new category
+        await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+          owner: props.repo.owner.login,
+          repo: props.repo.name,
+          path: `${TRANSLATION_FOLDER}/${lang.code}/${newCategory}.json`,
+          message: `[Translate] Create category ${lang.code}/${newCategory}`,
+          content: Buffer.from(JSON.stringify(translationFile.data)).toString(
+            "base64"
+          ),
+          headers: {
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+          },
+        });
+
+        // Then delete the old category
+        await octokit.request("DELETE /repos/{owner}/{repo}/contents/{path}", {
+          owner: props.repo.owner.login,
+          repo: props.repo.name,
+          path: `${TRANSLATION_FOLDER}/${lang.code}/${oldCategory}.json`,
+          message: `[Translate] Delete category ${lang.code}/${oldCategory}`,
+          sha: translationFile.sha,
+          headers: {
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+          },
+        });
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
   };
 
   const deleteCategory = async (category: string): Promise<void> => {
-    return;
+    await Promise.all(
+      getLanguages().map(async (lang) => {
+        const session = await getSession();
+        if (!session) throw new Error("Invalid session");
+
+        const translationFile = translationFiles?.find(
+          (obj) => obj.lang == lang.code && obj.nameDisplay == category
+        );
+        if (!translationFile || !translationFile.sha) return;
+
+        const octokit = new Octokit({ auth: session.accessToken });
+        await octokit.request("DELETE /repos/{owner}/{repo}/contents/{path}", {
+          owner: props.repo.owner.login,
+          repo: props.repo.name,
+          path: `${TRANSLATION_FOLDER}/${lang.code}/${category}.json`,
+          message: `[Translate] Delete category ${lang.code}/${category}`,
+          sha: translationFile.sha,
+          headers: {
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+          },
+        });
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
   };
 
   const getLanguages = (): Language[] =>

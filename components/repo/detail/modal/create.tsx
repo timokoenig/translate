@@ -128,9 +128,13 @@ const CreateTranslationModal = () => {
                 }
               >
                 <FormLabel htmlFor="lang">Language</FormLabel>
-                <Select id="lang" value={-1} onChange={formik.handleChange}>
+                <Select
+                  id="lang"
+                  value={formik.values.lang}
+                  onChange={formik.handleChange}
+                >
                   {languages.map((obj, index) => (
-                    <option key={index} value={index}>
+                    <option key={index} value={obj.code}>
                       {obj.emoji} {obj.name}
                     </option>
                   ))}
@@ -147,9 +151,13 @@ const CreateTranslationModal = () => {
                 }
               >
                 <FormLabel htmlFor="category">Category</FormLabel>
-                <Select id="category" value={-1} onChange={formik.handleChange}>
+                <Select
+                  id="category"
+                  value={formik.values.category}
+                  onChange={formik.handleChange}
+                >
                   {categories.map((obj, index) => (
-                    <option key={index} value={index}>
+                    <option key={index} value={obj}>
                       {obj}
                     </option>
                   ))}
