@@ -27,7 +27,7 @@ const CreateTranslationModal = () => {
   const { addTranslation, getTranslationGroups, getCategories, getLanguages } =
     useRepoStore();
   const categories = getCategories();
-  const languages = getLanguages();
+  const languages = getLanguages().map((obj) => obj.code);
   const existingTranslationKeys = getTranslationGroups().map((obj) => obj.key);
 
   const validationSchema = Yup.object().shape({

@@ -5,6 +5,7 @@ import {
   Commit,
   TranslationFile,
   TranslationGroup,
+  Language,
 } from "../../models";
 
 type RepoStoreContextType = {
@@ -33,7 +34,7 @@ type RepoStoreContextType = {
 
   getCategories: () => string[];
 
-  getLanguages: () => string[];
+  getLanguages: () => Language[];
 
   getTranslationGroups: () => TranslationGroup[];
 };

@@ -21,7 +21,7 @@ const Actions = () => {
           <option value={-1}>All Languages</option>
           {getLanguages().map((obj, index) => (
             <option key={index} value={index}>
-              {obj}
+              {`${obj.emoji} ${obj.name}`}
             </option>
           ))}
         </Select>

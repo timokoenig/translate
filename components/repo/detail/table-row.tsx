@@ -20,7 +20,8 @@ type Props = {
 };
 
 const RepositoryDetailListRow = (props: Props) => {
-  const { updateTranslationGroup, deleteTranslationGroup } = useRepoStore();
+  const { updateTranslationGroup, deleteTranslationGroup, getLanguages } =
+    useRepoStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [translationKey, setTranslationKey] = useState<string>(
     props.translationGroup.key
@@ -131,7 +132,12 @@ const RepositoryDetailListRow = (props: Props) => {
               <VStack w="full">
                 {props.translationGroup.translations.map((obj, index) => (
                   <HStack key={index} w="full">
-                    <Text whiteSpace="initial">{obj.lang.toUpperCase()}: </Text>
+                    <Text whiteSpace="initial">
+                      {
+                        getLanguages().find((lang) => lang.code == obj.lang)
+                          ?.emoji
+                      }
+                    </Text>
                     <Text whiteSpace="initial" w="full">
                       {obj.value}
                     </Text>

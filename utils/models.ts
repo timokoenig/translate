@@ -58,3 +58,9 @@ export type Commit = {
     avatar_url: string;
   };
 };
+
+export type Language = {
+  name: string;
+  code: string;
+  emoji: string;
+};

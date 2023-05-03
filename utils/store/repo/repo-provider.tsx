@@ -2,6 +2,7 @@
 import { RepoStoreContext } from "./repo-context";
 import {
   Commit,
+  Language,
   Repository,
   Translation,
   TranslationFile,
@@ -13,6 +14,7 @@ import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import TranslationHelper from "@/utils/translation-helper";
+import emojiFlags from "@/utils/resources/emoji-flags.json";
 
 const TRANSLATION_FOLDER = "translations";
 const GITHUB_API_VERSION = "2022-11-28";
@@ -354,8 +356,18 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
 
   const getCategories = (): string[] =>
     TranslationHelper.getCategories(translationFiles ?? []);
-  const getLanguages = (): string[] =>
-    TranslationHelper.getLanguages(translationFiles ?? []);
+  const getLanguages = (): Language[] =>
+    TranslationHelper.getLanguages(translationFiles ?? []).map((obj) => {
+      const entry = emojiFlags.find((emoji) => emoji.code == obj);
+      if (entry) {
+        return {
+          code: entry.code.toLowerCase(),
+          name: entry.name,
+          emoji: entry.emoji ?? entry.code.toUpperCase(),
+        };
+      }
+      return { code: obj, name: obj, emoji: "" };
+    });
 
   const getTranslationGroups = (): TranslationGroup[] => {
     let groups: TranslationGroup[] = [];
