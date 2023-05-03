@@ -1,5 +1,5 @@
 import { useRepoStore } from "@/utils/store/repo/repo-context";
-import { Box, HStack, Select, Text } from "@chakra-ui/react";
+import { Box, Button, HStack, Select, Text } from "@chakra-ui/react";
 import CreateTranslationModal from "./modal/create";
 
 type Props = {
@@ -27,6 +27,10 @@ const Actions = (props: Props) => {
     }
     const language = languages[value].code;
     setFilter({ ...filter, language });
+  };
+
+  const onResetFilter = () => {
+    setFilter({ category: null, language: null });
   };
 
   return (
@@ -57,6 +61,12 @@ const Actions = (props: Props) => {
             </option>
           ))}
         </Select>
+
+        {(filter.category || filter.language) && (
+          <Button variant="ghost" colorScheme="red" onClick={onResetFilter}>
+            Reset Filter
+          </Button>
+        )}
 
         <Text>
           {props.translationCount}{" "}
