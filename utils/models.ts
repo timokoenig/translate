@@ -1,5 +1,12 @@
 import moment from "moment";
 
+export type User = {
+  id?: number;
+  login?: string;
+  avatar_url?: string;
+  contributions?: number;
+};
+
 export type Repository = {
   id: number;
   name: string;
@@ -13,23 +20,25 @@ export type Repository = {
   };
 };
 
-export type User = {
-  id?: number;
-  login?: string;
-  avatar_url?: string;
-  contributions?: number;
-};
-
-export type File = {
+export type TranslationFile = {
   name: string;
+  nameDisplay: string;
   path: string;
   data: { [key: string]: string };
-  sha: string;
+  sha: string | null;
+  lang: string;
 };
 
 export type Translation = {
   key: string;
   value: string;
+  lang: string;
+};
+
+export type TranslationGroup = {
+  category: string;
+  key: string;
+  translations: Translation[];
 };
 
 export type Commit = {

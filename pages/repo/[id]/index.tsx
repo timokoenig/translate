@@ -18,7 +18,7 @@ type ContentProps = {
 
 const RepositoryDetailContent = (props: ContentProps) => {
   const [search, setSearch] = useState<string>("");
-  const { translationFile } = useRepoStore();
+  const { translationFiles } = useRepoStore();
 
   return (
     <>
@@ -29,7 +29,7 @@ const RepositoryDetailContent = (props: ContentProps) => {
         setSearch={setSearch}
       />
       <HorizontalLine />
-      {translationFile ? (
+      {translationFiles ? (
         <RepositoryDetailList search={search} />
       ) : (
         <EmptyState />

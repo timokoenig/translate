@@ -1,4 +1,3 @@
-import SearchInput from "@/components/global/search-input";
 import { Heading, Text, Box, VStack } from "@chakra-ui/react";
 
 const SettingsHeader = () => {

@@ -1,13 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { RepoStoreContext } from "./repo-context";
-import { Commit, File, Repository, Translation, User } from "../../models";
+import {
+  Commit,
+  Repository,
+  Translation,
+  TranslationFile,
+  TranslationGroup,
+  User,
+} from "../../models";
 import { Octokit } from "octokit";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import TranslationHelper from "@/utils/translation-helper";
 
-const TRANSLATION_FILE = "translation.json";
+const TRANSLATION_FOLDER = "translations";
 const GITHUB_API_VERSION = "2022-11-28";
+
+// TODO add base language to repo settings
+const baseLanguage = "en";
 
 type Props = {
   repo: Repository;
@@ -16,7 +27,9 @@ type Props = {
 
 const RepoStoreProvider = (props: Props): JSX.Element => {
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [translationFile, setTranslationFile] = useState<File | null>(null);
+  const [translationFiles, setTranslationFiles] = useState<
+    TranslationFile[] | null
+  >(null);
   const [contributors, setContributors] = useState<User[]>([]);
 
   // Fetch all repository contributors
@@ -35,15 +48,17 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     setContributors(res.data);
   };
 
-  // Fetch repository translation file
-  const fetchRepositoryTranslationFile = async (): Promise<void> => {
+  // Fetch repository translation files
+  const fetchRepositoryTranslationFiles = async (): Promise<void> => {
     const session = await getSession();
     if (!session) throw new Error("Invalid session");
 
     const octokit = new Octokit({ auth: session.accessToken });
+
     try {
-      const res = await octokit.request(
-        `GET /repos/{owner}/{repo}/contents/${TRANSLATION_FILE}`,
+      // First get all language folders in the translation folder
+      const repoContent: { data: { name: string }[] } = await octokit.request(
+        `GET /repos/{owner}/{repo}/contents/${TRANSLATION_FOLDER}`,
         {
           owner: props.repo.owner.login,
           repo: props.repo.name,
@@ -52,24 +67,65 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           },
         }
       );
-      setTranslationFile({
-        name: res.data.name,
-        path: res.data.path,
-        data: JSON.parse(Buffer.from(res.data.content, "base64").toString()),
-        sha: res.data.sha,
-      });
+      const repoLanguages = repoContent.data.map((obj) => obj.name);
+
+      // Then get the translation files from the language folder
+      const files = await Promise.all(
+        repoLanguages.map(async (lang) => {
+          const res: { data: { name: string }[] } = await octokit.request(
+            `GET /repos/{owner}/{repo}/contents/${TRANSLATION_FOLDER}/${lang}`,
+            {
+              owner: props.repo.owner.login,
+              repo: props.repo.name,
+              headers: {
+                "X-GitHub-Api-Version": GITHUB_API_VERSION,
+              },
+            }
+          );
+
+          // Then get the translation file content
+          return await Promise.all(
+            res.data.map(async (file) => {
+              const res = await octokit.request(
+                `GET /repos/{owner}/{repo}/contents/${TRANSLATION_FOLDER}/${lang}/${file.name}`,
+                {
+                  owner: props.repo.owner.login,
+                  repo: props.repo.name,
+                  headers: {
+                    "X-GitHub-Api-Version": GITHUB_API_VERSION,
+                  },
+                }
+              );
+              return {
+                name: res.data.name,
+                nameDisplay: res.data.name.replace(".json", ""),
+                path: res.data.path,
+                data: JSON.parse(
+                  Buffer.from(res.data.content, "base64").toString()
+                ),
+                sha: res.data.sha,
+                lang,
+              };
+            })
+          );
+        })
+      );
+
+      setTranslationFiles(files.flat());
     } catch (err: unknown) {
       if (`${err}`.includes("Not Found")) {
-        // the translation file does not exist yet; allow the user to create a new one
+        // the translation files do not exist yet; allow the user to create a new one
         return;
       }
       throw err;
     }
   };
 
-  // Update repository translation file
-  const updateRepositoryTranslationFile = async (
+  // Create or Update repository translation file
+  const createOrUpdateRepositoryTranslationFile = async (
     data: any,
+    lang: string,
+    category: string,
     sha: string | null
   ): Promise<void> => {
     const session = await getSession();
@@ -79,11 +135,11 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
       owner: props.repo.owner.login,
       repo: props.repo.name,
-      path: TRANSLATION_FILE,
+      path: `${TRANSLATION_FOLDER}/${lang}/${category}.json`,
       sha: sha ?? undefined,
       message: sha
-        ? `Update ${TRANSLATION_FILE}`
-        : `Create ${TRANSLATION_FILE}`,
+        ? `[Translate] Update translation for ${lang}/${category}`
+        : `[Translate] Create translation for ${lang}/${category}`,
       content: Buffer.from(JSON.stringify(data)).toString("base64"),
       headers: {
         "X-GitHub-Api-Version": GITHUB_API_VERSION,
@@ -92,50 +148,148 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   };
 
   // Set up new translation repo
-  const setupRepository = async (): Promise<void> => {
-    await updateRepositoryTranslationFile({ hello_world: "Hello World" }, null);
-    await fetchRepositoryTranslationFile();
+  const setupRepository = async (lang: string): Promise<void> => {
+    await createOrUpdateRepositoryTranslationFile(
+      { hello_world: "Hello World" },
+      lang,
+      "common", // default category
+      null
+    );
+    await fetchRepositoryTranslationFiles();
   };
 
   // Add new translation
-  const addTranslation = async (translation: Translation): Promise<void> => {
-    if (!translationFile) throw new Error("No translation file");
+  const addTranslation = async (
+    translation: Translation,
+    lang: string,
+    category: string
+  ): Promise<void> => {
+    if (!translationFiles) throw new Error("No translation files");
+
+    let translationFile = translationFiles.find(
+      (obj) => obj.nameDisplay == category && obj.lang == lang
+    );
+    if (!translationFile) {
+      translationFile = {
+        name: `${category}.json`,
+        nameDisplay: category,
+        path: `${TRANSLATION_FOLDER}/${lang}/${category}.json`,
+        data: {},
+        sha: null,
+        lang,
+      };
+    }
 
     const data = { ...translationFile.data };
     data[translation.key] = translation.value;
 
-    await updateRepositoryTranslationFile(data, translationFile.sha);
-    await fetchRepositoryTranslationFile();
+    await createOrUpdateRepositoryTranslationFile(
+      data,
+      lang,
+      category,
+      translationFile.sha
+    );
+    await fetchRepositoryTranslationFiles();
   };
 
-  // Update existing translation
-  const updateTranslation = async (
-    oldTranslation: Translation,
-    newTranslation: Translation
+  // Update existing translation group
+  const updateTranslationGroup = async (
+    oldTranslationGroup: TranslationGroup,
+    newTranslationGroup: TranslationGroup
   ): Promise<void> => {
-    if (!translationFile) throw new Error("No translation file");
+    if (!translationFiles) throw new Error("No translation files");
 
-    const data = { ...translationFile.data };
+    await Promise.all(
+      newTranslationGroup.translations.map(async (translation) => {
+        let translationFile = translationFiles.find(
+          (obj) =>
+            obj.nameDisplay == newTranslationGroup.category &&
+            obj.lang == translation.lang
+        );
+        if (!translationFile) {
+          translationFile = {
+            name: `${newTranslationGroup.category}.json`,
+            nameDisplay: newTranslationGroup.category,
+            path: `${TRANSLATION_FOLDER}/${translation.lang}/${newTranslationGroup.category}.json`,
+            data: {},
+            sha: null,
+            lang: translation.lang,
+          };
+        }
 
-    if (oldTranslation.key != newTranslation.key) {
-      // Key has changed, first delete old key and then add new one
-      delete data[oldTranslation.key];
-    }
-    data[newTranslation.key] = newTranslation.value;
+        const data = { ...translationFile.data };
+        let dataDidChange = false;
 
-    await updateRepositoryTranslationFile(data, translationFile.sha);
-    await fetchRepositoryTranslationFile();
+        if (oldTranslationGroup.key != newTranslationGroup.key) {
+          // Key has changed, first delete old key and then add new one
+          delete data[oldTranslationGroup.key];
+          dataDidChange = true;
+        }
+        if (data[newTranslationGroup.key] != translation.value) {
+          data[newTranslationGroup.key] = translation.value;
+          dataDidChange = true;
+        }
+
+        if (!dataDidChange) {
+          // Nothing changed, skip update
+          return;
+        }
+
+        await createOrUpdateRepositoryTranslationFile(
+          data,
+          translation.lang,
+          translationFile.nameDisplay,
+          translationFile.sha
+        );
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
   };
 
-  // Delete translation
-  const deleteTranslation = async (translation: Translation): Promise<void> => {
-    if (!translationFile) throw new Error("No translation file");
+  // Delete translation group
+  const deleteTranslationGroup = async (
+    translationGroup: TranslationGroup
+  ): Promise<void> => {
+    if (!translationFiles) throw new Error("No translation files");
 
-    const data = { ...translationFile.data };
-    delete data[translation.key];
+    await Promise.all(
+      translationGroup.translations.map(async (translation) => {
+        let translationFile = translationFiles.find(
+          (obj) =>
+            obj.nameDisplay == translationGroup.category &&
+            obj.lang == translation.lang
+        );
+        if (!translationFile) {
+          translationFile = {
+            name: `${translationGroup.category}.json`,
+            nameDisplay: translationGroup.category,
+            path: `${TRANSLATION_FOLDER}/${translation.lang}/${translationGroup.category}.json`,
+            data: {},
+            sha: null,
+            lang: translation.lang,
+          };
+        }
 
-    await updateRepositoryTranslationFile(data, translationFile.sha);
-    await fetchRepositoryTranslationFile();
+        const data = { ...translationFile.data };
+
+        if (!Object.keys(data).includes(translationGroup.key)) {
+          // Key does not exist, skip update
+          return;
+        }
+
+        delete data[translationGroup.key];
+
+        await createOrUpdateRepositoryTranslationFile(
+          data,
+          translation.lang,
+          translationFile.nameDisplay,
+          translationFile.sha
+        );
+      })
+    );
+
+    await fetchRepositoryTranslationFiles();
   };
 
   const fetchHistory = async (): Promise<Commit[]> => {
@@ -198,11 +352,46 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     return res.data.files[0].patch ?? "";
   };
 
+  const getCategories = (): string[] =>
+    TranslationHelper.getCategories(translationFiles ?? []);
+  const getLanguages = (): string[] =>
+    TranslationHelper.getLanguages(translationFiles ?? []);
+
+  const getTranslationGroups = (): TranslationGroup[] => {
+    let groups: TranslationGroup[] = [];
+
+    translationFiles?.forEach((file) => {
+      Object.keys(file.data).map((key) => {
+        let group = groups.find((obj) => obj.key == key);
+        if (!group) {
+          group = {
+            category: file.nameDisplay,
+            key,
+            translations: [],
+          };
+        }
+
+        const value = file.data[key];
+        if (value) {
+          group.translations.push({
+            key,
+            value,
+            lang: file.lang,
+          });
+        }
+
+        groups = [...groups.filter((obj) => obj.key != key), group];
+      });
+    });
+
+    return groups;
+  };
+
   // Load repository data
   useEffect(() => {
     (async () => {
       await fetchRepositoryContributors();
-      await fetchRepositoryTranslationFile();
+      await fetchRepositoryTranslationFiles();
       setLoading(false);
     })();
   }, []);
@@ -211,13 +400,17 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     <RepoStoreContext.Provider
       value={{
         isLoading,
+        baseLanguage,
         contributors,
-        translationFile,
+        translationFiles,
         setupRepository,
         addTranslation,
-        updateTranslation,
-        deleteTranslation,
+        updateTranslationGroup,
+        deleteTranslationGroup,
         fetchHistory,
+        getCategories,
+        getLanguages,
+        getTranslationGroups,
       }}
     >
       {props.children}

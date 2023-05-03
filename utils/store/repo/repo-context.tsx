@@ -1,23 +1,41 @@
 import { createContext, useContext } from "react";
-import { User, File, Translation, Repository, Commit } from "../../models";
+import {
+  User,
+  Translation,
+  Commit,
+  TranslationFile,
+  TranslationGroup,
+} from "../../models";
 
 type RepoStoreContextType = {
   isLoading: boolean;
 
+  baseLanguage: string;
+
   contributors: User[];
 
-  translationFile: File | null;
+  translationFiles: TranslationFile[] | null;
 
-  setupRepository: () => Promise<void>;
+  setupRepository: (lang: string) => Promise<void>;
 
-  addTranslation: (translation: Translation) => Promise<void>;
-  updateTranslation: (
-    oldTranslation: Translation,
-    newTranslation: Translation
+  addTranslation: (
+    translation: Translation,
+    lang: string,
+    category: string
   ) => Promise<void>;
-  deleteTranslation: (translation: Translation) => Promise<void>;
+  updateTranslationGroup: (
+    oldTranslationGropu: TranslationGroup,
+    newTranslationGroup: TranslationGroup
+  ) => Promise<void>;
+  deleteTranslationGroup: (translationGroup: TranslationGroup) => Promise<void>;
 
   fetchHistory: () => Promise<Commit[]>;
+
+  getCategories: () => string[];
+
+  getLanguages: () => string[];
+
+  getTranslationGroups: () => TranslationGroup[];
 };
 
 export const RepoStoreContext = createContext<RepoStoreContextType | undefined>(

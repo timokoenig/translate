@@ -6,7 +6,7 @@ const EmptyState = () => {
 
   const onConfirm = async () => {
     try {
-      await setupRepository();
+      await setupRepository("en");
     } catch (err: unknown) {
       console.log(err);
     }

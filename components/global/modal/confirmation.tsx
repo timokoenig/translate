@@ -11,7 +11,7 @@ import {
 
 type Props = {
   title: string;
-  message: string;
+  message: string | JSX.Element;
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;

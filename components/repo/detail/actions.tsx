@@ -1,24 +1,30 @@
 import { useRepoStore } from "@/utils/store/repo/repo-context";
-import { Text, Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, Select } from "@chakra-ui/react";
 import CreateTranslationModal from "./modal/create";
 
 const Actions = () => {
-  const { translationFile } = useRepoStore();
-  const keyCount = Object.keys(translationFile?.data ?? {}).length;
-
-  const onAdd = () => {
-    console.log("test");
-  };
+  const { getCategories, getLanguages } = useRepoStore();
 
   return (
     <Box p={8}>
-      <HStack>
-        <Text>
-          <Text as="span" fontWeight="semibold">
-            {keyCount}
-          </Text>{" "}
-          {keyCount > 1 ? "Translations" : "Translation"}
-        </Text>
+      <HStack gap={4}>
+        <Select value={-1} w="auto">
+          <option value={-1}>All Categories</option>
+          {getCategories().map((obj, index) => (
+            <option key={index} value={index}>
+              {obj}
+            </option>
+          ))}
+        </Select>
+
+        <Select value={-1} w="auto">
+          <option value={-1}>All Languages</option>
+          {getLanguages().map((obj, index) => (
+            <option key={index} value={index}>
+              {obj}
+            </option>
+          ))}
+        </Select>
         <Box flex={1} />
         <CreateTranslationModal />
       </HStack>

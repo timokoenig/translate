@@ -17,18 +17,20 @@ type Props = {
 };
 
 const RepositoryDetailList = (props: Props) => {
-  const { translationFile } = useRepoStore();
-  const filteredTranslations = Object.keys(translationFile?.data ?? {})
-    .map((key) => {
-      const data = translationFile?.data as { [key: string]: string };
-      return { key, value: data[key] };
-    })
+  const { getTranslationGroups } = useRepoStore();
+  const filteredTranslationGroup = getTranslationGroups()
     // sort by key name
     .sort((a, b) => (a.key > b.key ? 1 : a.key < b.key ? -1 : 0))
     // filter based on users search query
     .filter((obj) => {
       if (props.search == "") return true;
-      return obj.key.includes(props.search) || obj.value.includes(props.search);
+      return (
+        obj.translations.findIndex(
+          (translation) =>
+            translation.key.includes(props.search) ||
+            translation.value.includes(props.search)
+        ) != -1
+      );
     });
 
   return (
@@ -43,12 +45,12 @@ const RepositoryDetailList = (props: Props) => {
             </Tr>
           </Thead>
           <Tbody>
-            {filteredTranslations.map((translation, index) => (
-              <RepositoryDetailListRow key={index} translation={translation} />
+            {filteredTranslationGroup.map((group, index) => (
+              <RepositoryDetailListRow key={index} translationGroup={group} />
             ))}
           </Tbody>
         </Table>
-        {filteredTranslations.length == 0 && (
+        {filteredTranslationGroup.length == 0 && (
           <Center p={8}>
             <Text>No Translations</Text>
           </Center>
