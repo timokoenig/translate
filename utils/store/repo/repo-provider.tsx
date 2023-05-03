@@ -403,13 +403,27 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   };
 
   // Load repository data
+  const loadRepoData = async () => {
+    await fetchRepositoryContributors();
+    await fetchRepositoryTranslationFiles();
+  };
   useEffect(() => {
     (async () => {
-      await fetchRepositoryContributors();
-      await fetchRepositoryTranslationFiles();
+      await loadRepoData();
       setLoading(false);
     })();
   }, []);
+
+  // Reload repository data when user changes the repo
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      setContributors([]);
+      setTranslationFiles(null);
+      await loadRepoData();
+      setLoading(false);
+    })();
+  }, [props.repo]);
 
   return (
     <RepoStoreContext.Provider
