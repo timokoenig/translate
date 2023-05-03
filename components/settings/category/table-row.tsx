@@ -18,6 +18,7 @@ import { useRepoStore } from "@/utils/store/repo/repo-context";
 import { useEffect, useState } from "react";
 import ConfirmationModal from "@/components/global/modal/confirmation";
 import { FiMoreVertical } from "react-icons/fi";
+import Infobox from "@/components/global/infobox";
 
 type Props = {
   category: string;
@@ -147,15 +148,18 @@ const CategoryTableRow = (props: Props) => {
               </Popover>
 
               <ConfirmationModal
-                title="Delete Translation"
+                title="Delete Category"
                 message={
-                  <Text>
-                    Do you want to delete{" "}
-                    <Text fontWeight="semibold" as="span">
-                      {props.category}
+                  <>
+                    <Text mb={8}>
+                      Do you want to delete{" "}
+                      <Text fontWeight="semibold" as="span">
+                        {props.category}
+                      </Text>
+                      ?
                     </Text>
-                    ?
-                  </Text>
+                    <Infobox text="Deleting this category will also delete all translations that are in it!" />
+                  </>
                 }
                 isOpen={isOpen}
                 onOpen={onOpen}
