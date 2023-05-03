@@ -20,9 +20,6 @@ import emojiFlags from "@/utils/resources/emoji-flags.json";
 const TRANSLATION_FOLDER = "translations";
 const GITHUB_API_VERSION = "2022-11-28";
 
-// TODO add base language to repo settings
-const baseLanguage = "en";
-
 type Props = {
   repo: Repository;
   children: JSX.Element | JSX.Element[];
@@ -453,7 +450,6 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         isLoading,
         filter,
         setFilter,
-        baseLanguage,
         contributors,
         translationFiles,
         setupRepository,

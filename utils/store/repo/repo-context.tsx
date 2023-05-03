@@ -15,8 +15,6 @@ type RepoStoreContextType = {
   filter: Filter;
   setFilter: (filter: Filter) => void;
 
-  baseLanguage: string;
-
   contributors: User[];
 
   translationFiles: TranslationFile[] | null;
