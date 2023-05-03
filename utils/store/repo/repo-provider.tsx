@@ -425,6 +425,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       setLoading(true);
       setContributors([]);
       setTranslationFiles(null);
+      setFilter({ category: null, language: null });
       await loadRepoData();
       setLoading(false);
     })();
