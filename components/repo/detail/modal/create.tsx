@@ -27,7 +27,7 @@ const CreateTranslationModal = () => {
   const { addTranslation, getTranslationGroups, getCategories, getLanguages } =
     useRepoStore();
   const categories = getCategories();
-  const languages = getLanguages().map((obj) => obj.code);
+  const languages = getLanguages();
   const existingTranslationKeys = getTranslationGroups().map((obj) => obj.key);
 
   const validationSchema = Yup.object().shape({
@@ -40,7 +40,10 @@ const CreateTranslationModal = () => {
     lang: Yup.string()
       .trim()
       .required()
-      .oneOf(languages, "Language not allowed"),
+      .oneOf(
+        languages.map((obj) => obj.code),
+        "Language not allowed"
+      ),
     category: Yup.string()
       .trim()
       .required()
@@ -51,7 +54,7 @@ const CreateTranslationModal = () => {
     initialValues: {
       key: "",
       value: "",
-      lang: languages[0],
+      lang: languages[0].code,
       category: categories[0],
     },
     validationSchema,
@@ -137,7 +140,7 @@ const CreateTranslationModal = () => {
                 <Select id="lang" value={-1} onChange={formik.handleChange}>
                   {languages.map((obj, index) => (
                     <option key={index} value={index}>
-                      {obj}
+                      {obj.emoji} {obj.name}
                     </option>
                   ))}
                 </Select>
