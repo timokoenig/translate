@@ -21,16 +21,7 @@ const EmptyState = () => {
             This is a new repository without a translation file. Continue to
             create all necessary files.
           </Text>
-          <Button
-            bgGradient="linear(to-r, red.400,pink.400)"
-            color="white"
-            _hover={{
-              bgGradient: "linear(to-r, red.500,pink.500)",
-            }}
-            variant="solid"
-            w="full"
-            onClick={onConfirm}
-          >
+          <Button variant="primary" w="full" onClick={onConfirm}>
             Continue
           </Button>
         </VStack>

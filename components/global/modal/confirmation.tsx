@@ -33,12 +33,7 @@ const ConfirmationModal = (props: Props) => (
           No
         </Button>
         <Button
-          bgGradient="linear(to-r, red.400,pink.400)"
-          color="white"
-          _hover={{
-            bgGradient: "linear(to-r, red.500,pink.500)",
-          }}
-          variant="solid"
+          variant="primary"
           onClick={() => {
             props.onConfirm();
             props.onClose();

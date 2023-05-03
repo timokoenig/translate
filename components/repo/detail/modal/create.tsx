@@ -79,16 +79,7 @@ const CreateTranslationModal = () => {
 
   return (
     <>
-      <Button
-        leftIcon={<FiPlus />}
-        bgGradient="linear(to-r, red.400,pink.400)"
-        color="white"
-        _hover={{
-          bgGradient: "linear(to-r, red.500,pink.500)",
-        }}
-        variant="solid"
-        onClick={onOpen}
-      >
+      <Button leftIcon={<FiPlus />} variant="primary" onClick={onOpen}>
         Add Translation
       </Button>
 
@@ -177,12 +168,7 @@ const CreateTranslationModal = () => {
               Close
             </Button>
             <Button
-              bgGradient="linear(to-r, red.400,pink.400)"
-              color="white"
-              _hover={{
-                bgGradient: "linear(to-r, red.500,pink.500)",
-              }}
-              variant="solid"
+              variant="primary"
               onClick={() => formik.handleSubmit()}
               ml={4}
               isLoading={formik.isSubmitting}

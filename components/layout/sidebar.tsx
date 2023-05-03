@@ -82,12 +82,7 @@ const Sidebar = () => {
           <Box pt={4} w="full">
             <Button
               leftIcon={<FiPlus />}
-              bgGradient="linear(to-r, red.400,pink.400)"
-              color="white"
-              _hover={{
-                bgGradient: "linear(to-r, red.500,pink.500)",
-              }}
-              variant="solid"
+              variant="primary"
               w="full"
               onClick={() => router.push("/repo")}
             >

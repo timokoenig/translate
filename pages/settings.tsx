@@ -14,16 +14,7 @@ const Settings = () => {
       </Container>
       <HorizontalLine />
       <Container py={8}>
-        <Button
-          bgGradient="linear(to-r, red.400,pink.400)"
-          color="white"
-          _hover={{
-            bgGradient: "linear(to-r, red.500,pink.500)",
-          }}
-          variant="solid"
-          w="full"
-          onClick={() => signOut()}
-        >
+        <Button variant="primary" w="full" onClick={() => signOut()}>
           Sign Out
         </Button>
       </Container>

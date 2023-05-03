@@ -43,15 +43,7 @@ const RepositoryDetailContent = (props: ContentProps) => {
         <Heading as="h2" size="md" mb={8}>
           Others
         </Heading>
-        <Button
-          bgGradient="linear(to-r, red.400,pink.400)"
-          color="white"
-          _hover={{
-            bgGradient: "linear(to-r, red.500,pink.500)",
-          }}
-          variant="solid"
-          onClick={onRemoveRepo}
-        >
+        <Button variant="primary" onClick={onRemoveRepo}>
           Remove Repository
         </Button>
       </Box>

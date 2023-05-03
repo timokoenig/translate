@@ -42,11 +42,7 @@ const RepositoryDetailHeader = (props: Props) => {
         <Box pr={5}>
           {props.showCloseButton ?? false ? (
             <Button
-              bgGradient="linear(to-r, red.400,pink.400)"
-              color="white"
-              _hover={{
-                bgGradient: "linear(to-r, red.500,pink.500)",
-              }}
+              variant="primary"
               onClick={() => router.push(`/repo/${props.repo.id}`)}
             >
               Close
