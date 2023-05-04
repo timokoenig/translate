@@ -70,7 +70,11 @@ const Actions = (props: Props) => {
 
         <HStack borderWidth={1} borderColor="gray.200" borderRadius={6} p={2}>
           <Text>Missing Translations</Text>
-          <Switch size="sm" onChange={onChangeMissingTranslations} />
+          <Switch
+            isChecked={filter.missingTranslations}
+            size="sm"
+            onChange={onChangeMissingTranslations}
+          />
         </HStack>
 
         {resetEnabled && (
@@ -79,11 +83,11 @@ const Actions = (props: Props) => {
           </Button>
         )}
 
+        <Box flex={1} />
         <Text>
           {props.translationCount}{" "}
           {props.translationCount == 1 ? "Translation" : "Translations"}
         </Text>
-        <Box flex={1} />
         <CreateTranslationModal />
       </HStack>
     </Box>
