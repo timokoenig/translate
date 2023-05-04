@@ -34,6 +34,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   const [filter, setFilter] = useState<Filter>({
     category: null,
     language: null,
+    missingTranslations: false,
   });
 
   // Fetch all repository contributors
@@ -590,7 +591,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       setLoading(true);
       setContributors([]);
       setTranslationFiles(null);
-      setFilter({ category: null, language: null });
+      setFilter({ category: null, language: null, missingTranslations: false });
       await loadRepoData();
       setLoading(false);
     })();

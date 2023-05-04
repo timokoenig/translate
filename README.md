@@ -16,8 +16,8 @@ NEXTAUTH_SECRET=xxx
 Then run the following commands to install and build the application.
 
 ```
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 
 You will be able to open the application in your browser with the URL `http://localhost:3000`.
@@ -25,7 +25,7 @@ You will be able to open the application in your browser with the URL `http://lo
 You can also run the dev command for your local environment.
 
 ```
-npm run dev
+pnpm run dev
 ```
 
 ### Github OAuth App
