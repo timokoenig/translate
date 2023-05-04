@@ -18,7 +18,7 @@
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "formik": "^2.2.9",
-    "framer-motion": "^10.12.4",
+    "framer-motion": "^10.12.7",
     "json-diff": "^1.0.3",
     "moment": "^2.29.4",
     "next": "13.3.0",
