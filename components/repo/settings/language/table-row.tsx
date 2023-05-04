@@ -39,7 +39,7 @@ const LanguageTableRow = (props: Props) => {
   };
 
   return (
-    <Tr>
+    <Tr _last={{ td: { borderBottom: "0px" } }}>
       <Td w="full">
         <Text fontWeight="semibold">
           {props.language.emoji} {props.language.name}

@@ -60,7 +60,7 @@ const CategoryTableRow = (props: Props) => {
   }, [props]);
 
   return (
-    <Tr>
+    <Tr _last={{ td: { borderBottom: "0px" } }}>
       <Td w="full">
         {isEditing ? (
           <Input

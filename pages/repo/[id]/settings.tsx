@@ -10,8 +10,8 @@ import ContributorTable from "@/components/repo/settings/contributor-table";
 import { Button, Box, Heading } from "@chakra-ui/react";
 import RepoDetailLayout from "@/components/repo/detail/layout";
 import { Repository } from "@/utils/models";
-import CategoryTable from "@/components/settings/category/table";
-import LanguageTable from "@/components/settings/language/table";
+import CategoryTable from "@/components/repo/settings/category/table";
+import LanguageTable from "@/components/repo/settings/language/table";
 
 type ContentProps = {
   repo: Repository;

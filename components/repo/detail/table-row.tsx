@@ -81,7 +81,7 @@ const RepositoryDetailListRow = (props: Props) => {
   }, [props]);
 
   return (
-    <Tr>
+    <Tr _last={{ td: { borderBottom: "0px" } }}>
       <Td w="30%" verticalAlign="top">
         {isEditing ? (
           <Input
