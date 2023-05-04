@@ -523,15 +523,21 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
 
   const getTranslationGroups = (): TranslationGroup[] => {
     let groups: TranslationGroup[] = [];
+    let availableLanguages = getLanguages();
 
     translationFiles?.forEach((file) => {
-      Object.keys(file.data).map((key) => {
+      const keys = Object.keys(file.data);
+      keys.map((key) => {
         let group = groups.find((obj) => obj.key == key);
         if (!group) {
           group = {
             category: file.nameDisplay,
             key,
-            translations: [],
+            translations: availableLanguages.map((lang) => ({
+              key,
+              value: "",
+              lang: lang.code,
+            })),
           };
         }
 
@@ -540,11 +546,14 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
             ? file.data[key]
             : `${file.data[key]}`;
         if (value) {
-          group.translations.push({
-            key,
-            value,
-            lang: file.lang,
-          });
+          group.translations = [
+            ...group.translations.filter((obj) => obj.lang != file.lang),
+            {
+              key,
+              value,
+              lang: file.lang,
+            },
+          ];
         }
 
         groups = [...groups.filter((obj) => obj.key != key), group];
