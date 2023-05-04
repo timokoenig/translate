@@ -68,4 +68,5 @@ export type Language = {
 export type Filter = {
   category: string | null;
   language: string | null;
+  missingTranslations: boolean;
 };

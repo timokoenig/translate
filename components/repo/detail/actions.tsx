@@ -1,5 +1,5 @@
 import { useRepoStore } from "@/utils/store/repo/repo-context";
-import { Box, Button, HStack, Select, Text } from "@chakra-ui/react";
+import { Box, Button, HStack, Select, Switch, Text } from "@chakra-ui/react";
 import CreateTranslationModal from "./modal/create";
 
 type Props = {
@@ -29,9 +29,15 @@ const Actions = (props: Props) => {
     setFilter({ ...filter, language });
   };
 
+  const onChangeMissingTranslations = (): void =>
+    setFilter({ ...filter, missingTranslations: !filter.missingTranslations });
+
   const onResetFilter = () => {
-    setFilter({ category: null, language: null });
+    setFilter({ category: null, language: null, missingTranslations: false });
   };
+
+  const resetEnabled =
+    filter.category || filter.language || filter.missingTranslations;
 
   return (
     <Box p={8}>
@@ -62,7 +68,12 @@ const Actions = (props: Props) => {
           ))}
         </Select>
 
-        {(filter.category || filter.language) && (
+        <HStack borderWidth={1} borderColor="gray.200" borderRadius={6} p={2}>
+          <Text>Missing Translations</Text>
+          <Switch size="sm" onChange={onChangeMissingTranslations} />
+        </HStack>
+
+        {resetEnabled && (
           <Button variant="ghost" colorScheme="red" onClick={onResetFilter}>
             Reset Filter
           </Button>

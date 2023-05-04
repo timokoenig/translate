@@ -36,6 +36,19 @@ const RepositoryDetailList = (props: Props) => {
       }
       return true;
     })
+    // filter translations that have missing translations (if filter is enabled)
+    .filter((obj) => {
+      if (!filter.missingTranslations) return true;
+      return (
+        obj.translations.findIndex(
+          (translation) =>
+            translation.value.length == 0 &&
+            (filter.language == null
+              ? true
+              : translation.lang == filter.language)
+        ) != -1
+      );
+    })
     // filter based on users search query
     .filter((obj) => {
       if (props.search == "") return true;
