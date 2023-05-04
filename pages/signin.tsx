@@ -29,7 +29,7 @@ const Signin = () => {
     <VStack gap={10}>
       <Flex width="full" padding={4}>
         <Box marginLeft="auto">
-          <Link>
+          <Link href="https://github.com/timokoenig/translate" target="_blank">
             <FaGithub size={34} />
           </Link>
         </Box>
