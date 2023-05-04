@@ -75,6 +75,9 @@ const RepositoryDetailListRow = (props: Props) => {
     return true;
   };
 
+  const translationSorter = (a: Translation, b: Translation) =>
+    a.lang > b.lang ? 1 : a.lang < b.lang ? -1 : 0;
+
   useEffect(() => {
     setTranslationKey(props.translationGroup.key);
     setTranslations(props.translationGroup.translations);
@@ -101,32 +104,36 @@ const RepositoryDetailListRow = (props: Props) => {
           {isEditing ? (
             <HStack w="full">
               <VStack w="full">
-                {translations.filter(translationFilter).map((obj, index) => (
-                  <HStack key={index} w="full">
-                    <Text>
-                      {
-                        getLanguages().find((lang) => lang.code == obj.lang)
-                          ?.emoji
-                      }
-                    </Text>
-                    <Textarea
-                      value={obj.value}
-                      onChange={(e) => {
-                        const updatedTranslation = {
-                          ...obj,
-                          value: e.target.value,
-                        };
-                        setTranslations([
-                          ...translations.filter(
-                            (oldTranslation) => oldTranslation.key != obj.key
-                          ),
-                          updatedTranslation,
-                        ]);
-                      }}
-                      disabled={isLoading}
-                    />
-                  </HStack>
-                ))}
+                {translations
+                  .filter(translationFilter)
+                  .sort(translationSorter)
+                  .map((obj, index) => (
+                    <HStack key={index} w="full">
+                      <Text>
+                        {
+                          getLanguages().find((lang) => lang.code == obj.lang)
+                            ?.emoji
+                        }
+                      </Text>
+                      <Textarea
+                        value={obj.value}
+                        onChange={(e) => {
+                          const updatedTranslation = {
+                            ...obj,
+                            value: e.target.value,
+                          };
+                          setTranslations([
+                            ...translations.filter(
+                              (oldTranslation) =>
+                                oldTranslation.lang != obj.lang
+                            ),
+                            updatedTranslation,
+                          ]);
+                        }}
+                        disabled={isLoading}
+                      />
+                    </HStack>
+                  ))}
               </VStack>
               <IconButton
                 size="sm"
@@ -156,6 +163,7 @@ const RepositoryDetailListRow = (props: Props) => {
               <VStack w="full">
                 {props.translationGroup.translations
                   .filter(translationFilter)
+                  .sort(translationSorter)
                   .map((obj, index) => (
                     <HStack key={index} w="full">
                       <Text whiteSpace="initial">
