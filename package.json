@@ -21,7 +21,7 @@
     "framer-motion": "^10.12.4",
     "json-diff": "^1.0.3",
     "moment": "^2.29.4",
-    "next": "13.3.0",
+    "next": "13.3.4",
     "next-auth": "^4.22.1",
     "octokit": "^2.0.14",
     "parse-diff": "^0.11.1",
