@@ -308,33 +308,42 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         "X-GitHub-Api-Version": GITHUB_API_VERSION,
       },
     });
-    const commits = res.data.map((obj) => ({
-      sha: obj.sha,
-      message: obj.commit.message,
-      patch: "",
-      author: {
-        name: obj.commit.author?.name ?? "",
-        email: obj.commit.author?.email ?? "",
-        date: moment(obj.commit.author?.date ?? ""),
-        avatar_url: obj.author?.avatar_url ?? "",
-      },
-      committer: {
-        name: obj.commit.committer?.name ?? "",
-        email: obj.commit.committer?.email ?? "",
-        date: moment(obj.commit.committer?.date ?? ""),
-        avatar_url: obj.committer?.avatar_url ?? "",
-      },
-    }));
+    const commits = res.data
+      .map((obj) => ({
+        sha: obj.sha,
+        message: obj.commit.message,
+        patch: "",
+        author: {
+          name: obj.commit.author?.name ?? "",
+          email: obj.commit.author?.email ?? "",
+          date: moment(obj.commit.author?.date ?? ""),
+          avatar_url: obj.author?.avatar_url ?? "",
+        },
+        committer: {
+          name: obj.commit.committer?.name ?? "",
+          email: obj.commit.committer?.email ?? "",
+          date: moment(obj.commit.committer?.date ?? ""),
+          avatar_url: obj.committer?.avatar_url ?? "",
+        },
+      }))
+      .filter((obj) => obj.message.includes("[Translate]"));
 
     return await Promise.all(
       commits.map(async (obj) => {
-        const patch = await fetchPathForCommit(obj);
-        return { ...obj, patch };
+        if (
+          obj.message.includes("Create translation") ||
+          obj.message.includes("Update translation")
+        ) {
+          // Only get the patch for translation udpates
+          const patch = await fetchPatchForCommit(obj);
+          return { ...obj, patch };
+        }
+        return obj;
       })
     );
   };
 
-  const fetchPathForCommit = async (commit: Commit): Promise<string> => {
+  const fetchPatchForCommit = async (commit: Commit): Promise<string> => {
     const session = await getSession();
     if (!session) throw new Error("Invalid session");
 

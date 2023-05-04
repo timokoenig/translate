@@ -16,9 +16,17 @@ const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
 
   if (!addition || !deletion) return <></>;
 
-  const diff = jsonDiff.diffString(JSON.parse(deletion), JSON.parse(addition));
+  const diff = jsonDiff
+    .diffString(JSON.parse(deletion), JSON.parse(addition))
+    .replace("{", "")
+    .replace("}", "")
+    .trim();
 
-  return <Text>{diff}</Text>;
+  return (
+    <Text fontSize={14} color="gray.700">
+      <pre>{diff}</pre>
+    </Text>
+  );
 };
 
 type Props = {
@@ -45,6 +53,9 @@ const RepositoryHistoryTableRow = (props: Props) => {
       <Td>{props.commit.committer.date.format("DD/MM/YYYY HH:mm")}</Td>
       <Td>{props.commit.sha.substring(0, 10)}</Td>
       <Td>
+        <Text fontWeight="semibold" mb={4}>
+          {props.commit.message.replace("[Translate]", "").trim()}
+        </Text>
         {patchDiff.length > 0 && patchDiff[0].chunks.length > 0 && (
           <ChangeDiff changes={patchDiff[0].chunks[0].changes} />
         )}
