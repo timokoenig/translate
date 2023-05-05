@@ -20,16 +20,21 @@ const AppStoreProvider = (props: Props): JSX.Element => {
   );
 
   // Get the local repositories from local storage and set it in the app store state
-  const getLocalRepositories = (): void => {
+  const getLocalRepositories = (remoteRepos: Repository[]): void => {
+    const localRepoIDs = JSON.parse(
+      localStorage.getItem(LOCAL_STORAGE_KEY_REPOSITORIES) ?? "[]"
+    ) as number[];
     setLocalRepositories(
-      JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_KEY_REPOSITORIES) ?? "[]"
-      ) as Repository[]
+      remoteRepos.filter((obj) => localRepoIDs.includes(obj.id))
     );
   };
   // save the repositories to the local storage
   const saveLocalRepositories = (repos: Repository[]): void => {
-    localStorage.setItem(LOCAL_STORAGE_KEY_REPOSITORIES, JSON.stringify(repos));
+    const repoIDs = repos.map((obj) => obj.id);
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_REPOSITORIES,
+      JSON.stringify(repoIDs)
+    );
   };
   // Set the given repositories in the app store state and save it to local storage
   const setRepositories = (repos: Repository[]): void => {
@@ -47,17 +52,18 @@ const AppStoreProvider = (props: Props): JSX.Element => {
       await octokit.rest.repos.listForAuthenticatedUser();
     return res.data;
   };
-  const getRemoteRepositories = async (): Promise<void> => {
+  const getRemoteRepositories = async (): Promise<Repository[]> => {
     const res = await fetchGithubRepositories();
     setRemoteRepositories(res);
+    return res;
   };
 
   // Load the initial app data
   useEffect(() => {
     if (!isAuthenticated) return;
     (async () => {
-      getLocalRepositories();
-      await getRemoteRepositories();
+      const repos = await getRemoteRepositories();
+      getLocalRepositories(repos);
       setLoading(false);
     })();
   }, [isAuthenticated]);
