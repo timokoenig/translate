@@ -5,8 +5,16 @@ import SettingsHeader from "@/components/settings/header";
 import HorizontalLine from "@/components/global/horizontal-line";
 import { getSession, signOut } from "next-auth/react";
 import { NextPageContext } from "next";
+import { useAppStore } from "@/utils/store/app/app-context";
 
 const Settings = () => {
+  const { setLocalRepositories } = useAppStore();
+
+  const onSignOut = async () => {
+    await signOut();
+    setLocalRepositories([]);
+  };
+
   return (
     <Layout>
       <Container>
@@ -14,7 +22,7 @@ const Settings = () => {
       </Container>
       <HorizontalLine />
       <Container py={8}>
-        <Button variant="primary" w="full" onClick={() => signOut()}>
+        <Button variant="primary" w="full" onClick={onSignOut}>
           Sign Out
         </Button>
       </Container>
