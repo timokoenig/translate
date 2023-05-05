@@ -1,24 +1,24 @@
-import LoadingIndicatorFull from "@/components/global/loading-indicator-full";
-import Layout from "@/components/layout";
-import { Repository } from "@/utils/models";
-import { useRepoStore } from "@/utils/store/repo/repo-context";
-import RepoStoreProvider from "@/utils/store/repo/repo-provider";
-import { ReactNode } from "react";
+import LoadingIndicatorFull from '@/components/global/loading-indicator-full'
+import Layout from '@/components/layout'
+import { Repository } from '@/utils/models'
+import { useRepoStore } from '@/utils/store/repo/repo-context'
+import RepoStoreProvider from '@/utils/store/repo/repo-provider'
+import { ReactNode } from 'react'
 
 type Props = {
-  repo: Repository;
-  children: ReactNode;
-};
+  repo: Repository
+  children: ReactNode
+}
 
 const DetailContent = (props: Props) => {
-  const { isLoading } = useRepoStore();
+  const { isLoading } = useRepoStore()
 
   if (isLoading) {
-    return <LoadingIndicatorFull />;
+    return <LoadingIndicatorFull />
   }
 
-  return <>{props.children}</>;
-};
+  return <>{props.children}</>
+}
 
 const RepoDetailLayout = (props: Props) => {
   return (
@@ -27,7 +27,7 @@ const RepoDetailLayout = (props: Props) => {
         <DetailContent {...props} />
       </Layout>
     </RepoStoreProvider>
-  );
-};
+  )
+}
 
-export default RepoDetailLayout;
+export default RepoDetailLayout

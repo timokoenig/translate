@@ -1,20 +1,13 @@
-import {
-  Table,
-  TableContainer,
-  Tbody,
-  Heading,
-  Box,
-  HStack,
-} from "@chakra-ui/react";
-import { useRepoStore } from "@/utils/store/repo/repo-context";
-import AddLanguageModal from "./modal/add";
-import LanguageTableRow from "./table-row";
+import { useRepoStore } from '@/utils/store/repo/repo-context'
+import { Box, HStack, Heading, Table, TableContainer, Tbody } from '@chakra-ui/react'
+import AddLanguageModal from './modal/add'
+import LanguageTableRow from './table-row'
 
 const LanguageTable = () => {
-  const { getLanguages } = useRepoStore();
+  const { getLanguages } = useRepoStore()
   const sortedLanguages = getLanguages()
     // sort by name
-    .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
+    .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
 
   return (
     <>
@@ -37,7 +30,7 @@ const LanguageTable = () => {
         </Table>
       </TableContainer>
     </>
-  );
-};
+  )
+}
 
-export default LanguageTable;
+export default LanguageTable

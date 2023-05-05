@@ -1,11 +1,11 @@
-import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 
 type Props = {
-  value: string;
-  onChange?: (value: string) => void;
-  onClear: () => void;
-  disabled?: boolean;
-};
+  value: string
+  onChange?: (value: string) => void
+  onClear: () => void
+  disabled?: boolean
+}
 
 const SearchInput = (props: Props) => (
   <InputGroup size="md" maxW={500}>
@@ -13,10 +13,10 @@ const SearchInput = (props: Props) => (
       pr="4.5rem"
       placeholder="Search"
       value={props.value}
-      onChange={(e) => props.onChange && props.onChange(e.target.value)}
+      onChange={e => props.onChange && props.onChange(e.target.value)}
       disabled={props.disabled}
     />
-    {props.value != "" && (
+    {props.value != '' && (
       <InputRightElement width="4.5rem">
         <Button h="1.75rem" size="sm" onClick={props.onClear}>
           clear
@@ -24,6 +24,6 @@ const SearchInput = (props: Props) => (
       </InputRightElement>
     )}
   </InputGroup>
-);
+)
 
-export default SearchInput;
+export default SearchInput

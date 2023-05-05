@@ -1,15 +1,15 @@
-import { Center, Text } from "@chakra-ui/react";
+import { Center, Text } from '@chakra-ui/react'
 
 const Footer = () => (
   <Center>
     <Text>
-      Made with{" "}
+      Made with{' '}
       <Text as="span" color="red.400" display="inline">
         ♥
-      </Text>{" "}
+      </Text>{' '}
       for the community
     </Text>
   </Center>
-);
+)
 
-export default Footer;
+export default Footer

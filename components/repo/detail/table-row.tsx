@@ -1,95 +1,88 @@
-import { Translation, TranslationGroup } from "@/utils/models";
+import ConfirmationModal from '@/components/global/modal/confirmation'
+import { Translation, TranslationGroup } from '@/utils/models'
+import { useRepoStore } from '@/utils/store/repo/repo-context'
+import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
-  Text,
-  Td,
-  Tr,
-  Textarea,
+  Button,
+  HStack,
   IconButton,
   Input,
-  useDisclosure,
-  VStack,
-  HStack,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
   PopoverBody,
-  Button,
-} from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useRepoStore } from "@/utils/store/repo/repo-context";
-import { useEffect, useState } from "react";
-import ConfirmationModal from "@/components/global/modal/confirmation";
-import { FiMoreVertical } from "react-icons/fi";
+  PopoverContent,
+  PopoverTrigger,
+  Td,
+  Text,
+  Textarea,
+  Tr,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { FiMoreVertical } from 'react-icons/fi'
 
 type Props = {
-  translationGroup: TranslationGroup;
-};
+  translationGroup: TranslationGroup
+}
 
 const RepositoryDetailListRow = (props: Props) => {
-  const {
-    updateTranslationGroup,
-    deleteTranslationGroup,
-    getLanguages,
-    filter,
-  } = useRepoStore();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [translationKey, setTranslationKey] = useState<string>(
-    props.translationGroup.key
-  );
+  const { updateTranslationGroup, deleteTranslationGroup, getLanguages, filter } = useRepoStore()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [translationKey, setTranslationKey] = useState<string>(props.translationGroup.key)
   const [translations, setTranslations] = useState<Translation[]>(
     props.translationGroup.translations
-  );
-  const [isEditing, setEditing] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  )
+  const [isEditing, setEditing] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
 
-  const onEdit = () => setEditing(true);
+  const onEdit = () => setEditing(true)
 
   const onConfirm = async () => {
-    setLoading(true);
+    setLoading(true)
     await updateTranslationGroup(props.translationGroup, {
       ...props.translationGroup,
       key: translationKey,
       translations,
-    });
-    setEditing(false);
-    setLoading(false);
-  };
+    })
+    setEditing(false)
+    setLoading(false)
+  }
 
   const onCancel = () => {
-    setTranslationKey(props.translationGroup.key);
-    setTranslations(props.translationGroup.translations);
-    setEditing(false);
-  };
+    setTranslationKey(props.translationGroup.key)
+    setTranslations(props.translationGroup.translations)
+    setEditing(false)
+  }
 
   const onDelete = async () => {
-    setLoading(true);
-    await deleteTranslationGroup(props.translationGroup);
-    setEditing(false);
-    setLoading(false);
-  };
+    setLoading(true)
+    await deleteTranslationGroup(props.translationGroup)
+    setEditing(false)
+    setLoading(false)
+  }
 
   const translationFilter = (translation: Translation): boolean => {
     if (filter.language && translation.lang != filter.language) {
-      return false;
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
   const translationSorter = (a: Translation, b: Translation) =>
-    a.lang > b.lang ? 1 : a.lang < b.lang ? -1 : 0;
+    a.lang > b.lang ? 1 : a.lang < b.lang ? -1 : 0
 
   useEffect(() => {
-    setTranslationKey(props.translationGroup.key);
-    setTranslations(props.translationGroup.translations);
-  }, [props]);
+    setTranslationKey(props.translationGroup.key)
+    setTranslations(props.translationGroup.translations)
+  }, [props])
 
   return (
-    <Tr _last={{ td: { borderBottom: "0px" } }}>
+    <Tr _last={{ td: { borderBottom: '0px' } }}>
       <Td w="30%" verticalAlign="top">
         {isEditing ? (
           <Input
             value={translationKey}
-            onChange={(e) => setTranslationKey(e.target.value)}
+            onChange={e => setTranslationKey(e.target.value)}
             disabled={isLoading}
           />
         ) : (
@@ -109,26 +102,20 @@ const RepositoryDetailListRow = (props: Props) => {
                   .sort(translationSorter)
                   .map((obj, index) => (
                     <HStack key={index} w="full">
-                      <Text>
-                        {
-                          getLanguages().find((lang) => lang.code == obj.lang)
-                            ?.emoji
-                        }
-                      </Text>
+                      <Text>{getLanguages().find(lang => lang.code == obj.lang)?.emoji}</Text>
                       <Textarea
                         value={obj.value}
-                        onChange={(e) => {
+                        onChange={e => {
                           const updatedTranslation = {
                             ...obj,
                             value: e.target.value,
-                          };
+                          }
                           setTranslations([
                             ...translations.filter(
-                              (oldTranslation) =>
-                                oldTranslation.lang != obj.lang
+                              oldTranslation => oldTranslation.lang != obj.lang
                             ),
                             updatedTranslation,
-                          ]);
+                          ])
                         }}
                         disabled={isLoading}
                       />
@@ -140,9 +127,9 @@ const RepositoryDetailListRow = (props: Props) => {
                 aria-label="Confirm Button"
                 icon={<CheckIcon />}
                 colorScheme="green"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  onConfirm();
+                onClick={async e => {
+                  e.preventDefault()
+                  onConfirm()
                 }}
                 isLoading={isLoading}
               />
@@ -151,9 +138,9 @@ const RepositoryDetailListRow = (props: Props) => {
                 aria-label="Close Button"
                 icon={<CloseIcon />}
                 colorScheme="red"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onCancel();
+                onClick={e => {
+                  e.preventDefault()
+                  onCancel()
                 }}
                 isLoading={isLoading}
               />
@@ -167,10 +154,7 @@ const RepositoryDetailListRow = (props: Props) => {
                   .map((obj, index) => (
                     <HStack key={index} w="full">
                       <Text whiteSpace="initial">
-                        {
-                          getLanguages().find((lang) => lang.code == obj.lang)
-                            ?.emoji
-                        }
+                        {getLanguages().find(lang => lang.code == obj.lang)?.emoji}
                       </Text>
                       <Text whiteSpace="initial" w="full">
                         {obj.value}
@@ -196,9 +180,9 @@ const RepositoryDetailListRow = (props: Props) => {
                         aria-label="Edit Button"
                         leftIcon={<EditIcon />}
                         variant="ghost"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onEdit();
+                        onClick={e => {
+                          e.preventDefault()
+                          onEdit()
                         }}
                         isLoading={isLoading}
                       >
@@ -210,9 +194,9 @@ const RepositoryDetailListRow = (props: Props) => {
                         leftIcon={<DeleteIcon />}
                         variant="ghost"
                         colorScheme="red"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onOpen();
+                        onClick={e => {
+                          e.preventDefault()
+                          onOpen()
                         }}
                         isLoading={isLoading}
                       >
@@ -227,7 +211,7 @@ const RepositoryDetailListRow = (props: Props) => {
                 title="Delete Translation"
                 message={
                   <Text>
-                    Do you want to delete{" "}
+                    Do you want to delete{' '}
                     <Text fontWeight="semibold" as="span">
                       {props.translationGroup.key}
                     </Text>
@@ -244,7 +228,7 @@ const RepositoryDetailListRow = (props: Props) => {
         </HStack>
       </Td>
     </Tr>
-  );
-};
+  )
+}
 
-export default RepositoryDetailListRow;
+export default RepositoryDetailListRow

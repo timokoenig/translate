@@ -7,16 +7,16 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react'
 
 type Props = {
-  title: string;
-  message: string | JSX.Element;
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-  onConfirm: () => void;
-};
+  title: string
+  message: string | JSX.Element
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+  onConfirm: () => void
+}
 
 const ConfirmationModal = (props: Props) => (
   <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
@@ -35,8 +35,8 @@ const ConfirmationModal = (props: Props) => (
         <Button
           variant="primary"
           onClick={() => {
-            props.onConfirm();
-            props.onClose();
+            props.onConfirm()
+            props.onClose()
           }}
           ml={4}
         >
@@ -45,6 +45,6 @@ const ConfirmationModal = (props: Props) => (
       </ModalFooter>
     </ModalContent>
   </Modal>
-);
+)
 
-export default ConfirmationModal;
+export default ConfirmationModal

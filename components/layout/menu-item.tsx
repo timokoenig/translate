@@ -1,22 +1,22 @@
-import { Flex, Link } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { Flex, Link } from '@chakra-ui/react'
+import { ReactNode } from 'react'
 
 type Props = {
-  onClick: () => void;
-  isActive: boolean;
-  children: ReactNode;
-};
+  onClick: () => void
+  isActive: boolean
+  children: ReactNode
+}
 
 const MenuItem = (props: Props) => {
   return (
     <Link
       href="#"
-      style={{ textDecoration: "none" }}
-      _focus={{ boxShadow: "none" }}
+      style={{ textDecoration: 'none' }}
+      _focus={{ boxShadow: 'none' }}
       w="full"
-      onClick={(e) => {
-        e.preventDefault();
-        props.onClick();
+      onClick={e => {
+        e.preventDefault()
+        props.onClick()
       }}
     >
       <Flex
@@ -27,15 +27,15 @@ const MenuItem = (props: Props) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "gray.200",
-          color: "gray.900",
+          bg: 'gray.200',
+          color: 'gray.900',
         }}
-        bg={props.isActive ? "gray.100" : "white"}
+        bg={props.isActive ? 'gray.100' : 'white'}
       >
         {props.children}
       </Flex>
     </Link>
-  );
-};
+  )
+}
 
-export default MenuItem;
+export default MenuItem

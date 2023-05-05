@@ -1,38 +1,37 @@
-import React from "react";
+import { useAppStore } from '@/utils/store/app/app-context'
 import {
   Avatar,
   Box,
   Button,
   Flex,
   Heading,
-  Text,
-  useColorModeValue,
-  VStack,
   Link,
-} from "@chakra-ui/react";
-import { FiPlus, FiSettings } from "react-icons/fi";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import MenuItem from "./menu-item";
-import { FaGithub } from "react-icons/fa";
-import { useAppStore } from "@/utils/store/app/app-context";
-import moment from "moment";
-import SupportButton from "../global/support-button";
+  Text,
+  VStack,
+  useColorModeValue,
+} from '@chakra-ui/react'
+import moment from 'moment'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { FaGithub } from 'react-icons/fa'
+import { FiPlus, FiSettings } from 'react-icons/fi'
+import SupportButton from '../global/support-button'
+import MenuItem from './menu-item'
 
 const Sidebar = () => {
-  const router = useRouter();
-  const { localRepositories } = useAppStore();
+  const router = useRouter()
+  const { localRepositories } = useAppStore()
   const sortedLocalRepositories = localRepositories.sort((a, b) =>
     a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-  );
-  const { data: session } = useSession();
+  )
+  const { data: session } = useSession()
 
   return (
     <Box
-      bg={useColorModeValue("white", "gray.900")}
+      bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: 72 }}
+      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      w={{ base: 'full', md: 72 }}
       pos="fixed"
       h="full"
     >
@@ -41,7 +40,7 @@ const Sidebar = () => {
           w="full"
           p={4}
           borderBottom="1px"
-          borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+          borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
         >
           <Avatar
             size="sm"
@@ -50,14 +49,12 @@ const Sidebar = () => {
             mr={4}
           />
           <Heading as="h3" size="sm" lineHeight={2} textTransform="uppercase">
-            {session?.user?.name ?? "n/a"}
+            {session?.user?.name ?? 'n/a'}
           </Heading>
         </Flex>
 
         <VStack w="full" p={4} pt={4} textAlign="left">
-          {sortedLocalRepositories.length == 0 && (
-            <Text>Add your first repository to start</Text>
-          )}
+          {sortedLocalRepositories.length == 0 && <Text>Add your first repository to start</Text>}
           {sortedLocalRepositories.map((obj, index) => (
             <MenuItem
               key={index}
@@ -68,14 +65,8 @@ const Sidebar = () => {
                 <Text w="full" fontWeight="semibold">
                   {obj.owner.login}/<strong>{obj.name}</strong>
                 </Text>
-                <Text
-                  w="full"
-                  style={{ marginTop: 0 }}
-                  fontSize={12}
-                  color="gray.500"
-                >
-                  Last Updated{" "}
-                  {moment(obj.pushed_at).format("DD/MM/YYYY HH:mm")}
+                <Text w="full" style={{ marginTop: 0 }} fontSize={12} color="gray.500">
+                  Last Updated {moment(obj.pushed_at).format('DD/MM/YYYY HH:mm')}
                 </Text>
               </VStack>
             </MenuItem>
@@ -85,7 +76,7 @@ const Sidebar = () => {
               leftIcon={<FiPlus />}
               variant="primary"
               w="full"
-              onClick={() => router.push("/repo")}
+              onClick={() => router.push('/repo')}
             >
               Add Repository
             </Button>
@@ -102,10 +93,10 @@ const Sidebar = () => {
               color="gray.900"
               variant="solid"
               _hover={{
-                bg: "gray.300",
+                bg: 'gray.300',
               }}
               w="full"
-              onClick={() => router.push("/settings")}
+              onClick={() => router.push('/settings')}
             >
               Settings
             </Button>
@@ -117,7 +108,7 @@ const Sidebar = () => {
               leftIcon={<FaGithub />}
               bg="gray.900"
               color="white"
-              _hover={{ bg: "gray.700", textDecoration: "none" }}
+              _hover={{ bg: 'gray.700', textDecoration: 'none' }}
               variant="solid"
               w="full"
               href="https://github.com/timokoenig/translate"
@@ -129,7 +120,7 @@ const Sidebar = () => {
         </VStack>
       </VStack>
     </Box>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

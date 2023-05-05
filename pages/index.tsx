@@ -1,23 +1,15 @@
-import React from "react";
-import Layout from "@/components/layout";
-import {
-  Container,
-  SimpleGrid,
-  Heading,
-  Stack,
-  Center,
-  Text,
-} from "@chakra-ui/react";
-import { getSession } from "next-auth/react";
-import { NextPageContext } from "next";
+import Layout from '@/components/layout'
+import { Center, Container, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
+import { NextPageContext } from 'next'
+import { getSession } from 'next-auth/react'
 
 const Index = () => {
   return (
     <Layout>
-      <Container as={SimpleGrid} maxW={"xl"} spacing={10} mt={10}>
+      <Container as={SimpleGrid} maxW={'xl'} spacing={10} mt={10}>
         <Stack spacing={2}>
           <Heading
-            fontSize={{ base: "3xl", sm: "4xl", md: "5xl", lg: "6xl" }}
+            fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
             textAlign="center"
             bgGradient="linear(to-r, red.400,pink.400)"
             bgClip="text"
@@ -26,7 +18,7 @@ const Index = () => {
           </Heading>
           <Heading
             lineHeight={1.1}
-            fontSize={{ base: "xl", sm: "1xl", md: "2xl", lg: "3xl" }}
+            fontSize={{ base: 'xl', sm: '1xl', md: '2xl', lg: '3xl' }}
             textAlign="center"
           >
             Lightweight simple translation platform to manage your localizations
@@ -34,29 +26,29 @@ const Index = () => {
         </Stack>
         <Center>
           <Text>
-            Made with{" "}
+            Made with{' '}
             <Text as="span" color="red.400" display="inline">
               ♥
-            </Text>{" "}
+            </Text>{' '}
             for the community
           </Text>
         </Center>
       </Container>
     </Layout>
-  );
-};
+  )
+}
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { req } = context;
-  const session = await getSession({ req });
+  const { req } = context
+  const session = await getSession({ req })
 
   if (!session) {
     return {
-      redirect: { destination: "/signin" },
-    };
+      redirect: { destination: '/signin' },
+    }
   }
 
-  return { props: {} };
+  return { props: {} }
 }
 
-export default Index;
+export default Index

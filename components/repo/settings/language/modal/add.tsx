@@ -1,68 +1,66 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import emojiFlags from '@/utils/resources/emoji-flags.json'
+import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
-  Stack,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
   Select,
-} from "@chakra-ui/react";
-import { FiPlus } from "react-icons/fi";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import { useRepoStore } from "@/utils/store/repo/repo-context";
-import { useEffect } from "react";
-import emojiFlags from "@/utils/resources/emoji-flags.json";
+  Stack,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { useFormik } from 'formik'
+import { useEffect } from 'react'
+import { FiPlus } from 'react-icons/fi'
+import * as Yup from 'yup'
 
 const AddLanguageModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addLanguage, getLanguages } = useRepoStore();
-  const existingLanguages = getLanguages().map((obj) => obj.code);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { addLanguage, getLanguages } = useRepoStore()
+  const existingLanguages = getLanguages().map(obj => obj.code)
   const availableLanguages = emojiFlags
-    .map((obj) => ({ code: obj.code, name: obj.name, emoji: obj.emoji ?? "" }))
-    .filter((obj) => !existingLanguages.includes(obj.code));
+    .map(obj => ({ code: obj.code, name: obj.name, emoji: obj.emoji ?? '' }))
+    .filter(obj => !existingLanguages.includes(obj.code))
 
   const validationSchema = Yup.object().shape({
     language: Yup.string()
       .trim()
-      .required("Language is required")
-      .notOneOf(existingLanguages, "Language already exists"),
-  });
+      .required('Language is required')
+      .notOneOf(existingLanguages, 'Language already exists'),
+  })
 
   const formik = useFormik({
     initialValues: {
       language: availableLanguages[0].code,
     },
     validationSchema,
-    onSubmit: async (values) => {
-      if (!formik.isValid) return;
+    onSubmit: async values => {
+      if (!formik.isValid) return
       try {
-        const newLanguage = emojiFlags.find(
-          (obj) => obj.code == values.language
-        );
-        if (!newLanguage) return;
+        const newLanguage = emojiFlags.find(obj => obj.code == values.language)
+        if (!newLanguage) return
         await addLanguage({
           code: newLanguage.code,
           name: newLanguage.name,
-          emoji: newLanguage.emoji ?? "",
-        });
-        onClose();
+          emoji: newLanguage.emoji ?? '',
+        })
+        onClose()
       } catch (err: unknown) {
-        console.log(err);
+        console.log(err)
       }
     },
-  });
+  })
 
   useEffect(() => {
-    formik.resetForm();
-  }, [isOpen]);
+    formik.resetForm()
+  }, [isOpen])
 
   return (
     <>
@@ -80,17 +78,10 @@ const AddLanguageModal = () => {
               <FormControl
                 isRequired
                 isDisabled={formik.isSubmitting}
-                isInvalid={
-                  formik.errors.language !== undefined &&
-                  formik.touched.language
-                }
+                isInvalid={formik.errors.language !== undefined && formik.touched.language}
               >
                 <FormLabel htmlFor="language">Language</FormLabel>
-                <Select
-                  id="language"
-                  value={formik.values.language}
-                  onChange={formik.handleChange}
-                >
+                <Select id="language" value={formik.values.language} onChange={formik.handleChange}>
                   {availableLanguages.map((obj, index) => (
                     <option key={index} value={obj.code}>
                       {obj.emoji} {obj.name}
@@ -103,11 +94,7 @@ const AddLanguageModal = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              onClick={onClose}
-              variant="outline"
-              disabled={formik.isSubmitting}
-            >
+            <Button onClick={onClose} variant="outline" disabled={formik.isSubmitting}>
               Close
             </Button>
             <Button
@@ -122,7 +109,7 @@ const AddLanguageModal = () => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default AddLanguageModal;
+export default AddLanguageModal

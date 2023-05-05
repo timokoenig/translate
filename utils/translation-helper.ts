@@ -1,27 +1,27 @@
-import { TranslationFile } from "./models";
+import { TranslationFile } from './models'
 
 const TranslationHelper = {
   // Get all categories
   getCategories: (translationFiles: TranslationFile[]): string[] => {
-    let categories: string[] = [];
-    translationFiles.forEach((obj) => {
+    let categories: string[] = []
+    translationFiles.forEach(obj => {
       if (!categories.includes(obj.nameDisplay)) {
-        categories.push(obj.nameDisplay);
+        categories.push(obj.nameDisplay)
       }
-    });
-    return categories;
+    })
+    return categories
   },
 
   // Get all languages
   getLanguages: (translationFiles: TranslationFile[]): string[] => {
-    let languages: string[] = [];
-    translationFiles.forEach((obj) => {
+    let languages: string[] = []
+    translationFiles.forEach(obj => {
       if (!languages.includes(obj.lang)) {
-        languages.push(obj.lang);
+        languages.push(obj.lang)
       }
-    });
-    return languages;
+    })
+    return languages
   },
-};
+}
 
-export default TranslationHelper;
+export default TranslationHelper

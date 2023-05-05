@@ -1,10 +1,9 @@
-import { CloseIcon } from "@chakra-ui/icons";
-import { HStack, Text } from "@chakra-ui/react";
-import { FiAlertTriangle } from "react-icons/fi";
+import { HStack, Text } from '@chakra-ui/react'
+import { FiAlertTriangle } from 'react-icons/fi'
 
 type Props = {
-  text: string;
-};
+  text: string
+}
 
 const Infobox = (props: Props) => (
   <HStack
@@ -18,6 +17,6 @@ const Infobox = (props: Props) => (
     <FiAlertTriangle size={48} color="orange" />
     <Text>{props.text}</Text>
   </HStack>
-);
+)
 
-export default Infobox;
+export default Infobox

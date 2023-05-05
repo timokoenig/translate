@@ -1,57 +1,51 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react'
 import {
-  User,
-  Translation,
   Commit,
+  Filter,
+  Language,
+  Translation,
   TranslationFile,
   TranslationGroup,
-  Language,
-  Filter,
-} from "../../models";
+  User,
+} from '../../models'
 
 type RepoStoreContextType = {
-  isLoading: boolean;
+  isLoading: boolean
 
-  filter: Filter;
-  setFilter: (filter: Filter) => void;
+  filter: Filter
+  setFilter: (filter: Filter) => void
 
-  contributors: User[];
+  contributors: User[]
 
-  translationFiles: TranslationFile[] | null;
+  translationFiles: TranslationFile[] | null
 
-  setupRepository: (lang: string) => Promise<void>;
+  setupRepository: (lang: string) => Promise<void>
 
-  addTranslation: (
-    translation: Translation,
-    lang: string,
-    category: string
-  ) => Promise<void>;
+  addTranslation: (translation: Translation, lang: string, category: string) => Promise<void>
   updateTranslationGroup: (
     oldTranslationGropu: TranslationGroup,
     newTranslationGroup: TranslationGroup
-  ) => Promise<void>;
-  deleteTranslationGroup: (translationGroup: TranslationGroup) => Promise<void>;
+  ) => Promise<void>
+  deleteTranslationGroup: (translationGroup: TranslationGroup) => Promise<void>
 
-  fetchHistory: () => Promise<Commit[]>;
+  fetchHistory: () => Promise<Commit[]>
 
-  getCategories: () => string[];
-  addCategory: (category: string) => Promise<void>;
-  updateCategory: (oldCategory: string, newCategory: string) => Promise<void>;
-  deleteCategory: (category: string) => Promise<void>;
+  getCategories: () => string[]
+  addCategory: (category: string) => Promise<void>
+  updateCategory: (oldCategory: string, newCategory: string) => Promise<void>
+  deleteCategory: (category: string) => Promise<void>
 
-  getLanguages: () => Language[];
-  addLanguage: (language: Language) => Promise<void>;
-  deleteLanguage: (language: Language) => Promise<void>;
+  getLanguages: () => Language[]
+  addLanguage: (language: Language) => Promise<void>
+  deleteLanguage: (language: Language) => Promise<void>
 
-  getTranslationGroups: () => TranslationGroup[];
-};
+  getTranslationGroups: () => TranslationGroup[]
+}
 
-export const RepoStoreContext = createContext<RepoStoreContextType | undefined>(
-  undefined
-);
+export const RepoStoreContext = createContext<RepoStoreContextType | undefined>(undefined)
 
 export const useRepoStore = (): RepoStoreContextType => {
-  const ctx = useContext(RepoStoreContext);
-  if (!ctx) throw new Error("Invalid context");
-  return ctx;
-};
+  const ctx = useContext(RepoStoreContext)
+  if (!ctx) throw new Error('Invalid context')
+  return ctx
+}

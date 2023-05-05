@@ -1,6 +1,10 @@
 {
-  "name": "website-test",
-  "version": "0.1.0",
+  "name": "translate",
+  "description": "Lightweight simple translation platform to manage your localizations",
+  "version": "1.0.0",
+  "repository": "https://github.com/timokoenig/translate",
+  "author": "Timo Koenig <timo@timokoenig.com>",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",

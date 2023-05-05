@@ -1,19 +1,18 @@
-import React from "react";
-import Layout from "@/components/layout";
-import { Container, Button } from "@chakra-ui/react";
-import SettingsHeader from "@/components/settings/header";
-import HorizontalLine from "@/components/global/horizontal-line";
-import { getSession, signOut } from "next-auth/react";
-import { NextPageContext } from "next";
-import { useAppStore } from "@/utils/store/app/app-context";
+import HorizontalLine from '@/components/global/horizontal-line'
+import Layout from '@/components/layout'
+import SettingsHeader from '@/components/settings/header'
+import { useAppStore } from '@/utils/store/app/app-context'
+import { Button, Container } from '@chakra-ui/react'
+import { NextPageContext } from 'next'
+import { getSession, signOut } from 'next-auth/react'
 
 const Settings = () => {
-  const { setLocalRepositories } = useAppStore();
+  const { setLocalRepositories } = useAppStore()
 
   const onSignOut = async () => {
-    await signOut();
-    setLocalRepositories([]);
-  };
+    await signOut()
+    setLocalRepositories([])
+  }
 
   return (
     <Layout>
@@ -27,20 +26,20 @@ const Settings = () => {
         </Button>
       </Container>
     </Layout>
-  );
-};
+  )
+}
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { req } = context;
-  const session = await getSession({ req });
+  const { req } = context
+  const session = await getSession({ req })
 
   if (!session) {
     return {
-      redirect: { destination: "/signin" },
-    };
+      redirect: { destination: '/signin' },
+    }
   }
 
-  return { props: {} };
+  return { props: {} }
 }
 
-export default Settings;
+export default Settings

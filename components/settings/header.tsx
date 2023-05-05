@@ -1,4 +1,4 @@
-import { Heading, Text, Box, VStack } from "@chakra-ui/react";
+import { Box, Heading, Text, VStack } from '@chakra-ui/react'
 
 const SettingsHeader = () => {
   return (
@@ -8,7 +8,7 @@ const SettingsHeader = () => {
         <Text>Change app settings or user preferences</Text>
       </Box>
     </VStack>
-  );
-};
+  )
+}
 
-export default SettingsHeader;
+export default SettingsHeader

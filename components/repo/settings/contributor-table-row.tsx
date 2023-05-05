@@ -1,9 +1,9 @@
-import { User } from "@/utils/models";
-import { Avatar, Text, HStack, Heading } from "@chakra-ui/react";
+import { User } from '@/utils/models'
+import { Avatar, HStack, Heading, Text } from '@chakra-ui/react'
 
 type Props = {
-  user: User;
-};
+  user: User
+}
 
 const ContributorTableRow = (props: Props) => {
   return (
@@ -16,7 +16,7 @@ const ContributorTableRow = (props: Props) => {
       </HStack>
       <Text>{props.user.contributions} contributions</Text>
     </HStack>
-  );
-};
+  )
+}
 
-export default ContributorTableRow;
+export default ContributorTableRow

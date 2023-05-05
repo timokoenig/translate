@@ -1,12 +1,12 @@
-import { Button, Link, Image } from "@chakra-ui/react";
+import { Button, Image, Link } from '@chakra-ui/react'
 
 type Props = {
-  w?: string;
-};
+  w?: string
+}
 
 const SupportButton = (props: Props) => {
-  const kofiUsername = process.env.NEXT_PUBLIC_KOFI_USERNAME;
-  if (!kofiUsername) return null;
+  const kofiUsername = process.env.NEXT_PUBLIC_KOFI_USERNAME
+  if (!kofiUsername) return null
   return (
     <Button
       as={Link}
@@ -14,20 +14,16 @@ const SupportButton = (props: Props) => {
       target="_blank"
       bgGradient="linear(to-r, red.400,pink.400)"
       color="white"
-      w={props.w ?? "auto"}
+      w={props.w ?? 'auto'}
       _hover={{
-        bgGradient: "linear(to-r, red.500,pink.500)",
-        textDecoration: "none",
+        bgGradient: 'linear(to-r, red.500,pink.500)',
+        textDecoration: 'none',
       }}
     >
-      <Image
-        src="/kofi_s_logo_nolabel.svg"
-        height="36px"
-        alt="Support this project on ko-fi.com"
-      />
+      <Image src="/kofi_s_logo_nolabel.svg" height="36px" alt="Support this project on ko-fi.com" />
       Support this project
     </Button>
-  );
-};
+  )
+}
 
-export default SupportButton;
+export default SupportButton

@@ -1,33 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { NextPageContext } from "next";
-import { getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import HorizontalLine from "@/components/global/horizontal-line";
-import RepositoryDetailHeader from "@/components/repo/detail/header";
-import { useAppStore } from "@/utils/store/app/app-context";
-import { useRouter } from "next/router";
-import ContributorTable from "@/components/repo/settings/contributor-table";
-import { Button, Box, Heading } from "@chakra-ui/react";
-import RepoDetailLayout from "@/components/repo/detail/layout";
-import { Repository } from "@/utils/models";
-import CategoryTable from "@/components/repo/settings/category/table";
-import LanguageTable from "@/components/repo/settings/language/table";
+import HorizontalLine from '@/components/global/horizontal-line'
+import RepositoryDetailHeader from '@/components/repo/detail/header'
+import RepoDetailLayout from '@/components/repo/detail/layout'
+import CategoryTable from '@/components/repo/settings/category/table'
+import ContributorTable from '@/components/repo/settings/contributor-table'
+import LanguageTable from '@/components/repo/settings/language/table'
+import { Repository } from '@/utils/models'
+import { useAppStore } from '@/utils/store/app/app-context'
+import { Box, Button, Heading } from '@chakra-ui/react'
+import { NextPageContext } from 'next'
+import { getSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 type ContentProps = {
-  repo: Repository;
-};
+  repo: Repository
+}
 
 const RepositoryDetailContent = (props: ContentProps) => {
-  const router = useRouter();
-  const [search, setSearch] = useState<string>("");
-  const { localRepositories, setLocalRepositories } = useAppStore();
+  const router = useRouter()
+  const [search, setSearch] = useState<string>('')
+  const { localRepositories, setLocalRepositories } = useAppStore()
 
   const onRemoveRepo = () => {
-    setLocalRepositories(
-      localRepositories.filter((obj) => obj.id != props.repo.id)
-    );
-    router.replace("/");
-  };
+    setLocalRepositories(localRepositories.filter(obj => obj.id != props.repo.id))
+    router.replace('/')
+  }
 
   return (
     <>
@@ -54,50 +52,50 @@ const RepositoryDetailContent = (props: ContentProps) => {
         </Button>
       </Box>
     </>
-  );
-};
+  )
+}
 
 type Props = {
-  id: number;
-};
+  id: number
+}
 
 const RepoDetailSettings = (props: Props) => {
-  const router = useRouter();
-  const { localRepositories } = useAppStore();
-  const repo = localRepositories.find((obj) => obj.id == props.id);
+  const router = useRouter()
+  const { localRepositories } = useAppStore()
+  const repo = localRepositories.find(obj => obj.id == props.id)
 
   useEffect(() => {
     if (!repo) {
-      router.replace("/");
+      router.replace('/')
     }
-  }, []);
+  }, [])
 
   if (!repo) {
-    return null;
+    return null
   }
 
   return (
     <RepoDetailLayout repo={repo}>
       <RepositoryDetailContent repo={repo} />
     </RepoDetailLayout>
-  );
-};
+  )
+}
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { req } = context;
-  const session = await getSession({ req });
+  const { req } = context
+  const session = await getSession({ req })
 
   if (!session) {
     return {
-      redirect: { destination: "/signin" },
-    };
+      redirect: { destination: '/signin' },
+    }
   }
 
   return {
     props: {
       id: Number(context.query.id as string),
     },
-  };
+  }
 }
 
-export default RepoDetailSettings;
+export default RepoDetailSettings

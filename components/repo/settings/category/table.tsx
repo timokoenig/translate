@@ -1,20 +1,13 @@
-import {
-  Table,
-  TableContainer,
-  Tbody,
-  Heading,
-  Box,
-  HStack,
-} from "@chakra-ui/react";
-import { useRepoStore } from "@/utils/store/repo/repo-context";
-import CategoryTableRow from "./table-row";
-import CreateCategoryModal from "./modal/create";
+import { useRepoStore } from '@/utils/store/repo/repo-context'
+import { Box, HStack, Heading, Table, TableContainer, Tbody } from '@chakra-ui/react'
+import CreateCategoryModal from './modal/create'
+import CategoryTableRow from './table-row'
 
 const CategoryTable = () => {
-  const { getCategories } = useRepoStore();
+  const { getCategories } = useRepoStore()
   const sortedCategories = getCategories()
     // sort by name
-    .sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
+    .sort((a, b) => (a > b ? 1 : a < b ? -1 : 0))
 
   return (
     <>
@@ -37,7 +30,7 @@ const CategoryTable = () => {
         </Table>
       </TableContainer>
     </>
-  );
-};
+  )
+}
 
-export default CategoryTable;
+export default CategoryTable

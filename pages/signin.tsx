@@ -1,10 +1,10 @@
-import { NextPageContext } from "next";
-import { VStack, Flex, Link, Box, Container } from "@chakra-ui/react";
-import { getSession } from "next-auth/react";
-import { FaGithub } from "react-icons/fa";
-import HeroContainer from "@/components/signin/hero-container";
-import FeatureContainer from "@/components/signin/feature-container";
-import Footer from "@/components/signin/footer";
+import FeatureContainer from '@/components/signin/feature-container'
+import Footer from '@/components/signin/footer'
+import HeroContainer from '@/components/signin/hero-container'
+import { Box, Container, Flex, Link, VStack } from '@chakra-ui/react'
+import { NextPageContext } from 'next'
+import { getSession } from 'next-auth/react'
+import { FaGithub } from 'react-icons/fa'
 
 const Signin = () => {
   return (
@@ -24,20 +24,20 @@ const Signin = () => {
         </VStack>
       </Container>
     </VStack>
-  );
-};
+  )
+}
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { req } = context;
-  const session = await getSession({ req });
+  const { req } = context
+  const session = await getSession({ req })
 
   if (session) {
     return {
-      redirect: { destination: "/" },
-    };
+      redirect: { destination: '/' },
+    }
   }
 
-  return { props: {} };
+  return { props: {} }
 }
 
-export default Signin;
+export default Signin

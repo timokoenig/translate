@@ -1,23 +1,22 @@
-import { Repository } from "@/utils/models";
-import { useAppStore } from "@/utils/store/app/app-context";
-import { VStack, Text, Button, Td, Tr, Tag } from "@chakra-ui/react";
-import { FiPlus } from "react-icons/fi";
-import moment from "moment";
+import { Repository } from '@/utils/models'
+import { useAppStore } from '@/utils/store/app/app-context'
+import { Button, Tag, Td, Text, Tr, VStack } from '@chakra-ui/react'
+import moment from 'moment'
+import { FiPlus } from 'react-icons/fi'
 
 type Props = {
-  repo: Repository;
-};
+  repo: Repository
+}
 
 const RepositoryListRow = (props: Props) => {
-  const { localRepositories, setLocalRepositories } = useAppStore();
+  const { localRepositories, setLocalRepositories } = useAppStore()
 
   // Check if user has added this repository already
-  const isAdded =
-    localRepositories.findIndex((obj) => obj.id == props.repo.id) != -1;
+  const isAdded = localRepositories.findIndex(obj => obj.id == props.repo.id) != -1
 
   const onAdd = () => {
-    setLocalRepositories([...localRepositories, props.repo]);
-  };
+    setLocalRepositories([...localRepositories, props.repo])
+  }
 
   return (
     <Tr>
@@ -40,15 +39,10 @@ const RepositoryListRow = (props: Props) => {
           </Tag>
         )}
       </Td>
-      <Td>{moment(props.repo.pushed_at).format("DD/MM/YYYY HH:mm")}</Td>
+      <Td>{moment(props.repo.pushed_at).format('DD/MM/YYYY HH:mm')}</Td>
       <Td textAlign="right">
         {isAdded ? (
-          <Button
-            colorScheme="green"
-            variant="ghost"
-            onClick={() => {}}
-            isDisabled
-          >
+          <Button colorScheme="green" variant="ghost" onClick={() => {}} isDisabled>
             Added
           </Button>
         ) : (
@@ -58,7 +52,7 @@ const RepositoryListRow = (props: Props) => {
         )}
       </Td>
     </Tr>
-  );
-};
+  )
+}
 
-export default RepositoryListRow;
+export default RepositoryListRow

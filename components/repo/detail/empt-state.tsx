@@ -1,16 +1,16 @@
-import { useRepoStore } from "@/utils/store/repo/repo-context";
-import { Button, Center, Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { useRepoStore } from '@/utils/store/repo/repo-context'
+import { Box, Button, Center, Heading, Text, VStack } from '@chakra-ui/react'
 
 const EmptyState = () => {
-  const { setupRepository } = useRepoStore();
+  const { setupRepository } = useRepoStore()
 
   const onConfirm = async () => {
     try {
-      await setupRepository("en");
+      await setupRepository('en')
     } catch (err: unknown) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   return (
     <Box p={8}>
@@ -18,8 +18,8 @@ const EmptyState = () => {
         <VStack gap={7} maxW={400}>
           <Heading>Set up repository</Heading>
           <Text textAlign="center">
-            This is a new repository without a translation file. Continue to
-            create all necessary files.
+            This is a new repository without a translation file. Continue to create all necessary
+            files.
           </Text>
           <Button variant="primary" w="full" onClick={onConfirm}>
             Continue
@@ -27,7 +27,7 @@ const EmptyState = () => {
         </VStack>
       </Center>
     </Box>
-  );
-};
+  )
+}
 
-export default EmptyState;
+export default EmptyState

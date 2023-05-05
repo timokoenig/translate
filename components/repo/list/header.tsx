@@ -1,10 +1,10 @@
-import SearchInput from "@/components/global/search-input";
-import { Heading, Text, Box, VStack } from "@chakra-ui/react";
+import SearchInput from '@/components/global/search-input'
+import { Box, Heading, Text, VStack } from '@chakra-ui/react'
 
 type Props = {
-  search: string;
-  setSearch: (value: string) => void;
-};
+  search: string
+  setSearch: (value: string) => void
+}
 
 const RepositoryListHeader = (props: Props) => {
   return (
@@ -12,13 +12,13 @@ const RepositoryListHeader = (props: Props) => {
       <SearchInput
         value={props.search}
         onChange={props.setSearch}
-        onClear={() => props.setSearch("")}
+        onClear={() => props.setSearch('')}
       />
 
       <Box mb={10}>
         <Heading size="lg">GitHub Repositories</Heading>
         <Text>
-          Select a repository from the list below to use it with{" "}
+          Select a repository from the list below to use it with{' '}
           <Text
             bgGradient="linear(to-r, red.400,pink.400)"
             bgClip="text"
@@ -30,7 +30,7 @@ const RepositoryListHeader = (props: Props) => {
         </Text>
       </Box>
     </VStack>
-  );
-};
+  )
+}
 
-export default RepositoryListHeader;
+export default RepositoryListHeader
