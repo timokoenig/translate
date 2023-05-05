@@ -8,7 +8,7 @@ import {
   Image,
   Link,
 } from "@chakra-ui/react";
-import SupportButton from "./support-button";
+import SupportButton from "../global/support-button";
 import { FaGithub } from "react-icons/fa";
 import { useAppStore } from "@/utils/store/app/app-context";
 import { signIn } from "next-auth/react";

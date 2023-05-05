@@ -42,6 +42,10 @@ The application uses NextAuth.js for the OAuth authentication. You need to set t
 
 You can use openssl to generate a secret for you `openssl rand -base64 32`.
 
+### Ko-Fi Support Button
+
+Set the `NEXT_PUBLIC_KOFI_USERNAME` environment variable to enable the ko-fi support button.
+
 ## Why Translate?
 
 While I developed a NextJS application with many different localizations, I was tired of editing the json files directly and copying keys from one language to another. The more keys you have and the more languages your application supports the more difficult it gets to manage them. **Translate** provides a simple web interface to manage all translations directly in your Github repository.

@@ -17,6 +17,7 @@ import MenuItem from "./menu-item";
 import { FaGithub } from "react-icons/fa";
 import { useAppStore } from "@/utils/store/app/app-context";
 import moment from "moment";
+import SupportButton from "../global/support-button";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -93,7 +94,7 @@ const Sidebar = () => {
 
         <Box flex={1} />
 
-        <VStack w="full" p={4} pt={8} textAlign="left">
+        <VStack w="full" gap={2} p={4} pt={8} textAlign="left">
           <Box pt={4} w="full">
             <Button
               leftIcon={<FiSettings />}
@@ -109,7 +110,8 @@ const Sidebar = () => {
               Settings
             </Button>
           </Box>
-          <Box pt={4} w="full">
+          <SupportButton w="full" />
+          <Box w="full">
             <Button
               as={Link}
               leftIcon={<FaGithub />}
