@@ -50,6 +50,8 @@ Set the `NEXT_PUBLIC_KOFI_USERNAME` environment variable to enable the ko-fi sup
 
 Set the `NEXT_PUBLIC_IMPRINT_URL` environment variable with a URL to your imprint HTML to enable the imprint page.
 
+You can use this [Imprint service](https://imprint.wtf) to generate your imprint HTML file.
+
 ## Why Translate?
 
 While I developed a NextJS application with many different localizations, I was tired of editing the json files directly and copying keys from one language to another. The more keys you have and the more languages your application supports the more difficult it gets to manage them. **Translate** provides a simple web interface to manage all translations directly in your Github repository.
