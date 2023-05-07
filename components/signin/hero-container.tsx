@@ -1,8 +1,9 @@
 import { useAppStore } from '@/utils/store/app/app-context'
-import { Box, Button, Heading, Image, Link, SimpleGrid, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Image, Link, SimpleGrid, Text, VStack } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import { FaGithub } from 'react-icons/fa'
 import SupportButton from '../global/support-button'
+import HeroHeadline from './hero-headline'
 
 const HeroContainer = () => {
   const { setAuthenticated } = useAppStore()
@@ -16,23 +17,7 @@ const HeroContainer = () => {
   return (
     <SimpleGrid columns={2}>
       <VStack p={4}>
-        <VStack spacing={2} mb={8}>
-          <Heading
-            fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
-            textAlign="center"
-            bgGradient="linear(to-r, red.400,pink.400)"
-            bgClip="text"
-          >
-            Translate
-          </Heading>
-          <Heading
-            lineHeight={1.1}
-            fontSize={{ base: 'xl', sm: '1xl', md: '2xl', lg: '3xl' }}
-            textAlign="center"
-          >
-            Lightweight simple translation platform to manage your localizations
-          </Heading>
-        </VStack>
+        <HeroHeadline />
         <Text pb={8} px={16} textAlign="center">
           Getting started is easy! Just sign in using your{' '}
           <Link href="https://github.com" isExternal textDecoration="underline">

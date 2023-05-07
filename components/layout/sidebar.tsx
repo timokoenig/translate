@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { FaGithub } from 'react-icons/fa'
 import { FiPlus, FiSettings } from 'react-icons/fi'
+import License from '../global/license'
 import SupportButton from '../global/support-button'
 import MenuItem from './menu-item'
 
@@ -117,6 +118,7 @@ const Sidebar = () => {
               Open Source
             </Button>
           </Box>
+          <License />
         </VStack>
       </VStack>
     </Box>
