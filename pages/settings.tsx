@@ -1,6 +1,7 @@
 import HorizontalLine from '@/components/global/horizontal-line'
 import Layout from '@/components/layout'
 import SettingsHeader from '@/components/settings/header'
+import Preferences from '@/components/settings/preferences'
 import { useAppStore } from '@/utils/store/app/app-context'
 import { Button, Container } from '@chakra-ui/react'
 import { NextPageContext } from 'next'
@@ -19,6 +20,8 @@ const Settings = () => {
       <Container>
         <SettingsHeader />
       </Container>
+      <HorizontalLine />
+      <Preferences />
       <HorizontalLine />
       <Container py={8}>
         <Button variant="primary" w="full" onClick={onSignOut}>

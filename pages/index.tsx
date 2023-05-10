@@ -1,5 +1,13 @@
 import Layout from '@/components/layout'
-import { Center, Container, Heading, SimpleGrid, Stack, Text } from '@chakra-ui/react'
+import {
+  Center,
+  Container,
+  Heading,
+  SimpleGrid,
+  Stack,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react'
 import { NextPageContext } from 'next'
 import { getSession } from 'next-auth/react'
 
@@ -11,7 +19,10 @@ const Index = () => {
           <Heading
             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
             textAlign="center"
-            bgGradient="linear(to-r, red.400,pink.400)"
+            bgGradient={useColorModeValue(
+              'linear(to-r, red.400,pink.400)',
+              'linear(to-r, red.500,pink.500)'
+            )}
             bgClip="text"
           >
             Translate

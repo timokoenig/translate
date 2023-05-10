@@ -1,5 +1,5 @@
 import SearchInput from '@/components/global/search-input'
-import { Box, Heading, Text, VStack } from '@chakra-ui/react'
+import { Box, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 
 type Props = {
   search: string
@@ -20,7 +20,10 @@ const RepositoryListHeader = (props: Props) => {
         <Text>
           Select a repository from the list below to use it with{' '}
           <Text
-            bgGradient="linear(to-r, red.400,pink.400)"
+            bgGradient={useColorModeValue(
+              'linear(to-r, red.400,pink.400)',
+              'linear(to-r, red.500,pink.500)'
+            )}
             bgClip="text"
             fontWeight="bold"
             display="inline"

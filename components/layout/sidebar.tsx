@@ -90,11 +90,11 @@ const Sidebar = () => {
           <Box pt={4} w="full">
             <Button
               leftIcon={<FiSettings />}
-              bg="gray.200"
-              color="gray.900"
+              bg={useColorModeValue('gray.200', 'gray.800')}
+              color={useColorModeValue('gray.900', 'gray.100')}
               variant="solid"
               _hover={{
-                bg: 'gray.300',
+                bg: useColorModeValue('gray.300', 'gray.700'),
               }}
               w="full"
               onClick={() => router.push('/settings')}

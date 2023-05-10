@@ -1,4 +1,4 @@
-import { Flex, Link } from '@chakra-ui/react'
+import { Flex, Link, useColorModeValue } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 type Props = {
@@ -27,10 +27,13 @@ const MenuItem = (props: Props) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'gray.200',
-          color: 'gray.900',
+          bg: useColorModeValue('gray.200', 'gray.700'),
+          color: useColorModeValue('gray.900', 'gray.100'),
         }}
-        bg={props.isActive ? 'gray.100' : 'white'}
+        bg={useColorModeValue(
+          props.isActive ? 'gray.100' : 'transparent',
+          props.isActive ? 'gray.800' : 'transparent'
+        )}
       >
         {props.children}
       </Flex>

@@ -1,10 +1,18 @@
-import { Button, Image, Link } from '@chakra-ui/react'
+import { Button, Image, Link, useColorModeValue } from '@chakra-ui/react'
 
 type Props = {
   w?: string
 }
 
 const SupportButton = (props: Props) => {
+  const bgGradient = useColorModeValue(
+    'linear(to-r, red.400,pink.400)',
+    'linear(to-r, red.500,pink.500)'
+  )
+  const bgGradientHover = useColorModeValue(
+    'linear(to-r, red.500,pink.500)',
+    'linear(to-r, red.600,pink.600)'
+  )
   const kofiUsername = process.env.NEXT_PUBLIC_KOFI_USERNAME
   if (!kofiUsername) return null
   return (
@@ -12,11 +20,11 @@ const SupportButton = (props: Props) => {
       as={Link}
       href={`https://ko-fi.com/${kofiUsername}`}
       target="_blank"
-      bgGradient="linear(to-r, red.400,pink.400)"
+      bgGradient={bgGradient}
       color="white"
       w={props.w ?? 'auto'}
       _hover={{
-        bgGradient: 'linear(to-r, red.500,pink.500)',
+        bgGradient: bgGradientHover,
         textDecoration: 'none',
       }}
     >

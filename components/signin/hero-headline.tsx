@@ -1,4 +1,4 @@
-import { Heading, Link, VStack } from '@chakra-ui/react'
+import { Heading, Link, VStack, useColorModeValue } from '@chakra-ui/react'
 
 const HeroHeadline = () => (
   <VStack spacing={2} mb={8}>
@@ -6,7 +6,10 @@ const HeroHeadline = () => (
       as={Link}
       fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
       textAlign="center"
-      bgGradient="linear(to-r, red.400,pink.400)"
+      bgGradient={useColorModeValue(
+        'linear(to-r, red.400,pink.400)',
+        'linear(to-r, red.500,pink.500)'
+      )}
       bgClip="text"
       href="/"
     >

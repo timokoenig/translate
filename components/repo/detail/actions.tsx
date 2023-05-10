@@ -1,5 +1,5 @@
 import { useRepoStore } from '@/utils/store/repo/repo-context'
-import { Box, Button, HStack, Select, Switch, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Select, Switch, Text, useColorModeValue } from '@chakra-ui/react'
 import CreateTranslationModal from './modal/create'
 
 type Props = {
@@ -67,7 +67,12 @@ const Actions = (props: Props) => {
           ))}
         </Select>
 
-        <HStack borderWidth={1} borderColor="gray.200" borderRadius={6} p={2}>
+        <HStack
+          borderWidth={1}
+          borderColor={useColorModeValue('gray.200', 'gray.700')}
+          borderRadius={6}
+          p={2}
+        >
           <Text>Missing Translations</Text>
           <Switch
             isChecked={filter.missingTranslations}

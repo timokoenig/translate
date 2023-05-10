@@ -1,9 +1,10 @@
 import { Commit } from '@/utils/models'
-import { Avatar, HStack, Heading, Td, Text, Tr } from '@chakra-ui/react'
+import { Avatar, HStack, Heading, Td, Text, Tr, useColorModeValue } from '@chakra-ui/react'
 import jsonDiff from 'json-diff'
 import parse from 'parse-diff'
 
 const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
+  const textColor = useColorModeValue('gray.700', 'gray.300')
   const filteredChanges = props.changes.filter(
     obj => !obj.content.includes('No newline at end of file')
   )
@@ -19,7 +20,7 @@ const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
     .trim()
 
   return (
-    <Text fontSize={14} color="gray.700">
+    <Text fontSize={14} color={textColor}>
       <pre>{diff}</pre>
     </Text>
   )

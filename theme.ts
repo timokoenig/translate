@@ -1,14 +1,23 @@
 import { extendTheme } from '@chakra-ui/react'
+import type { StyleFunctionProps } from '@chakra-ui/styled-system'
 
 const theme = extendTheme({
   components: {
     Button: {
       variants: {
         primary: {
-          bgGradient: 'linear(to-r, red.400,pink.400)',
+          bgGradient: (props: StyleFunctionProps) => {
+            return props.colorMode === 'light'
+              ? 'linear(to-r, red.400,pink.400)'
+              : 'linear(to-r, red.500,pink.500)'
+          },
           color: 'white',
           _hover: {
-            bgGradient: 'linear(to-r, red.500,pink.500)',
+            bgGradient: (props: StyleFunctionProps) => {
+              return props.colorMode === 'light'
+                ? 'linear(to-r, red.500,pink.500)'
+                : 'linear(to-r, red.600,pink.600)'
+            },
           },
         },
       },
