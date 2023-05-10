@@ -15,20 +15,20 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
-    "@chakra-ui/react": "^2.6.0",
+    "@chakra-ui/react": "^2.6.1",
     "@chakra-ui/system": "^2.5.7",
-    "@emotion/react": "^11.10.8",
-    "@emotion/styled": "^11.10.8",
-    "@types/node": "18.16.3",
-    "@types/react-dom": "18.0.11",
-    "eslint": "8.39.0",
-    "eslint-config-next": "13.3.4",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@types/node": "20.1.0",
+    "@types/react-dom": "18.2.4",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.1",
     "formik": "^2.2.9",
-    "framer-motion": "^10.12.4",
+    "framer-motion": "^10.12.10",
     "isomorphic-dompurify": "^1.4.0",
     "json-diff": "^1.0.3",
     "moment": "^2.29.4",
-    "next": "13.3.4",
+    "next": "13.4.1",
     "next-auth": "^4.22.1",
     "octokit": "^2.0.14",
     "parse-diff": "^0.11.1",
@@ -40,6 +40,6 @@
   },
   "devDependencies": {
     "@types/json-diff": "^0.9.1",
-    "@types/react": "^18.2.0"
+    "@types/react": "^18.2.6"
   }
 }
