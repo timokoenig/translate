@@ -1,5 +1,14 @@
 import { useAppStore } from '@/utils/store/app/app-context'
-import { Box, Button, Image, Link, SimpleGrid, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Image,
+  Link,
+  SimpleGrid,
+  Text,
+  VStack,
+  useColorModeValue,
+} from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import { FaGithub } from 'react-icons/fa'
 import SupportButton from '../global/support-button'
@@ -37,7 +46,10 @@ const HeroContainer = () => {
         </Box>
         <SupportButton />
       </VStack>
-      <Image src="/browser-mockup.png" alt="Translate Browser Mockup" />
+      <Image
+        src={useColorModeValue('/browser-mockup-light.png', '/browser-mockup-dark.png')}
+        alt="Translate Browser Mockup"
+      />
     </SimpleGrid>
   )
 }
