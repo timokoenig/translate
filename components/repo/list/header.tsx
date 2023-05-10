@@ -27,6 +27,7 @@ const RepositoryListHeader = (props: Props) => {
             bgClip="text"
             fontWeight="bold"
             display="inline"
+            as="span"
           >
             Translate
           </Text>
