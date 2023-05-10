@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import emojiFlags from '@/utils/resources/emoji-flags.json'
+import languages from '@/utils/resources/languages.json'
 import TranslationHelper from '@/utils/translation-helper'
 import moment from 'moment'
 import { getSession } from 'next-auth/react'
@@ -445,7 +445,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
 
   const getLanguages = (): Language[] =>
     TranslationHelper.getLanguages(translationFiles ?? []).map(obj => {
-      const entry = emojiFlags.find(emoji => emoji.code == obj)
+      const entry = languages.find(emoji => emoji.code == obj)
       if (entry) {
         return {
           code: entry.code.toLowerCase(),

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import emojiFlags from '@/utils/resources/emoji-flags.json'
+import languages from '@/utils/resources/languages.json'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
   Button,
@@ -25,7 +25,7 @@ const AddLanguageModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { addLanguage, getLanguages } = useRepoStore()
   const existingLanguages = getLanguages().map(obj => obj.code)
-  const availableLanguages = emojiFlags
+  const availableLanguages = languages
     .map(obj => ({ code: obj.code, name: obj.name, emoji: obj.emoji ?? '' }))
     .filter(obj => !existingLanguages.includes(obj.code))
 
@@ -44,7 +44,7 @@ const AddLanguageModal = () => {
     onSubmit: async values => {
       if (!formik.isValid) return
       try {
-        const newLanguage = emojiFlags.find(obj => obj.code == values.language)
+        const newLanguage = languages.find(obj => obj.code == values.language)
         if (!newLanguage) return
         await addLanguage({
           code: newLanguage.code,
