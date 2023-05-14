@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Text, useColorModeValue } from '@chakra-ui/react'
 import { FiAlertTriangle } from 'react-icons/fi'
 
 type Props = {
@@ -15,7 +15,7 @@ const Infobox = (props: Props) => (
     p={4}
   >
     <FiAlertTriangle size={48} color="orange" />
-    <Text>{props.text}</Text>
+    <Text color={useColorModeValue('white', 'black')}>{props.text}</Text>
   </HStack>
 )
 
