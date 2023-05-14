@@ -12,6 +12,7 @@ import {
   Repository,
   Translation,
   TranslationFile,
+  TranslationFileData,
   TranslationGroup,
   User,
 } from '../../models'
@@ -511,9 +512,12 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     let groups: TranslationGroup[] = []
     let availableLanguages = getLanguages()
 
-    translationFiles?.forEach(file => {
-      const keys = Object.keys(file.data)
-      keys.map(key => {
+    const mapTranslationGroup = (
+      file: TranslationFile,
+      data: TranslationFileData
+    ): TranslationGroup[] =>
+      Object.keys(data).map(key => {
+        const keyData = data[key] as string | TranslationFileData
         let group = groups.find(obj => obj.key == key)
         if (!group) {
           group = {
@@ -524,23 +528,30 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
               value: '',
               lang: lang.code,
             })),
+            children: typeof keyData == 'string' ? [] : mapTranslationGroup(file, keyData),
           }
         }
 
-        const value = typeof file.data[key] == 'string' ? file.data[key] : `${file.data[key]}`
-        if (value) {
+        if (typeof keyData == 'string') {
           group.translations = [
             ...group.translations.filter(obj => obj.lang != file.lang),
             {
               key,
-              value,
+              value: keyData,
               lang: file.lang,
             },
           ]
         }
 
-        groups = [...groups.filter(obj => obj.key != key), group]
+        return group
       })
+
+    translationFiles?.forEach(file => {
+      const translationGroups = mapTranslationGroup(file, file.data)
+      groups = [
+        ...translationGroups,
+        ...groups.filter(obj => translationGroups.findIndex(group => group.key == obj.key) == -1),
+      ]
     })
 
     return groups

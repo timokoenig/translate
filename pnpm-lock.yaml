@@ -6,6 +6,7 @@ specifiers:
   '@chakra-ui/system': ^2.5.7
   '@emotion/react': ^11.11.0
   '@emotion/styled': ^11.11.0
+  '@tanstack/react-table': ^8.9.1
   '@types/json-diff': ^0.9.1
   '@types/node': 20.1.0
   '@types/react': ^18.2.6
@@ -33,6 +34,7 @@ dependencies:
   '@chakra-ui/system': 2.5.7_yiqp6zyzlsf3e67mwwqwha2b2u
   '@emotion/react': 11.11.0_s3k22s5ab4eu26xuel7hiaraxy
   '@emotion/styled': 11.11.0_gwsnvbfty4jua3m4tf74x4grui
+  '@tanstack/react-table': 8.9.1_biqbaboplfbrettd7655fr4n2y
   '@types/node': 20.1.0
   '@types/react-dom': 18.2.4
   eslint: 8.40.0
@@ -1779,6 +1781,23 @@ packages:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
       tslib: 2.5.0
+    dev: false
+
+  /@tanstack/react-table/8.9.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-yHs2m6lk5J5RNcu2dNtsDGux66wNXZjEgzxos6MRCX8gL+nqxeW3ZglqP6eANN0bGElPnjvqiUHGQvdACOr3Cw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.9.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.9.1:
+    resolution: {integrity: sha512-2+R83n8vMZND0q3W1lSiF7co9nFbeWbjAErFf27xwbeA9E0wtUu5ZDfgj+TZ6JzdAEQAgfxkk/QNFAKiS8E4MA==}
+    engines: {node: '>=12'}
     dev: false
 
   /@tootallnate/once/2.0.0:

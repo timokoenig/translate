@@ -2,11 +2,7 @@ import { useRepoStore } from '@/utils/store/repo/repo-context'
 import { Box, Button, HStack, Select, Switch, Text, useColorModeValue } from '@chakra-ui/react'
 import CreateTranslationModal from './modal/create'
 
-type Props = {
-  translationCount: number
-}
-
-const Actions = (props: Props) => {
+const Actions = () => {
   const { getCategories, getLanguages, filter, setFilter } = useRepoStore()
   const languages = getLanguages()
   const categories = getCategories()
@@ -88,9 +84,6 @@ const Actions = (props: Props) => {
         )}
 
         <Box flex={1} />
-        <Text>
-          {props.translationCount} {props.translationCount == 1 ? 'Translation' : 'Translations'}
-        </Text>
         <CreateTranslationModal />
       </HStack>
     </Box>
