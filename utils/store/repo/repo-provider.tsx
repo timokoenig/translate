@@ -509,16 +509,20 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   }
 
   const getTranslationGroups = (): TranslationGroup[] => {
-    let groups: TranslationGroup[] = []
+    let translationGroups: TranslationGroup[] = []
     let availableLanguages = getLanguages()
 
     const mapTranslationGroup = (
       file: TranslationFile,
-      data: TranslationFileData
-    ): TranslationGroup[] =>
-      Object.keys(data).map(key => {
+      data: TranslationFileData,
+      groups: TranslationGroup[]
+    ): TranslationGroup[] => {
+      let tmpGroups = groups
+
+      Object.keys(data).forEach(key => {
         const keyData = data[key] as string | TranslationFileData
-        let group = groups.find(obj => obj.key == key)
+
+        let group = tmpGroups.find(obj => obj.key == key)
         if (!group) {
           group = {
             category: file.nameDisplay,
@@ -528,7 +532,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
               value: '',
               lang: lang.code,
             })),
-            children: typeof keyData == 'string' ? [] : mapTranslationGroup(file, keyData),
+            children: [],
           }
         }
 
@@ -541,20 +545,27 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
               lang: file.lang,
             },
           ]
+        } else if (typeof keyData == 'object') {
+          group.children = mapTranslationGroup(file, keyData, group.children)
         }
 
-        return group
+        tmpGroups = [...tmpGroups.filter(obj => obj.key != group?.key), group]
       })
 
+      return tmpGroups.sort((a, b) =>
+        a.key.toLowerCase() > b.key.toLowerCase()
+          ? 1
+          : a.key.toLowerCase() < b.key.toLowerCase()
+          ? -1
+          : 0
+      )
+    }
+
     translationFiles?.forEach(file => {
-      const translationGroups = mapTranslationGroup(file, file.data)
-      groups = [
-        ...translationGroups,
-        ...groups.filter(obj => translationGroups.findIndex(group => group.key == obj.key) == -1),
-      ]
+      translationGroups = mapTranslationGroup(file, file.data, translationGroups)
     })
 
-    return groups
+    return translationGroups
   }
 
   // Load repository data

@@ -84,9 +84,7 @@ const RepositoryDetailList = (props: Props) => {
                 translation.key.includes(props.search) || translation.value.includes(props.search)
             ) != -1
           )
-        })
-        // sort by key name
-        .sort((a, b) => (a.key > b.key ? 1 : a.key < b.key ? -1 : 0)),
+        }),
     [translationFiles, filter, props]
   )
 
