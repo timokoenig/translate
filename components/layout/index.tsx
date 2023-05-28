@@ -1,6 +1,7 @@
 import { useAppStore } from '@/utils/store/app/app-context'
 import { Box, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
+import CookieBanner from '../global/cookie-banner'
 import LoadingIndicatorFull from '../global/loading-indicator-full'
 import Sidebar from './sidebar'
 
@@ -20,6 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           {children}
         </Box>
       </Box>
+      <CookieBanner />
     </VStack>
   )
 }
