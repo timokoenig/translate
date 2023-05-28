@@ -16,6 +16,7 @@ import {
   TranslationGroup,
   User,
 } from '../../models'
+import { deleteNestedValue, updateNestedValue } from './helper'
 import { RepoStoreContext } from './repo-context'
 
 const TRANSLATION_FOLDER = 'translations'
@@ -196,43 +197,38 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   ): Promise<void> => {
     if (!translationFiles) throw new Error('No translation files')
 
+    if (JSON.stringify(oldTranslationGroup) == JSON.stringify(newTranslationGroup)) return
+
     await Promise.all(
-      newTranslationGroup.translations.map(async translation => {
+      getLanguages().map(async (lang: Language): Promise<void> => {
         let translationFile = translationFiles.find(
-          obj => obj.nameDisplay == newTranslationGroup.category && obj.lang == translation.lang
+          obj => obj.nameDisplay == newTranslationGroup.category && obj.lang == lang.code
         )
         if (!translationFile) {
           translationFile = {
             name: `${newTranslationGroup.category}.json`,
             nameDisplay: newTranslationGroup.category,
-            path: `${TRANSLATION_FOLDER}/${translation.lang}/${newTranslationGroup.category}.json`,
+            path: `${TRANSLATION_FOLDER}/${lang.code}/${newTranslationGroup.category}.json`,
             data: {},
             sha: null,
-            lang: translation.lang,
+            lang: lang.code,
           }
         }
 
-        const data = { ...translationFile.data }
-        let dataDidChange = false
+        let data = { ...translationFile.data }
 
         if (oldTranslationGroup.key != newTranslationGroup.key) {
           // Key has changed, first delete old key and then add new one
-          delete data[oldTranslationGroup.key]
-          dataDidChange = true
-        }
-        if (data[newTranslationGroup.key] != translation.value) {
-          data[newTranslationGroup.key] = translation.value
-          dataDidChange = true
+          data = deleteNestedValue(oldTranslationGroup.keyPath, {
+            ...translationFile.data,
+          })
         }
 
-        if (!dataDidChange) {
-          // Nothing changed, skip update
-          return
-        }
+        data = updateNestedValue(newTranslationGroup, lang.code, newTranslationGroup.keyPath, data)
 
         await createOrUpdateRepositoryTranslationFile(
           data,
-          translation.lang,
+          lang.code,
           translationFile.nameDisplay,
           translationFile.sha
         )
@@ -262,14 +258,12 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           }
         }
 
-        const data = { ...translationFile.data }
+        const data = deleteNestedValue(translationGroup.keyPath, { ...translationFile.data })
 
-        if (!Object.keys(data).includes(translationGroup.key)) {
+        if (JSON.stringify({ ...translationFile.data }) == JSON.stringify(data)) {
           // Key does not exist, skip update
           return
         }
-
-        delete data[translationGroup.key]
 
         await createOrUpdateRepositoryTranslationFile(
           data,

@@ -2,9 +2,10 @@ import ConfirmationModal from '@/components/global/modal/confirmation'
 import { TranslationGroup } from '@/utils/models'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import { useTranslationStore } from '@/utils/store/translation/translation-context'
-import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { AddIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, useDisclosure } from '@chakra-ui/react'
 import { CellContext } from '@tanstack/react-table'
+import CreateTranslationModal from '../../../modal/create'
 
 type Props = {
   data: CellContext<TranslationGroup, unknown>
@@ -15,7 +16,48 @@ const ColumnActions = (props: Props) => {
   const { selectedTranslationGroup, setSelectedTranslationGroup, isLoading, setLoading } =
     useTranslationStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenCreate, onOpen: onOpenCreate, onClose: onCloseCreate } = useDisclosure()
   const translationGroup = props.data.getValue() as TranslationGroup
+
+  const onAdd = async (key: string, value: string, lang: string, _: string) => {
+    setLoading(true)
+    try {
+      let newTranslationGroup: TranslationGroup = JSON.parse(JSON.stringify(translationGroup))
+
+      if (translationGroup.translations.length > 0) {
+        const hasTranslationValues =
+          translationGroup.translations.findIndex(obj => obj.value.trim() != '') != -1
+        if (hasTranslationValues) {
+          newTranslationGroup.children.push({
+            ...translationGroup,
+            children: [],
+            keyPath: [...translationGroup.keyPath, translationGroup.key],
+          })
+        }
+        newTranslationGroup.translations = []
+      }
+
+      newTranslationGroup.children.push({
+        key,
+        keyPath: [...translationGroup.keyPath, key],
+        category: translationGroup.category,
+        translations: [
+          {
+            key,
+            value,
+            lang,
+          },
+        ],
+        children: [],
+      })
+
+      await updateTranslationGroup(translationGroup, newTranslationGroup)
+    } catch (err: unknown) {
+      console.log(err)
+      // TODO show error
+    }
+    setLoading(false)
+  }
 
   const onDelete = async () => {
     setLoading(true)
@@ -71,6 +113,22 @@ const ColumnActions = (props: Props) => {
 
   return (
     <HStack className="tr-actions" display={isLoading ? 'block' : 'none'}>
+      <IconButton
+        aria-label="Add"
+        icon={<AddIcon />}
+        variant="ghost"
+        isLoading={isLoading}
+        onClick={e => {
+          e.preventDefault()
+          onOpenCreate()
+        }}
+      />
+      <CreateTranslationModal
+        isOpen={isOpenCreate}
+        onClose={onCloseCreate}
+        onAdd={onAdd}
+        categoryEnabled={false}
+      />
       <IconButton
         aria-label="Edit"
         icon={<EditIcon />}

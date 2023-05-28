@@ -15,16 +15,20 @@ import {
   Select,
   Stack,
   Textarea,
-  useDisclosure,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { useEffect } from 'react'
-import { FiPlus } from 'react-icons/fi'
 import * as Yup from 'yup'
 
-const CreateTranslationModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const { addTranslation, getTranslationGroups, getCategories, getLanguages } = useRepoStore()
+type Props = {
+  isOpen: boolean
+  onClose: () => void
+  onAdd: (key: string, value: string, lang: string, category: string) => Promise<void>
+  categoryEnabled?: boolean
+}
+
+const CreateTranslationModal = (props: Props) => {
+  const { getTranslationGroups, getCategories, getLanguages } = useRepoStore()
   const categories = getCategories()
   const languages = getLanguages()
   const existingTranslationKeys = getTranslationGroups().map(obj => obj.key)
@@ -43,7 +47,10 @@ const CreateTranslationModal = () => {
         languages.map(obj => obj.code),
         'Language not allowed'
       ),
-    category: Yup.string().trim().required().oneOf(categories, 'Category not allowed'),
+    category:
+      props.categoryEnabled == false
+        ? Yup.string().optional()
+        : Yup.string().trim().required().oneOf(categories, 'Category not allowed'),
   })
 
   const formik = useFormik({
@@ -57,12 +64,8 @@ const CreateTranslationModal = () => {
     onSubmit: async values => {
       if (!formik.isValid) return
       try {
-        await addTranslation(
-          { key: values.key, value: values.value, lang: values.lang },
-          values.lang,
-          values.category
-        )
-        onClose()
+        await props.onAdd(values.key, values.value, values.lang, values.category)
+        props.onClose()
       } catch (err: unknown) {
         console.log(err)
       }
@@ -71,55 +74,51 @@ const CreateTranslationModal = () => {
 
   useEffect(() => {
     formik.resetForm()
-  }, [isOpen])
+  }, [props.isOpen])
 
   return (
-    <>
-      <Button leftIcon={<FiPlus />} variant="primary" onClick={onOpen}>
-        Add Translation
-      </Button>
+    <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Add Translation</ModalHeader>
 
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Translation</ModalHeader>
+        <ModalBody>
+          <Stack spacing={4}>
+            <FormControl
+              isRequired
+              isDisabled={formik.isSubmitting}
+              isInvalid={formik.errors.key !== undefined && formik.touched.key}
+            >
+              <FormLabel htmlFor="key">Key name</FormLabel>
+              <Input id="key" value={formik.values.key} onChange={formik.handleChange} />
+              <FormErrorMessage>{formik.errors.key}</FormErrorMessage>
+            </FormControl>
+            <FormControl
+              isDisabled={formik.isSubmitting}
+              isInvalid={formik.errors.value !== undefined && formik.touched.value}
+            >
+              <FormLabel htmlFor="value">Value</FormLabel>
+              <Textarea id="value" value={formik.values.value} onChange={formik.handleChange} />
+              <FormErrorMessage>{formik.errors.value}</FormErrorMessage>
+            </FormControl>
 
-          <ModalBody>
-            <Stack spacing={4}>
-              <FormControl
-                isRequired
-                isDisabled={formik.isSubmitting}
-                isInvalid={formik.errors.key !== undefined && formik.touched.key}
-              >
-                <FormLabel htmlFor="key">Key name</FormLabel>
-                <Input id="key" value={formik.values.key} onChange={formik.handleChange} />
-                <FormErrorMessage>{formik.errors.key}</FormErrorMessage>
-              </FormControl>
-              <FormControl
-                isDisabled={formik.isSubmitting}
-                isInvalid={formik.errors.value !== undefined && formik.touched.value}
-              >
-                <FormLabel htmlFor="value">Value</FormLabel>
-                <Textarea id="value" value={formik.values.value} onChange={formik.handleChange} />
-                <FormErrorMessage>{formik.errors.value}</FormErrorMessage>
-              </FormControl>
+            <FormControl
+              isRequired
+              isDisabled={formik.isSubmitting}
+              isInvalid={formik.errors.lang !== undefined && formik.touched.lang}
+            >
+              <FormLabel htmlFor="lang">Language</FormLabel>
+              <Select id="lang" value={formik.values.lang} onChange={formik.handleChange}>
+                {languages.map((obj, index) => (
+                  <option key={index} value={obj.code}>
+                    {obj.emoji} {obj.name}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>{formik.errors.lang}</FormErrorMessage>
+            </FormControl>
 
-              <FormControl
-                isRequired
-                isDisabled={formik.isSubmitting}
-                isInvalid={formik.errors.lang !== undefined && formik.touched.lang}
-              >
-                <FormLabel htmlFor="lang">Language</FormLabel>
-                <Select id="lang" value={formik.values.lang} onChange={formik.handleChange}>
-                  {languages.map((obj, index) => (
-                    <option key={index} value={obj.code}>
-                      {obj.emoji} {obj.name}
-                    </option>
-                  ))}
-                </Select>
-                <FormErrorMessage>{formik.errors.lang}</FormErrorMessage>
-              </FormControl>
-
+            {(props.categoryEnabled == undefined || props.categoryEnabled == true) && (
               <FormControl
                 isRequired
                 isDisabled={formik.isSubmitting}
@@ -135,25 +134,25 @@ const CreateTranslationModal = () => {
                 </Select>
                 <FormErrorMessage>{formik.errors.category}</FormErrorMessage>
               </FormControl>
-            </Stack>
-          </ModalBody>
+            )}
+          </Stack>
+        </ModalBody>
 
-          <ModalFooter>
-            <Button onClick={onClose} variant="outline" disabled={formik.isSubmitting}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => formik.handleSubmit()}
-              ml={4}
-              isLoading={formik.isSubmitting}
-            >
-              Add Key
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+        <ModalFooter>
+          <Button onClick={props.onClose} variant="outline" disabled={formik.isSubmitting}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => formik.handleSubmit()}
+            ml={4}
+            isLoading={formik.isSubmitting}
+          >
+            Add Key
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   )
 }
 
