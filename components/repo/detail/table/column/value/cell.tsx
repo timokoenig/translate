@@ -10,7 +10,7 @@ type Props = {
 
 const ColumnValueCell = (props: Props) => {
   const { filter, getLanguages } = useRepoStore()
-  const { selectedTranslationGroup, setSelectedTranslationGroup } = useTranslationStore()
+  const { selectedTranslationGroup, setSelectedTranslationGroup, isLoading } = useTranslationStore()
   const translationGroup = props.data.getValue() as TranslationGroup
   if (translationGroup.children.length > 0) {
     return <></>
@@ -40,6 +40,7 @@ const ColumnValueCell = (props: Props) => {
               <Text>{getLanguages().find(lang => lang.code == obj.lang)?.emoji}</Text>
               <Textarea
                 value={obj.value}
+                isDisabled={isLoading}
                 onChange={e => {
                   if (!selectedTranslationGroup) return
                   const updatedTranslation = {

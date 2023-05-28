@@ -5,7 +5,6 @@ import { useTranslationStore } from '@/utils/store/translation/translation-conte
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, useDisclosure } from '@chakra-ui/react'
 import { CellContext } from '@tanstack/react-table'
-import { useState } from 'react'
 
 type Props = {
   data: CellContext<TranslationGroup, unknown>
@@ -13,9 +12,9 @@ type Props = {
 
 const ColumnActions = (props: Props) => {
   const { deleteTranslationGroup, updateTranslationGroup } = useRepoStore()
-  const { selectedTranslationGroup, setSelectedTranslationGroup } = useTranslationStore()
+  const { selectedTranslationGroup, setSelectedTranslationGroup, isLoading, setLoading } =
+    useTranslationStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isLoading, setLoading] = useState<boolean>(false)
   const translationGroup = props.data.getValue() as TranslationGroup
 
   const onDelete = async () => {
@@ -27,8 +26,7 @@ const ColumnActions = (props: Props) => {
   const onSave = async () => {
     if (!selectedTranslationGroup) return
     setLoading(true)
-    console.log(selectedTranslationGroup)
-    // updateTranslationGroup(translationGroup, selectedTranslationGroup)
+    await updateTranslationGroup(translationGroup, selectedTranslationGroup)
     setSelectedTranslationGroup(null)
     setLoading(false)
   }
@@ -72,7 +70,7 @@ const ColumnActions = (props: Props) => {
   }
 
   return (
-    <HStack className="tr-actions" display="none">
+    <HStack className="tr-actions" display={isLoading ? 'block' : 'none'}>
       <IconButton
         aria-label="Edit"
         icon={<EditIcon />}

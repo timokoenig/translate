@@ -18,7 +18,7 @@ type Props = {
 
 const ColumnKeyCell = (props: Props) => {
   const translationGroup = props.data.getValue() as TranslationGroup
-  const { selectedTranslationGroup, setSelectedTranslationGroup } = useTranslationStore()
+  const { selectedTranslationGroup, setSelectedTranslationGroup, isLoading } = useTranslationStore()
   const translationCount = getCount(translationGroup)
 
   if (
@@ -29,6 +29,7 @@ const ColumnKeyCell = (props: Props) => {
       <ColumnKeyContainer data={props.data}>
         <Input
           value={selectedTranslationGroup.key}
+          isDisabled={isLoading}
           onChange={e =>
             setSelectedTranslationGroup({
               ...selectedTranslationGroup,

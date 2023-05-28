@@ -7,7 +7,7 @@ type Props = {
 }
 
 const TranslationStoreProvider = (props: Props): JSX.Element => {
-  const [isLoading, setLoading] = useState<boolean>(true)
+  const [isLoading, setLoading] = useState<boolean>(false)
   const [selectedTranslationGroup, setSelectedTranslationGroup] = useState<TranslationGroup | null>(
     null
   )
