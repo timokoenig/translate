@@ -5,11 +5,7 @@ const LOCAL_STORAGE_COOKIE_NOTICE = 'cookie-notice'
 
 const CookieBanner = () => {
   const [cookieNoticeAccepted, setCookieNoticeAccepted] = useState<boolean>(true)
-
-  useEffect(() => {
-    setCookieNoticeAccepted(localStorage.getItem(LOCAL_STORAGE_COOKIE_NOTICE) == 'true')
-  }, [])
-
+  const bgColor = useColorModeValue('gray.300', 'gray.700')
   const bgGradient = useColorModeValue(
     'linear(to-r, red.400,pink.400)',
     'linear(to-r, red.500,pink.500)'
@@ -24,6 +20,10 @@ const CookieBanner = () => {
     setCookieNoticeAccepted(true)
   }
 
+  useEffect(() => {
+    setCookieNoticeAccepted(localStorage.getItem(LOCAL_STORAGE_COOKIE_NOTICE) == 'true')
+  }, [])
+
   if (!process.env.NEXT_PUBLIC_IMPRINT_URL || cookieNoticeAccepted) return <></>
 
   return (
@@ -33,7 +33,7 @@ const CookieBanner = () => {
       left={4}
       bottom={4}
       padding={4}
-      backgroundColor={useColorModeValue('gray.300', 'gray.700')}
+      backgroundColor={bgColor}
       borderRadius={8}
       gap={2}
     >
