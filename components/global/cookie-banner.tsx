@@ -10,8 +10,6 @@ const CookieBanner = () => {
     setCookieNoticeAccepted(localStorage.getItem(LOCAL_STORAGE_COOKIE_NOTICE) == 'true')
   }, [])
 
-  if (!process.env.NEXT_PUBLIC_IMPRINT_URL || cookieNoticeAccepted) return <></>
-
   const bgGradient = useColorModeValue(
     'linear(to-r, red.400,pink.400)',
     'linear(to-r, red.500,pink.500)'
@@ -25,6 +23,8 @@ const CookieBanner = () => {
     localStorage.setItem(LOCAL_STORAGE_COOKIE_NOTICE, 'true')
     setCookieNoticeAccepted(true)
   }
+
+  if (!process.env.NEXT_PUBLIC_IMPRINT_URL || cookieNoticeAccepted) return <></>
 
   return (
     <VStack
