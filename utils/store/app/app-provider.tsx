@@ -41,8 +41,10 @@ const AppStoreProvider = (props: Props): JSX.Element => {
     if (!session) throw new Error('Invalid session')
 
     const octokit = new Octokit({ auth: session.accessToken })
-    const res: { data: Repository[] } = await octokit.rest.repos.listForAuthenticatedUser()
-    return res.data
+    const res = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser, {
+      per_page: 100,
+    })
+    return res
   }
   const getRemoteRepositories = async (): Promise<Repository[]> => {
     const res = await fetchGithubRepositories()
