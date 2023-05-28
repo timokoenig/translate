@@ -25,7 +25,7 @@ const ConfirmationModal = (props: Props) => (
       <ModalHeader>{props.title}</ModalHeader>
 
       <ModalBody>
-        <Text>{props.message}</Text>
+        {typeof props.message == 'string' ? <Text>{props.message}</Text> : props.message}
       </ModalBody>
 
       <ModalFooter>

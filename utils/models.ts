@@ -40,6 +40,7 @@ export type Translation = {
 export type TranslationGroup = {
   category: string
   key: string
+  keyPath: string[]
   translations: Translation[]
   children: TranslationGroup[]
 }

@@ -515,7 +515,8 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     const mapTranslationGroup = (
       file: TranslationFile,
       data: TranslationFileData,
-      groups: TranslationGroup[]
+      groups: TranslationGroup[],
+      keyPath: string[]
     ): TranslationGroup[] => {
       let tmpGroups = groups
 
@@ -527,6 +528,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           group = {
             category: file.nameDisplay,
             key,
+            keyPath: [...keyPath, key],
             translations: availableLanguages.map(lang => ({
               key,
               value: '',
@@ -546,7 +548,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
             },
           ]
         } else if (typeof keyData == 'object') {
-          group.children = mapTranslationGroup(file, keyData, group.children)
+          group.children = mapTranslationGroup(file, keyData, group.children, group.keyPath)
         }
 
         tmpGroups = [...tmpGroups.filter(obj => obj.key != group?.key), group]
@@ -562,7 +564,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     }
 
     translationFiles?.forEach(file => {
-      translationGroups = mapTranslationGroup(file, file.data, translationGroups)
+      translationGroups = mapTranslationGroup(file, file.data, translationGroups, [])
     })
 
     return translationGroups
