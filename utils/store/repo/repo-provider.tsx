@@ -143,7 +143,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       message: sha
         ? `[Translate] Update translation for ${lang}/${category}`
         : `[Translate] Create translation for ${lang}/${category}`,
-      content: Buffer.from(JSON.stringify(data)).toString('base64'),
+      content: Buffer.from(JSON.stringify(data, null, 2)).toString('base64'),
       headers: {
         'X-GitHub-Api-Version': GITHUB_API_VERSION,
       },
