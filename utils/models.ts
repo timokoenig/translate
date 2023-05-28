@@ -20,11 +20,13 @@ export type Repository = {
   }
 }
 
+export type TranslationFileData = { [key: string]: string | TranslationFileData }
+
 export type TranslationFile = {
   name: string
   nameDisplay: string
   path: string
-  data: { [key: string]: string }
+  data: TranslationFileData
   sha: string | null
   lang: string
 }
@@ -38,7 +40,9 @@ export type Translation = {
 export type TranslationGroup = {
   category: string
   key: string
+  keyPath: string[]
   translations: Translation[]
+  children: TranslationGroup[]
 }
 
 export type Commit = {

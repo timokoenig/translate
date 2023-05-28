@@ -13,17 +13,23 @@ const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
 
   if (!addition || !deletion) return <></>
 
-  const diff = jsonDiff
-    .diffString(JSON.parse(deletion), JSON.parse(addition))
-    .replace('{', '')
-    .replace('}', '')
-    .trim()
+  try {
+    const diff = jsonDiff
+      .diffString(JSON.parse(deletion), JSON.parse(addition))
+      .replace('{', '')
+      .replace('}', '')
+      .trim()
 
-  return (
-    <Text fontSize={14} color={textColor}>
-      <pre>{diff}</pre>
-    </Text>
-  )
+    return (
+      <Text fontSize={14} color={textColor}>
+        <pre>{diff}</pre>
+      </Text>
+    )
+  } catch (err: unknown) {
+    console.log(err)
+    // TODO find a better way to show diff for nested translations
+    return <></>
+  }
 }
 
 type Props = {

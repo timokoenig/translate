@@ -1,13 +1,20 @@
 import { useRepoStore } from '@/utils/store/repo/repo-context'
-import { Box, Button, HStack, Select, Switch, Text, useColorModeValue } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  HStack,
+  Select,
+  Switch,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { FiPlus } from 'react-icons/fi'
 import CreateTranslationModal from './modal/create'
 
-type Props = {
-  translationCount: number
-}
-
-const Actions = (props: Props) => {
-  const { getCategories, getLanguages, filter, setFilter } = useRepoStore()
+const Actions = () => {
+  const { getCategories, getLanguages, filter, setFilter, addTranslation } = useRepoStore()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const languages = getLanguages()
   const categories = getCategories()
 
@@ -37,6 +44,13 @@ const Actions = (props: Props) => {
   }
 
   const resetEnabled = filter.category || filter.language || filter.missingTranslations
+
+  const onAddTranslation = async (
+    key: string,
+    value: string,
+    lang: string,
+    category: string
+  ): Promise<void> => addTranslation({ key, value, lang }, lang, category)
 
   return (
     <Box p={8}>
@@ -88,10 +102,10 @@ const Actions = (props: Props) => {
         )}
 
         <Box flex={1} />
-        <Text>
-          {props.translationCount} {props.translationCount == 1 ? 'Translation' : 'Translations'}
-        </Text>
-        <CreateTranslationModal />
+        <Button leftIcon={<FiPlus />} variant="primary" onClick={onOpen}>
+          Add Translation
+        </Button>
+        <CreateTranslationModal isOpen={isOpen} onClose={onClose} onAdd={onAddTranslation} />
       </HStack>
     </Box>
   )
