@@ -2,7 +2,7 @@ import { Center, Text, VStack } from '@chakra-ui/react'
 import License from '../global/license'
 
 const Footer = () => (
-  <VStack>
+  <VStack pb={8}>
     <Center>
       <Text>
         Made with{' '}

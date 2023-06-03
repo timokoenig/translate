@@ -24,8 +24,8 @@ const HeroContainer = () => {
   }
 
   return (
-    <SimpleGrid columns={2}>
-      <VStack p={4}>
+    <SimpleGrid columns={{ sm: 1, md: 2 }}>
+      <VStack p={4} pb={12}>
         <HeroHeadline />
         <Text pb={8} px={16} textAlign="center">
           Getting started is easy! Just sign in using your{' '}

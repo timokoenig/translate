@@ -10,6 +10,7 @@ import {
   HStack,
   Heading,
   IconButton,
+  Stack,
   VStack,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
@@ -35,7 +36,7 @@ const RepositoryDetailHeader = (props: Props) => {
         disabled={!props.searchEnabled}
       />
 
-      <HStack mb={10} w="full">
+      <Stack direction={{ base: 'column', md: 'row' }} mb={10} w="full">
         <Heading size="lg" fontWeight="normal" flex={1}>
           {props.repo.owner.login}/<strong>{props.repo.name}</strong>
         </Heading>
@@ -61,12 +62,12 @@ const RepositoryDetailHeader = (props: Props) => {
             </HStack>
           )}
         </Box>
-        <AvatarGroup size="md" max={3}>
+        <AvatarGroup size="md" max={3} display={{ base: 'none', md: 'block' }}>
           {contributors.map((contributor, index) => (
             <Avatar key={index} name={contributor.login} src={contributor.avatar_url} />
           ))}
         </AvatarGroup>
-      </HStack>
+      </Stack>
     </VStack>
   )
 }

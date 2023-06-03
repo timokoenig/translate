@@ -1,4 +1,4 @@
-import { Box, HStack, Heading, Text } from '@chakra-ui/react'
+import { Box, Heading, Stack, Text } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 type Props = {
@@ -16,7 +16,7 @@ const FeatureBox = (props: Props) => (
 )
 
 const FeatureContainer = () => (
-  <HStack w="full" pb={16} gap={4}>
+  <Stack direction={['column', 'row']} w="full" pb={16} gap={4}>
     <FeatureBox title="Experience">
       <Text>
         The Translate platform is a user-friendly web interface built on top of established
@@ -58,7 +58,7 @@ const FeatureContainer = () => (
         .
       </Text>
     </FeatureBox>
-  </HStack>
+  </Stack>
 )
 
 export default FeatureContainer

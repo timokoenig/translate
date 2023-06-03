@@ -21,7 +21,7 @@ const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
       .trim()
 
     return (
-      <Text fontSize={14} color={textColor}>
+      <Text fontSize={14} color={textColor} as="span">
         <pre>{diff}</pre>
       </Text>
     )

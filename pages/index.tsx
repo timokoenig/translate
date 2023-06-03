@@ -1,5 +1,7 @@
 import Layout from '@/components/layout'
+import { useAppStore } from '@/utils/store/app/app-context'
 import {
+  Button,
   Center,
   Container,
   Heading,
@@ -12,6 +14,7 @@ import { NextPageContext } from 'next'
 import { getSession } from 'next-auth/react'
 
 const Index = () => {
+  const { setMobileMenuOpen } = useAppStore()
   return (
     <Layout>
       <Container as={SimpleGrid} maxW={'xl'} spacing={10} mt={10}>
@@ -34,6 +37,11 @@ const Index = () => {
           >
             Lightweight simple translation platform to manage your localizations
           </Heading>
+          <Center py={8}>
+            <Button variant="primary" onClick={() => setMobileMenuOpen(true)}>
+              Select Repository
+            </Button>
+          </Center>
         </Stack>
         <Center>
           <Text>

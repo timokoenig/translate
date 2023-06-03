@@ -59,6 +59,7 @@ const Actions = () => {
           value={categories.findIndex(obj => obj == filter.category)}
           onChange={e => onChangeCategory(Number(e.target.value))}
           w="auto"
+          display={{ base: 'none', md: 'flex' }}
         >
           <option value={-1}>All Categories</option>
           {getCategories().map((obj, index) => (
@@ -72,6 +73,7 @@ const Actions = () => {
           value={languages.findIndex(obj => obj.code == filter.language)}
           onChange={e => onChangeLanguage(Number(e.target.value))}
           w="auto"
+          display={{ base: 'none', md: 'flex' }}
         >
           <option value={-1}>All Languages</option>
           {getLanguages().map((obj, index) => (
@@ -86,6 +88,7 @@ const Actions = () => {
           borderColor={useColorModeValue('gray.200', 'gray.700')}
           borderRadius={6}
           p={2}
+          display={{ base: 'none', md: 'flex' }}
         >
           <Text>Missing Translations</Text>
           <Switch

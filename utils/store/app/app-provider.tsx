@@ -13,6 +13,7 @@ type Props = {
 
 const AppStoreProvider = (props: Props): JSX.Element => {
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
   const [isAuthenticated, setAuthenticated] = useState<boolean>(false)
   const [localRepositories, setLocalRepositories] = useState<Repository[]>([])
   const [remoteRepositories, setRemoteRepositories] = useState<Repository[]>([])
@@ -76,6 +77,8 @@ const AppStoreProvider = (props: Props): JSX.Element => {
     <AppStoreContext.Provider
       value={{
         isLoading,
+        mobileMenuOpen,
+        setMobileMenuOpen,
         localRepositories,
         setLocalRepositories: setRepositories,
         remoteRepositories,

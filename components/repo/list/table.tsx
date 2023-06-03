@@ -30,9 +30,9 @@ const RepositoryList = (props: Props) => {
     })
 
   return (
-    <TableContainer margin={0} padding={2}>
-      <Table variant="simple" margin={0}>
-        <Thead>
+    <TableContainer margin={0} whiteSpace="normal">
+      <Table variant="simple" layout={{ base: 'fixed', md: 'auto' }}>
+        <Thead display={{ base: 'none', md: 'table-header-group' }}>
           <Tr>
             <Th>Repository</Th>
             <Th>Visibility</Th>

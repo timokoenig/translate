@@ -3,7 +3,7 @@ import { TranslationGroup } from '@/utils/models'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import { useTranslationStore } from '@/utils/store/translation/translation-context'
 import { AddIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { HStack, IconButton, Text, useDisclosure } from '@chakra-ui/react'
+import { HStack, IconButton, Text, useBreakpoint, useDisclosure } from '@chakra-ui/react'
 import { CellContext } from '@tanstack/react-table'
 import CreateTranslationModal from '../../../modal/create'
 
@@ -18,6 +18,7 @@ const ColumnActions = (props: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isOpenCreate, onOpen: onOpenCreate, onClose: onCloseCreate } = useDisclosure()
   const translationGroup = props.data.getValue() as TranslationGroup
+  const breakpoint = useBreakpoint()
 
   const onAdd = async (key: string, value: string, lang: string, _: string) => {
     setLoading(true)
@@ -112,7 +113,7 @@ const ColumnActions = (props: Props) => {
   }
 
   return (
-    <HStack className="tr-actions" display={isLoading ? 'block' : 'none'}>
+    <HStack className="tr-actions" display={isLoading || breakpoint == 'base' ? 'block' : 'none'}>
       <IconButton
         aria-label="Add"
         icon={<AddIcon />}

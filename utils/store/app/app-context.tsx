@@ -4,6 +4,9 @@ import { Repository } from '../../models'
 type AppStoreContextType = {
   isLoading: boolean
 
+  mobileMenuOpen: boolean
+  setMobileMenuOpen: (value: boolean) => void
+
   localRepositories: Repository[]
   setLocalRepositories: (repo: Repository[]) => void
 
