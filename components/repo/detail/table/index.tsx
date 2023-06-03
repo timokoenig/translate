@@ -9,7 +9,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { useBottomScrollListener } from 'react-bottom-scroll-listener'
 import Actions from '../actions'
 import ColumnActions from './column/actions/cell'
 import ColumnKeyCell from './column/key/cell'
@@ -108,20 +107,21 @@ const RepositoryDetailList = (props: Props) => {
 
   // Track users scrolling to dynamically load more items
   const itemsPerPage = 20
-  useBottomScrollListener(
-    () => {
-      // User reached almost the bottom of the table
-      // Check if we have more items left, then add those the list
-      const totalNumberOfItems = filteredTranslationGroup.length
-      const currentNumberOfDisplayedItems = itemPage * itemsPerPage
-      if (currentNumberOfDisplayedItems > totalNumberOfItems) return
-      setItemPage(itemPage + 1)
-    },
-    { offset: 1000 }
-  )
+  // useBottomScrollListener(
+  //   () => {
+  //     // User reached almost the bottom of the table
+  //     // Check if we have more items left, then add those the list
+  //     const totalNumberOfItems = filteredTranslationGroup.length
+  //     const currentNumberOfDisplayedItems = itemPage * itemsPerPage
+  //     if (currentNumberOfDisplayedItems > totalNumberOfItems) return
+  //     setItemPage(itemPage + 1)
+  //   },
+  //   { offset: 1000 }
+  // )
+  // FIXME: temporarily disabled because bottomScrollListener does not like grouped translations and runs into an infinite loop
 
   const table = useReactTable({
-    data: filteredTranslationGroup.slice(0, itemPage * itemsPerPage),
+    data: filteredTranslationGroup, //.slice(0, itemPage * itemsPerPage),
     columns,
     getSubRows: row => row.children,
     getCoreRowModel: getCoreRowModel(),
