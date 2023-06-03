@@ -8,7 +8,8 @@ import {
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { useBottomScrollListener } from 'react-bottom-scroll-listener'
 import Actions from '../actions'
 import ColumnActions from './column/actions/cell'
 import ColumnKeyCell from './column/key/cell'
@@ -23,6 +24,7 @@ type Props = {
 
 const RepositoryDetailList = (props: Props) => {
   const { translationFiles, getTranslationGroups, filter } = useRepoStore()
+  const [itemPage, setItemPage] = useState<number>(1)
 
   const filteredTranslationGroup = useMemo(
     () =>
@@ -104,8 +106,22 @@ const RepositoryDetailList = (props: Props) => {
     },
   ]
 
+  // Track users scrolling to dynamically load more items
+  const itemsPerPage = 20
+  useBottomScrollListener(
+    () => {
+      // User reached almost the bottom of the table
+      // Check if we have more items left, then add those the list
+      const totalNumberOfItems = filteredTranslationGroup.length
+      const currentNumberOfDisplayedItems = itemPage * itemsPerPage
+      if (currentNumberOfDisplayedItems > totalNumberOfItems) return
+      setItemPage(itemPage + 1)
+    },
+    { offset: 1000 }
+  )
+
   const table = useReactTable({
-    data: filteredTranslationGroup,
+    data: filteredTranslationGroup.slice(0, itemPage * itemsPerPage),
     columns,
     getSubRows: row => row.children,
     getCoreRowModel: getCoreRowModel(),
