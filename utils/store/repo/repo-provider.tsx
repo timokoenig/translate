@@ -569,12 +569,6 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     await fetchRepositoryContributors()
     await fetchRepositoryTranslationFiles()
   }
-  useEffect(() => {
-    ;(async () => {
-      await loadRepoData()
-      setLoading(false)
-    })()
-  }, [])
 
   // Reload repository data when user changes the repo
   useEffect(() => {
