@@ -8,7 +8,7 @@ import {
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import Actions from '../actions'
 import ColumnActions from './column/actions/cell'
 import ColumnKeyCell from './column/key/cell'
@@ -22,8 +22,7 @@ type Props = {
 }
 
 const RepositoryDetailList = (props: Props) => {
-  const { translationGroups, filter } = useRepoStore()
-  const [itemPage, setItemPage] = useState<number>(1)
+  const { currentRepo, translationGroups, filter } = useRepoStore()
 
   const filteredTranslationGroup = useMemo(
     () =>
@@ -65,7 +64,7 @@ const RepositoryDetailList = (props: Props) => {
           )
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [translationGroups, filter, props]
+    [currentRepo, translationGroups, filter, props]
   )
 
   // Get the count of all visible translations
@@ -105,23 +104,8 @@ const RepositoryDetailList = (props: Props) => {
     },
   ]
 
-  // Track users scrolling to dynamically load more items
-  const itemsPerPage = 20
-  // useBottomScrollListener(
-  //   () => {
-  //     // User reached almost the bottom of the table
-  //     // Check if we have more items left, then add those the list
-  //     const totalNumberOfItems = filteredTranslationGroup.length
-  //     const currentNumberOfDisplayedItems = itemPage * itemsPerPage
-  //     if (currentNumberOfDisplayedItems > totalNumberOfItems) return
-  //     setItemPage(itemPage + 1)
-  //   },
-  //   { offset: 1000 }
-  // )
-  // FIXME: temporarily disabled because bottomScrollListener does not like grouped translations and runs into an infinite loop
-
   const table = useReactTable({
-    data: filteredTranslationGroup, //.slice(0, itemPage * itemsPerPage),
+    data: filteredTranslationGroup,
     columns,
     getSubRows: row => row.children,
     getCoreRowModel: getCoreRowModel(),

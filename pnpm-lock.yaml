@@ -26,7 +26,6 @@ specifiers:
   next-auth: ^4.22.1
   octokit: ^2.0.19
   react: 18.2.0
-  react-bottom-scroll-listener: ^5.1.0
   react-dom: 18.2.0
   react-icons: ^4.9.0
   ts-jest: ^29.1.0
@@ -54,7 +53,6 @@ dependencies:
   next-auth: 4.22.1_z4pol2qj2yv3um3jqqobs4b3eu
   octokit: 2.0.19
   react: 18.2.0
-  react-bottom-scroll-listener: 5.1.0_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.9.0_react@18.2.0
   typescript: 5.0.4
@@ -5663,18 +5661,6 @@ packages:
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
-    dev: false
-
-  /react-bottom-scroll-listener/5.1.0_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-HI4qRKLbQ0Ox8xwIgYtLMk+1zETTaLtGBrhcTUFVRLL3OjVzfnyPPiXPGDnAPY6sGQh4KFH7Flp1dddnSmG33A==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16.0.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      lodash.debounce: 4.0.8
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-clientside-effect/1.2.6_react@18.2.0:

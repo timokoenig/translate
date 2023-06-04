@@ -95,7 +95,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       currentBranch
     )
 
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   // Reload repository data when user changes the current branch
@@ -137,7 +137,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       currentBranch
     )
 
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   // Update existing translation group
@@ -185,7 +185,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       })
     )
 
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   // Delete translation group
@@ -224,7 +224,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       })
     )
 
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   const fetchHistory = (): Promise<Commit[]> =>
@@ -232,27 +232,27 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
 
   const addCategory = async (category: string): Promise<void> => {
     await GitHubContent.addCategory(currentRepo, currentBranch, category)
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   const updateCategory = async (oldCategory: string, newCategory: string): Promise<void> => {
     await GitHubContent.updateCategory(currentRepo, currentBranch, oldCategory, newCategory)
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   const deleteCategory = async (category: string): Promise<void> => {
     await GitHubContent.deleteCategory(currentRepo, currentBranch, category)
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   const addLanguage = async (language: Language): Promise<void> => {
     await GitHubContent.addLanguage(currentRepo, currentBranch, language)
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   const deleteLanguage = async (language: Language): Promise<void> => {
     await GitHubContent.deleteLanguage(currentRepo, currentBranch, language)
-    await loadRepositoryData()
+    await loadRepositoryData(currentRepo, currentBranch)
   }
 
   // Reload repository data when user changes the repo
