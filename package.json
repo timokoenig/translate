@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
-    "@chakra-ui/react": "^2.6.1",
-    "@chakra-ui/system": "^2.5.7",
+    "@chakra-ui/react": "^2.7.0",
+    "@chakra-ui/system": "^2.5.8",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@tanstack/react-table": "^8.9.1",
@@ -24,24 +24,24 @@
     "@types/react-dom": "18.2.4",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
-    "formik": "^2.2.9",
-    "framer-motion": "^10.12.10",
-    "isomorphic-dompurify": "^1.4.0",
-    "json-diff": "^1.0.3",
+    "formik": "^2.4.1",
+    "framer-motion": "^10.12.16",
+    "isomorphic-dompurify": "^1.6.0",
+    "json-diff": "^1.0.6",
     "moment": "^2.29.4",
     "next": "13.4.4",
     "next-auth": "^4.22.1",
-    "octokit": "^2.0.14",
+    "octokit": "^2.0.19",
     "parse-diff": "^0.11.1",
     "react": "18.2.0",
     "react-bottom-scroll-listener": "^5.1.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.8.0",
+    "react-icons": "^4.9.0",
     "typescript": "5.0.4",
-    "yup": "^1.1.1"
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/json-diff": "^0.9.1",
-    "@types/react": "^18.2.6"
+    "@types/react": "^18.2.8"
   }
 }
