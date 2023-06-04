@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react'
 import {
+  Branch,
   Commit,
   Filter,
   Language,
@@ -16,6 +17,10 @@ type RepoStoreContextType = {
   setFilter: (filter: Filter) => void
 
   contributors: User[]
+
+  branches: Branch[]
+  currentBranch: Branch | null
+  setCurrentBranch: (branch: Branch | null) => void
 
   translationFiles: TranslationFile[] | null
 

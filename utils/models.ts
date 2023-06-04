@@ -13,6 +13,7 @@ export type Repository = {
   full_name: string
   description: string | null
   private: boolean
+  default_branch: string
   updated_at: string | null
   pushed_at: string | null
   owner: {
@@ -73,4 +74,13 @@ export type Filter = {
   category: string | null
   language: string | null
   missingTranslations: boolean
+}
+
+export type Branch = {
+  name: string
+  commit: {
+    sha: string
+    url: string
+  }
+  protected: boolean
 }

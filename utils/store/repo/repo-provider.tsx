@@ -4,8 +4,9 @@ import TranslationHelper from '@/utils/translation-helper'
 import moment from 'moment'
 import { getSession } from 'next-auth/react'
 import { Octokit } from 'octokit'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
+  Branch,
   Commit,
   Filter,
   Language,
@@ -31,6 +32,8 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [translationFiles, setTranslationFiles] = useState<TranslationFile[] | null>(null)
   const [contributors, setContributors] = useState<User[]>([])
+  const [currentBranch, setCurrentBranch] = useState<Branch | null>(null)
+  const [branches, setBranches] = useState<Branch[]>([])
   const [filter, setFilter] = useState<Filter>({
     category: null,
     language: null,
@@ -53,6 +56,24 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     setContributors(res.data)
   }
 
+  // Fetch all repository branches
+  const fetchRepositoryBranches = async (): Promise<void> => {
+    const session = await getSession()
+    if (!session) throw new Error('Invalid session')
+
+    const octokit = new Octokit({ auth: session.accessToken })
+    const res: { data: Branch[] } = await octokit.request('GET /repos/{owner}/{repo}/branches', {
+      owner: props.repo.owner.login,
+      repo: props.repo.name,
+      headers: {
+        'X-GitHub-Api-Version': GITHUB_API_VERSION,
+      },
+    })
+    setBranches(res.data)
+    setCurrentBranch(res.data.find(obj => obj.name == props.repo.default_branch) ?? null)
+    console.log(res.data.find(obj => obj.name == props.repo.default_branch) ?? null)
+  }
+
   // Fetch repository translation files
   const fetchRepositoryTranslationFiles = async (): Promise<void> => {
     const session = await getSession()
@@ -67,6 +88,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         {
           owner: props.repo.owner.login,
           repo: props.repo.name,
+          ref: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -82,6 +104,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
             {
               owner: props.repo.owner.login,
               repo: props.repo.name,
+              ref: currentBranch?.name,
               headers: {
                 'X-GitHub-Api-Version': GITHUB_API_VERSION,
               },
@@ -96,6 +119,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
                 {
                   owner: props.repo.owner.login,
                   repo: props.repo.name,
+                  ref: currentBranch?.name,
                   headers: {
                     'X-GitHub-Api-Version': GITHUB_API_VERSION,
                   },
@@ -140,6 +164,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
       repo: props.repo.name,
       path: `${TRANSLATION_FOLDER}/${lang}/${category}.json`,
       sha: sha ?? undefined,
+      branch: currentBranch?.name,
       message: sha
         ? `[Translate] Update translation for ${lang}/${category}`
         : `[Translate] Create translation for ${lang}/${category}`,
@@ -285,6 +310,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     const res = await octokit.request('GET /repos/{owner}/{repo}/commits', {
       owner: props.repo.owner.login,
       repo: props.repo.name,
+      sha: currentBranch?.name,
       headers: {
         'X-GitHub-Api-Version': GITHUB_API_VERSION,
       },
@@ -358,6 +384,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           path: `${TRANSLATION_FOLDER}/${lang.code}/${category}.json`,
           message: `[Translate] Create category ${lang.code}/${category}`,
           content: Buffer.from(JSON.stringify({})).toString('base64'),
+          branch: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -388,6 +415,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           path: `${TRANSLATION_FOLDER}/${lang.code}/${newCategory}.json`,
           message: `[Translate] Create category ${lang.code}/${newCategory}`,
           content: Buffer.from(JSON.stringify(translationFile.data)).toString('base64'),
+          branch: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -400,6 +428,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           path: `${TRANSLATION_FOLDER}/${lang.code}/${oldCategory}.json`,
           message: `[Translate] Delete category ${lang.code}/${oldCategory}`,
           sha: translationFile.sha,
+          branch: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -428,6 +457,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           path: `${TRANSLATION_FOLDER}/${lang.code}/${category}.json`,
           message: `[Translate] Delete category ${lang.code}/${category}`,
           sha: translationFile.sha,
+          branch: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -464,6 +494,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           path: `${TRANSLATION_FOLDER}/${language.code}/${category}.json`,
           message: `[Translate] Add language ${language.code}/${category}`,
           content: Buffer.from(JSON.stringify({})).toString('base64'),
+          branch: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -492,6 +523,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
           path: `${TRANSLATION_FOLDER}/${language.code}/${category}.json`,
           message: `[Translate] Delete language ${language.code}/${category}`,
           sha: translationFile.sha,
+          branch: currentBranch?.name,
           headers: {
             'X-GitHub-Api-Version': GITHUB_API_VERSION,
           },
@@ -567,6 +599,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   // Load repository data
   const loadRepoData = async () => {
     await fetchRepositoryContributors()
+    await fetchRepositoryBranches()
     await fetchRepositoryTranslationFiles()
   }
 
@@ -582,6 +615,31 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     })()
   }, [props.repo])
 
+  // Reload repository data when user changes the current branch
+  const isFirstBranchUpdate = useRef(true)
+  useEffect(() => {
+    if (isFirstBranchUpdate.current) {
+      isFirstBranchUpdate.current = false
+      return
+    }
+
+    ;(async () => {
+      setLoading(true)
+      setTranslationFiles(null)
+      await fetchRepositoryTranslationFiles()
+      setLoading(false)
+    })()
+  }, [currentBranch])
+
+  const changeCurrentBranch = async (branch: Branch): Promise<void> => {
+    setLoading(true)
+    setTranslationFiles(null)
+    setCurrentBranch(branch)
+    setFilter({ category: null, language: null, missingTranslations: false })
+    await fetchRepositoryTranslationFiles()
+    setLoading(false)
+  }
+
   return (
     <RepoStoreContext.Provider
       value={{
@@ -589,6 +647,9 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         filter,
         setFilter,
         contributors,
+        branches,
+        currentBranch,
+        setCurrentBranch,
         translationFiles,
         setupRepository,
         addTranslation,

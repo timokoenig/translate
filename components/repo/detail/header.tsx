@@ -10,6 +10,7 @@ import {
   HStack,
   Heading,
   IconButton,
+  Select,
   Stack,
   VStack,
 } from '@chakra-ui/react'
@@ -25,7 +26,7 @@ type Props = {
 
 const RepositoryDetailHeader = (props: Props) => {
   const router = useRouter()
-  const { contributors } = useRepoStore()
+  const { contributors, branches, currentBranch, setCurrentBranch } = useRepoStore()
 
   return (
     <VStack gap={4} w="full" align="flex-start" p={8}>
@@ -68,6 +69,18 @@ const RepositoryDetailHeader = (props: Props) => {
           ))}
         </AvatarGroup>
       </Stack>
+
+      <Select
+        value={branches.findIndex(obj => obj.name == currentBranch?.name)}
+        onChange={e => setCurrentBranch(branches[Number(e.target.value)])}
+        w="auto"
+      >
+        {branches.map((obj, index) => (
+          <option key={index} value={index}>
+            {`Branch: ${obj.name}`}
+          </option>
+        ))}
+      </Select>
     </VStack>
   )
 }
