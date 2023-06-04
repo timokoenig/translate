@@ -1,4 +1,4 @@
-import LoadingIndicatorFull from '@/components/global/loading-indicator-full'
+import LoadingIndicator from '@/components/global/loading-indicator'
 import Layout from '@/components/layout'
 import { Repository } from '@/utils/models'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
@@ -14,7 +14,7 @@ const DetailContent = (props: Props) => {
   const { isLoading } = useRepoStore()
 
   if (isLoading) {
-    return <LoadingIndicatorFull />
+    return <LoadingIndicator />
   }
 
   return <>{props.children}</>

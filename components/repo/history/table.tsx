@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import LoadingIndicatorFull from '@/components/global/loading-indicator-full'
+import LoadingIndicator from '@/components/global/loading-indicator'
 import { Commit } from '@/utils/models'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react'
@@ -25,7 +25,7 @@ const RepositoryHistoryTable = () => {
   }, [])
 
   if (isLoading) {
-    return <LoadingIndicatorFull />
+    return <LoadingIndicator />
   }
 
   return (
