@@ -8,6 +8,7 @@ specifiers:
   '@emotion/styled': ^11.11.0
   '@tanstack/react-table': ^8.9.1
   '@types/json-diff': ^0.9.1
+  '@types/lodash.debounce': ^4.0.7
   '@types/node': 20.2.5
   '@types/react': ^18.2.8
   '@types/react-dom': 18.2.4
@@ -17,6 +18,7 @@ specifiers:
   framer-motion: ^10.12.16
   isomorphic-dompurify: ^1.6.0
   json-diff: ^1.0.6
+  lodash.debounce: ^4.0.8
   moment: ^2.29.4
   next: 13.4.4
   next-auth: ^4.22.1
@@ -44,6 +46,7 @@ dependencies:
   framer-motion: 10.12.16_biqbaboplfbrettd7655fr4n2y
   isomorphic-dompurify: 1.6.0
   json-diff: 1.0.6
+  lodash.debounce: 4.0.8
   moment: 2.29.4
   next: 13.4.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.22.1_z4pol2qj2yv3um3jqqobs4b3eu
@@ -58,6 +61,7 @@ dependencies:
 
 devDependencies:
   '@types/json-diff': 0.9.1
+  '@types/lodash.debounce': 4.0.7
   '@types/react': 18.2.8
 
 packages:
@@ -1840,6 +1844,12 @@ packages:
       '@types/node': 20.2.5
     dev: false
 
+  /@types/lodash.debounce/4.0.7:
+    resolution: {integrity: sha512-X1T4wMZ+gT000M2/91SYj0d/7JfeNZ9PeeOldSNoE/lunLeQXKvkmIumI29IaKMotU/ln/McOIvgzZcQ/3TrSA==}
+    dependencies:
+      '@types/lodash': 4.14.195
+    dev: true
+
   /@types/lodash.mergewith/4.6.7:
     resolution: {integrity: sha512-3m+lkO5CLRRYU0fhGRp7zbsGi6+BZj0uTVSwvcKU+nSlhjA9/QRNfuSGnD2mX6hQA7ZbmcCkzk5h4ZYGOtk14A==}
     dependencies:
@@ -1848,7 +1858,6 @@ packages:
 
   /@types/lodash/4.14.195:
     resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
-    dev: false
 
   /@types/node/20.2.5:
     resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
