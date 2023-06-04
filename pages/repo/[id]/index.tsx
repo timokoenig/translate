@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import HorizontalLine from '@/components/global/horizontal-line'
 import LoadingIndicator from '@/components/global/loading-indicator'
+import LoadingIndicatorFull from '@/components/global/loading-indicator-full'
 import EmptyState from '@/components/repo/detail/empt-state'
 import RepositoryDetailHeader from '@/components/repo/detail/header'
 import RepoDetailLayout from '@/components/repo/detail/layout'
@@ -50,16 +51,20 @@ type Props = {
 const RepositoryDetail = (props: Props) => {
   const router = useRouter()
   const { localRepositories } = useAppStore()
-  const repo = localRepositories.find(obj => obj.id == props.id)
+  const [repo, setRepo] = useState<Repository | null>(null)
 
   useEffect(() => {
-    if (!repo) {
+    if (localRepositories.length == 0) return
+    const localRepo = localRepositories.find(obj => obj.id == props.id)
+    if (!localRepo) {
       router.replace('/')
+      return
     }
-  }, [])
+    setRepo(localRepo)
+  }, [props, localRepositories])
 
   if (!repo) {
-    return null
+    return <LoadingIndicatorFull />
   }
 
   return (
