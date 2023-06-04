@@ -71,7 +71,6 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     })
     setBranches(res.data)
     setCurrentBranch(res.data.find(obj => obj.name == props.repo.default_branch) ?? null)
-    console.log(res.data.find(obj => obj.name == props.repo.default_branch) ?? null)
   }
 
   // Fetch repository translation files
