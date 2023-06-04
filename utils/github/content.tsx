@@ -1,6 +1,8 @@
+import languageJson from '@/utils/resources/languages.json'
 import { getSession } from 'next-auth/react'
 import { Octokit } from 'octokit'
-import { Branch, Language, Repository, TranslationFile } from '../models'
+import { Branch, Language, Repository, TranslationFile, TranslationFileData } from '../models'
+import TranslationHelper from '../translation-helper'
 import { GITHUB_API_VERSION, TRANSLATION_FOLDER } from './constants'
 
 // Fetch repository translation files
@@ -83,7 +85,7 @@ export const fetchTranslationFiles = async (
 // Create or Update repository translation file
 export const createOrUpdateTranslationFile = async (
   repo: Repository,
-  data: any,
+  data: TranslationFileData,
   lang: string,
   category: string,
   sha: string | null,
@@ -92,16 +94,44 @@ export const createOrUpdateTranslationFile = async (
   const session = await getSession()
   if (!session) throw new Error('Invalid session')
 
+  const path = `${TRANSLATION_FOLDER}/${lang}/${category}.json`
+
+  let langEmoji =
+    languageJson.find(obj => obj.code.toLowerCase() == lang)?.emoji ?? lang.toUpperCase()
+
+  let message: string[] = [
+    sha
+      ? `[Translate] Update translation ${langEmoji} ${category}`
+      : `[Translate] Create translation ${langEmoji} ${category}`,
+  ]
+
+  const file = repo.files.find(obj => obj.path == path)
+  if (file) {
+    const dataDiff = TranslationHelper.getTranslationDataDiff(file.data, data)
+    if (dataDiff.added.length > 0) {
+      message.push('Added')
+      dataDiff.added.forEach(key => message.push(`+ ${key}`))
+    }
+    if (dataDiff.modified.length > 0) {
+      message.push('\n')
+      message.push('Modified')
+      dataDiff.modified.forEach(key => message.push(`~ ${key}`))
+    }
+    if (dataDiff.deleted.length > 0) {
+      message.push('\n')
+      message.push('Deleted')
+      dataDiff.deleted.forEach(key => message.push(`- ${key}`))
+    }
+  }
+
   const octokit = new Octokit({ auth: session.accessToken })
   await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
     owner: repo.owner.login,
     repo: repo.name,
-    path: `${TRANSLATION_FOLDER}/${lang}/${category}.json`,
+    path,
     sha: sha ?? undefined,
     branch: currentBranch.name,
-    message: sha
-      ? `[Translate] Update translation for ${lang}/${category}`
-      : `[Translate] Create translation for ${lang}/${category}`,
+    message: message.join('\n'),
     content: Buffer.from(JSON.stringify(data, null, 2)).toString('base64'),
     headers: {
       'X-GitHub-Api-Version': GITHUB_API_VERSION,
@@ -124,7 +154,7 @@ export const addCategory = async (
         owner: repo.owner.login,
         repo: repo.name,
         path: `${TRANSLATION_FOLDER}/${lang.code}/${category}.json`,
-        message: `[Translate] Create category ${lang.code}/${category}`,
+        message: `[Translate] Create category ${lang.emoji} ${category}`,
         content: Buffer.from(JSON.stringify({})).toString('base64'),
         branch: currentBranch.name,
         headers: {
@@ -158,7 +188,7 @@ export const updateCategory = async (
         owner: repo.owner.login,
         repo: repo.name,
         path: `${TRANSLATION_FOLDER}/${lang.code}/${newCategory}.json`,
-        message: `[Translate] Create category ${lang.code}/${newCategory}`,
+        message: `[Translate] Create category ${lang.emoji} ${newCategory}`,
         content: Buffer.from(JSON.stringify(translationFile.data)).toString('base64'),
         branch: currentBranch.name,
         headers: {
@@ -171,7 +201,7 @@ export const updateCategory = async (
         owner: repo.owner.login,
         repo: repo.name,
         path: `${TRANSLATION_FOLDER}/${lang.code}/${oldCategory}.json`,
-        message: `[Translate] Delete category ${lang.code}/${oldCategory}`,
+        message: `[Translate] Delete category ${lang.emoji} ${oldCategory}`,
         sha: translationFile.sha,
         branch: currentBranch.name,
         headers: {
@@ -202,7 +232,7 @@ export const deleteCategory = async (
         owner: repo.owner.login,
         repo: repo.name,
         path: `${TRANSLATION_FOLDER}/${lang.code}/${category}.json`,
-        message: `[Translate] Delete category ${lang.code}/${category}`,
+        message: `[Translate] Delete category ${lang.emoji} ${category}`,
         sha: translationFile.sha,
         branch: currentBranch.name,
         headers: {
@@ -228,7 +258,7 @@ export const addLanguage = async (
         owner: repo.owner.login,
         repo: repo.name,
         path: `${TRANSLATION_FOLDER}/${language.code}/${category}.json`,
-        message: `[Translate] Add language ${language.code}/${category}`,
+        message: `[Translate] Add language ${language.emoji} ${category}`,
         content: Buffer.from(JSON.stringify({})).toString('base64'),
         branch: currentBranch.name,
         headers: {
@@ -259,7 +289,7 @@ export const deleteLanguage = async (
         owner: repo.owner.login,
         repo: repo.name,
         path: `${TRANSLATION_FOLDER}/${language.code}/${category}.json`,
-        message: `[Translate] Delete language ${language.code}/${category}`,
+        message: `[Translate] Delete language ${language.emoji} ${category}`,
         sha: translationFile.sha,
         branch: currentBranch.name,
         headers: {

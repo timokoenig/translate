@@ -1,44 +1,14 @@
 import { Commit } from '@/utils/models'
-import { Avatar, HStack, Heading, Td, Text, Tr, useColorModeValue } from '@chakra-ui/react'
-import jsonDiff from 'json-diff'
-import parse from 'parse-diff'
-
-const ChangeDiff = (props: { changes: parse.Change[] }): JSX.Element => {
-  const textColor = useColorModeValue('gray.700', 'gray.300')
-  const filteredChanges = props.changes.filter(
-    obj => !obj.content.includes('No newline at end of file')
-  )
-  const addition = filteredChanges.find(obj => obj.type == 'add')?.content.substring(1)
-  const deletion = filteredChanges.find(obj => obj.type == 'del')?.content.substring(1)
-
-  if (!addition || !deletion) return <></>
-
-  try {
-    const diff = jsonDiff
-      .diffString(JSON.parse(deletion), JSON.parse(addition))
-      .replace('{', '')
-      .replace('}', '')
-      .trim()
-
-    return (
-      <Text fontSize={14} color={textColor} as="span">
-        <pre>{diff}</pre>
-      </Text>
-    )
-  } catch (err: unknown) {
-    console.log(err)
-    // TODO find a better way to show diff for nested translations
-    return <></>
-  }
-}
+import { Avatar, HStack, Heading, Td, Text, Tr, VStack } from '@chakra-ui/react'
 
 type Props = {
   commit: Commit
 }
 
 const RepositoryHistoryTableRow = (props: Props) => {
-  const patchDiff = parse(props.commit.patch)
-
+  const lines: string[] = props.commit.message.split('\n')
+  const title: string = lines.shift()?.replace('[Translate]', '').trim() ?? ''
+  const description: string[] = lines.length > 0 ? lines : []
   return (
     <Tr>
       <Td>
@@ -56,12 +26,17 @@ const RepositoryHistoryTableRow = (props: Props) => {
       <Td>{props.commit.committer.date.format('DD/MM/YYYY HH:mm')}</Td>
       <Td>{props.commit.sha.substring(0, 10)}</Td>
       <Td>
-        <Text fontWeight="semibold" mb={4}>
-          {props.commit.message.replace('[Translate]', '').trim()}
-        </Text>
-        {patchDiff.length > 0 && patchDiff[0].chunks.length > 0 && (
-          <ChangeDiff changes={patchDiff[0].chunks[0].changes} />
-        )}
+        <VStack alignItems="left">
+          <Text fontWeight="semibold">{title}</Text>
+          {description.map((obj, index) => (
+            <Text
+              fontWeight={['Added', 'Modified', 'Deleted'].includes(obj) ? 'semibold' : 'normal'}
+              key={index}
+            >
+              {obj}
+            </Text>
+          ))}
+        </VStack>
       </Td>
     </Tr>
   )

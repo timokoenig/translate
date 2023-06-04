@@ -87,7 +87,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
   // Set up new translation repository
   const setupRepository = async (lang: string): Promise<void> => {
     await GitHubContent.createOrUpdateTranslationFile(
-      props.repo,
+      currentRepo,
       { hello_world: 'Hello World' },
       lang,
       'common', // default category
@@ -129,7 +129,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
     data[translation.key] = translation.value
 
     await GitHubContent.createOrUpdateTranslationFile(
-      props.repo,
+      currentRepo,
       data,
       lang,
       category,
@@ -175,7 +175,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         data = updateNestedValue(newTranslationGroup, lang.code, newTranslationGroup.keyPath, data)
 
         await GitHubContent.createOrUpdateTranslationFile(
-          props.repo,
+          currentRepo,
           data,
           lang.code,
           translationFile.nameDisplay,
@@ -214,7 +214,7 @@ const RepoStoreProvider = (props: Props): JSX.Element => {
         }
 
         await GitHubContent.createOrUpdateTranslationFile(
-          props.repo,
+          currentRepo,
           data,
           translation.lang,
           translationFile.nameDisplay,

@@ -54,7 +54,6 @@ export type TranslationGroup = {
 export type Commit = {
   sha: string
   message: string
-  patch: string
   author: {
     name: string
     email: string
