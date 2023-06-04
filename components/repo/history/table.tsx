@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import RepositoryHistoryTableRow from './table-row'
 
 const RepositoryHistoryTable = () => {
-  const { fetchHistory } = useRepoStore()
+  const { currentBranch, fetchHistory } = useRepoStore()
   const [commits, setCommits] = useState<Commit[]>([])
   const [isLoading, setLoading] = useState<boolean>(true)
   const sortedCommits = commits
@@ -18,11 +18,12 @@ const RepositoryHistoryTable = () => {
 
   useEffect(() => {
     ;(async () => {
+      setLoading(true)
       const res = await fetchHistory()
       setCommits(res)
       setLoading(false)
     })()
-  }, [])
+  }, [currentBranch])
 
   if (isLoading) {
     return <LoadingIndicator />
