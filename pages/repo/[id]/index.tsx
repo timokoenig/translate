@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import HorizontalLine from '@/components/global/horizontal-line'
+import LoadingIndicator from '@/components/global/loading-indicator'
 import EmptyState from '@/components/repo/detail/empt-state'
 import RepositoryDetailHeader from '@/components/repo/detail/header'
 import RepoDetailLayout from '@/components/repo/detail/layout'
@@ -18,7 +19,7 @@ type ContentProps = {
 
 const RepositoryDetailContent = (props: ContentProps) => {
   const [search, setSearch] = useState<string>('')
-  const { translationFiles } = useRepoStore()
+  const { currentRepo, isLoadingContent } = useRepoStore()
 
   return (
     <>
@@ -28,8 +29,16 @@ const RepositoryDetailContent = (props: ContentProps) => {
         search={search}
         setSearch={setSearch}
       />
+
       <HorizontalLine />
-      {translationFiles ? <RepositoryDetailList search={search} /> : <EmptyState />}
+
+      {isLoadingContent ? (
+        <LoadingIndicator />
+      ) : currentRepo.files.length > 0 ? (
+        <RepositoryDetailList search={search} />
+      ) : (
+        <EmptyState />
+      )}
     </>
   )
 }

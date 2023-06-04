@@ -4,10 +4,8 @@ import CreateCategoryModal from './modal/create'
 import CategoryTableRow from './table-row'
 
 const CategoryTable = () => {
-  const { getCategories } = useRepoStore()
-  const sortedCategories = getCategories()
-    // sort by name
-    .sort((a, b) => (a > b ? 1 : a < b ? -1 : 0))
+  const { currentRepo } = useRepoStore()
+  const sortedCategories = currentRepo.categories.sort((a, b) => (a > b ? 1 : a < b ? -1 : 0)) // sort by name
 
   return (
     <>

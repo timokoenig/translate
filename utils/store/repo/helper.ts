@@ -1,4 +1,4 @@
-import { TranslationFileData, TranslationGroup } from '@/utils/models'
+import { Repository, TranslationFile, TranslationFileData, TranslationGroup } from '@/utils/models'
 
 export const deleteNestedValue = (
   path: string[],
@@ -71,4 +71,66 @@ export const updateNestedValue = (
     key in tmpData ? (tmpData[key] as TranslationFileData) : {}
   )
   return tmpData
+}
+
+// Compose translation groups from current repositories translation files
+export const composeTranslationGroups = (repo: Repository): TranslationGroup[] => {
+  let translationGroups: TranslationGroup[] = []
+
+  const mapTranslationGroup = (
+    file: TranslationFile,
+    data: TranslationFileData,
+    groups: TranslationGroup[],
+    keyPath: string[]
+  ): TranslationGroup[] => {
+    let tmpGroups = groups
+
+    Object.keys(data).forEach(key => {
+      const keyData = data[key] as string | TranslationFileData
+
+      let group = tmpGroups.find(obj => obj.key == key)
+      if (!group) {
+        group = {
+          category: file.nameDisplay,
+          key,
+          keyPath: [...keyPath, key],
+          translations: repo.languages.map(lang => ({
+            key,
+            value: '',
+            lang: lang.code,
+          })),
+          children: [],
+        }
+      }
+
+      if (typeof keyData == 'string') {
+        group.translations = [
+          ...group.translations.filter(obj => obj.lang != file.lang),
+          {
+            key,
+            value: keyData,
+            lang: file.lang,
+          },
+        ]
+      } else if (typeof keyData == 'object') {
+        group.children = mapTranslationGroup(file, keyData, group.children, group.keyPath)
+      }
+
+      tmpGroups = [...tmpGroups.filter(obj => obj.key != group?.key), group]
+    })
+
+    return tmpGroups.sort((a, b) =>
+      a.key.toLowerCase() > b.key.toLowerCase()
+        ? 1
+        : a.key.toLowerCase() < b.key.toLowerCase()
+        ? -1
+        : 0
+    )
+  }
+
+  repo.files.forEach(file => {
+    translationGroups = mapTranslationGroup(file, file.data, translationGroups, [])
+  })
+
+  return translationGroups
 }

@@ -19,6 +19,11 @@ export type Repository = {
   owner: {
     login: string
   }
+  contributors: User[]
+  files: TranslationFile[]
+  languages: Language[]
+  categories: string[]
+  branches: Branch[]
 }
 
 export type TranslationFileData = { [key: string]: string | TranslationFileData }

@@ -13,17 +13,15 @@ import { FiPlus } from 'react-icons/fi'
 import CreateTranslationModal from './modal/create'
 
 const Actions = () => {
-  const { getCategories, getLanguages, filter, setFilter, addTranslation } = useRepoStore()
+  const { currentRepo, filter, setFilter, addTranslation } = useRepoStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const languages = getLanguages()
-  const categories = getCategories()
 
   const onChangeCategory = (value: number): void => {
     if (value == -1) {
       setFilter({ ...filter, category: null })
       return
     }
-    const category = categories[value]
+    const category = currentRepo.categories[value]
     setFilter({ ...filter, category })
   }
 
@@ -32,7 +30,7 @@ const Actions = () => {
       setFilter({ ...filter, language: null })
       return
     }
-    const language = languages[value].code
+    const language = currentRepo.languages[value].code
     setFilter({ ...filter, language })
   }
 
@@ -56,13 +54,13 @@ const Actions = () => {
     <Box p={8}>
       <HStack gap={4}>
         <Select
-          value={categories.findIndex(obj => obj == filter.category)}
+          value={currentRepo.categories.findIndex(obj => obj == filter.category)}
           onChange={e => onChangeCategory(Number(e.target.value))}
           w="auto"
           display={{ base: 'none', md: 'flex' }}
         >
           <option value={-1}>All Categories</option>
-          {getCategories().map((obj, index) => (
+          {currentRepo.categories.map((obj, index) => (
             <option key={index} value={index}>
               {obj}
             </option>
@@ -70,13 +68,13 @@ const Actions = () => {
         </Select>
 
         <Select
-          value={languages.findIndex(obj => obj.code == filter.language)}
+          value={currentRepo.languages.findIndex(obj => obj.code == filter.language)}
           onChange={e => onChangeLanguage(Number(e.target.value))}
           w="auto"
           display={{ base: 'none', md: 'flex' }}
         >
           <option value={-1}>All Languages</option>
-          {getLanguages().map((obj, index) => (
+          {currentRepo.languages.map((obj, index) => (
             <option key={index} value={index}>
               {`${obj.emoji} ${obj.name}`}
             </option>

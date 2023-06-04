@@ -18,7 +18,9 @@ const ColumnActions = (props: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isOpenCreate, onOpen: onOpenCreate, onClose: onCloseCreate } = useDisclosure()
   const translationGroup = props.data.getValue() as TranslationGroup
-  const breakpoint = useBreakpoint()
+  const breakpoint = useBreakpoint({
+    fallback: 'md',
+  })
 
   const onAdd = async (key: string, value: string, lang: string, _: string) => {
     setLoading(true)

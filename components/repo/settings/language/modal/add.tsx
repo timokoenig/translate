@@ -23,8 +23,8 @@ import * as Yup from 'yup'
 
 const AddLanguageModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { addLanguage, getLanguages } = useRepoStore()
-  const existingLanguages = getLanguages().map(obj => obj.code)
+  const { addLanguage, currentRepo } = useRepoStore()
+  const existingLanguages = currentRepo.languages.map(obj => obj.code)
   const availableLanguages = languages
     .map(obj => ({ code: obj.code, name: obj.name, emoji: obj.emoji ?? '' }))
     .filter(obj => !existingLanguages.includes(obj.code))

@@ -26,7 +26,7 @@ type Props = {
 
 const RepositoryDetailHeader = (props: Props) => {
   const router = useRouter()
-  const { contributors, branches, currentBranch, setCurrentBranch } = useRepoStore()
+  const { currentRepo, currentBranch, changeCurrentBranch } = useRepoStore()
 
   return (
     <VStack gap={4} w="full" align="flex-start" p={8}>
@@ -64,18 +64,18 @@ const RepositoryDetailHeader = (props: Props) => {
           )}
         </Box>
         <AvatarGroup size="md" max={3} display={{ base: 'none', md: 'block' }}>
-          {contributors.map((contributor, index) => (
+          {currentRepo.contributors.map((contributor, index) => (
             <Avatar key={index} name={contributor.login} src={contributor.avatar_url} />
           ))}
         </AvatarGroup>
       </Stack>
 
       <Select
-        value={branches.findIndex(obj => obj.name == currentBranch?.name)}
-        onChange={e => setCurrentBranch(branches[Number(e.target.value)])}
+        value={currentRepo.branches.findIndex(obj => obj.name == currentBranch?.name)}
+        onChange={e => changeCurrentBranch(currentRepo.branches[Number(e.target.value)])}
         w="auto"
       >
-        {branches.map((obj, index) => (
+        {currentRepo.branches.map((obj, index) => (
           <option key={index} value={index}>
             {`Branch: ${obj.name}`}
           </option>

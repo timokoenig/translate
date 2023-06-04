@@ -22,15 +22,14 @@ import * as Yup from 'yup'
 
 const CreateCategoryModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { addCategory, getCategories } = useRepoStore()
-  const existingCategories = getCategories()
+  const { addCategory, currentRepo } = useRepoStore()
 
   const validationSchema = Yup.object().shape({
     category: Yup.string()
       .min(1, 'Category name must be at least one character long')
       .trim()
       .required('Category name is required')
-      .notOneOf(existingCategories, 'Category name already exists'),
+      .notOneOf(currentRepo.categories, 'Category name already exists'),
   })
 
   const formik = useFormik({

@@ -25,12 +25,12 @@ type Props = {
 }
 
 const LanguageTableRow = (props: Props) => {
-  const { deleteLanguage, getLanguages } = useRepoStore()
+  const { deleteLanguage, currentRepo } = useRepoStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setLoading] = useState<boolean>(false)
 
   // A repo always needs to have at least one language
-  const deleteEnabled = getLanguages().length > 1
+  const deleteEnabled = currentRepo.languages.length > 1
 
   const onDelete = async () => {
     setLoading(true)

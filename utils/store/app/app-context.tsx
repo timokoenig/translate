@@ -12,8 +12,6 @@ type AppStoreContextType = {
 
   remoteRepositories: Repository[]
 
-  fetchGithubRepositories: () => Promise<Repository[]>
-
   setAuthenticated: (value: boolean) => void
 }
 

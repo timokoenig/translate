@@ -4,10 +4,10 @@ import AddLanguageModal from './modal/add'
 import LanguageTableRow from './table-row'
 
 const LanguageTable = () => {
-  const { getLanguages } = useRepoStore()
-  const sortedLanguages = getLanguages()
-    // sort by name
-    .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
+  const { currentRepo } = useRepoStore()
+  const sortedLanguages = currentRepo.languages.sort((a, b) =>
+    a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+  ) // sort by name
 
   return (
     <>

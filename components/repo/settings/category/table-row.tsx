@@ -25,14 +25,14 @@ type Props = {
 }
 
 const CategoryTableRow = (props: Props) => {
-  const { updateCategory, deleteCategory, getCategories } = useRepoStore()
+  const { updateCategory, deleteCategory, currentRepo } = useRepoStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [category, setCategory] = useState<string>(props.category)
   const [isEditing, setEditing] = useState<boolean>(false)
   const [isLoading, setLoading] = useState<boolean>(false)
 
   // A repo always needs to have at least one category
-  const deleteEnabled = getCategories().length > 1
+  const deleteEnabled = currentRepo.categories.length > 1
 
   const onEdit = () => setEditing(true)
 

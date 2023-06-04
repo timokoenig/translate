@@ -28,10 +28,8 @@ type Props = {
 }
 
 const CreateTranslationModal = (props: Props) => {
-  const { getTranslationGroups, getCategories, getLanguages } = useRepoStore()
-  const categories = getCategories()
-  const languages = getLanguages()
-  const existingTranslationKeys = getTranslationGroups().map(obj => obj.key)
+  const { translationGroups, currentRepo } = useRepoStore()
+  const existingTranslationKeys = translationGroups.map(obj => obj.key)
 
   const validationSchema = Yup.object().shape({
     key: Yup.string()
@@ -44,21 +42,21 @@ const CreateTranslationModal = (props: Props) => {
       .trim()
       .required()
       .oneOf(
-        languages.map(obj => obj.code),
+        currentRepo.languages.map(obj => obj.code),
         'Language not allowed'
       ),
     category:
       props.categoryEnabled == false
         ? Yup.string().optional()
-        : Yup.string().trim().required().oneOf(categories, 'Category not allowed'),
+        : Yup.string().trim().required().oneOf(currentRepo.categories, 'Category not allowed'),
   })
 
   const formik = useFormik({
     initialValues: {
       key: '',
       value: '',
-      lang: languages[0].code,
-      category: categories[0],
+      lang: currentRepo.languages[0].code,
+      category: currentRepo.categories[0],
     },
     validationSchema,
     onSubmit: async values => {
@@ -109,7 +107,7 @@ const CreateTranslationModal = (props: Props) => {
             >
               <FormLabel htmlFor="lang">Language</FormLabel>
               <Select id="lang" value={formik.values.lang} onChange={formik.handleChange}>
-                {languages.map((obj, index) => (
+                {currentRepo.languages.map((obj, index) => (
                   <option key={index} value={obj.code}>
                     {obj.emoji} {obj.name}
                   </option>
@@ -126,7 +124,7 @@ const CreateTranslationModal = (props: Props) => {
               >
                 <FormLabel htmlFor="category">Category</FormLabel>
                 <Select id="category" value={formik.values.category} onChange={formik.handleChange}>
-                  {categories.map((obj, index) => (
+                  {currentRepo.categories.map((obj, index) => (
                     <option key={index} value={obj}>
                       {obj}
                     </option>

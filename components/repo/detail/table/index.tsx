@@ -22,12 +22,12 @@ type Props = {
 }
 
 const RepositoryDetailList = (props: Props) => {
-  const { translationFiles, getTranslationGroups, filter } = useRepoStore()
+  const { translationGroups, filter } = useRepoStore()
   const [itemPage, setItemPage] = useState<number>(1)
 
   const filteredTranslationGroup = useMemo(
     () =>
-      getTranslationGroups()
+      translationGroups
         // filter based on addtional filters
         .filter(obj => {
           if (filter.category && filter.category != obj.category) {
@@ -65,7 +65,7 @@ const RepositoryDetailList = (props: Props) => {
           )
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [translationFiles, filter, props]
+    [translationGroups, filter, props]
   )
 
   // Get the count of all visible translations

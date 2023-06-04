@@ -9,7 +9,7 @@ type Props = {
 }
 
 const ColumnValueCell = (props: Props) => {
-  const { filter, getLanguages } = useRepoStore()
+  const { filter, currentRepo } = useRepoStore()
   const { selectedTranslationGroup, setSelectedTranslationGroup, isLoading } = useTranslationStore()
   const translationGroup = props.data.getValue() as TranslationGroup
   if (translationGroup.children.length > 0) {
@@ -37,7 +37,7 @@ const ColumnValueCell = (props: Props) => {
           .sort(translationSorter)
           .map((obj, index) => (
             <HStack key={index} w="full">
-              <Text>{getLanguages().find(lang => lang.code == obj.lang)?.emoji}</Text>
+              <Text>{currentRepo.languages.find(lang => lang.code == obj.lang)?.emoji}</Text>
               <Textarea
                 value={obj.value}
                 isDisabled={isLoading}
@@ -72,7 +72,7 @@ const ColumnValueCell = (props: Props) => {
         .map((obj, index) => (
           <HStack key={index} w="full">
             <Text whiteSpace="initial">
-              {getLanguages().find(lang => lang.code == obj.lang)?.emoji}
+              {currentRepo.languages.find(lang => lang.code == obj.lang)?.emoji}
             </Text>
             <Text whiteSpace="initial" w="full">
               {obj.value}

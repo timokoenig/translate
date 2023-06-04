@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { fetchRepositories } from '@/utils/github/repo'
 import { getSession } from 'next-auth/react'
-import { Octokit } from 'octokit'
 import { useEffect, useState } from 'react'
 import { Repository } from '../../models'
 import { AppStoreContext } from './app-context'
@@ -36,19 +36,8 @@ const AppStoreProvider = (props: Props): JSX.Element => {
     saveLocalRepositories(repos)
   }
 
-  // Fetch all github repositories from the current authenticated user
-  const fetchGithubRepositories = async (): Promise<Repository[]> => {
-    const session = await getSession()
-    if (!session) throw new Error('Invalid session')
-
-    const octokit = new Octokit({ auth: session.accessToken })
-    const res = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser, {
-      per_page: 100,
-    })
-    return res
-  }
   const getRemoteRepositories = async (): Promise<Repository[]> => {
-    const res = await fetchGithubRepositories()
+    const res = await fetchRepositories()
     setRemoteRepositories(res)
     return res
   }
@@ -82,7 +71,6 @@ const AppStoreProvider = (props: Props): JSX.Element => {
         localRepositories,
         setLocalRepositories: setRepositories,
         remoteRepositories,
-        fetchGithubRepositories,
         setAuthenticated,
       }}
     >

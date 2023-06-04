@@ -4,28 +4,26 @@ import {
   Commit,
   Filter,
   Language,
+  Repository,
   Translation,
-  TranslationFile,
   TranslationGroup,
-  User,
 } from '../../models'
 
 type RepoStoreContextType = {
   isLoading: boolean
+  isLoadingContent: boolean
 
   filter: Filter
   setFilter: (filter: Filter) => void
 
-  contributors: User[]
+  currentRepo: Repository
 
-  branches: Branch[]
-  currentBranch: Branch | null
-  setCurrentBranch: (branch: Branch | null) => void
-
-  translationFiles: TranslationFile[] | null
+  currentBranch: Branch
+  changeCurrentBranch: (branch: Branch) => Promise<void>
 
   setupRepository: (lang: string) => Promise<void>
 
+  translationGroups: TranslationGroup[]
   addTranslation: (translation: Translation, lang: string, category: string) => Promise<void>
   updateTranslationGroup: (
     oldTranslationGropu: TranslationGroup,
@@ -35,16 +33,12 @@ type RepoStoreContextType = {
 
   fetchHistory: () => Promise<Commit[]>
 
-  getCategories: () => string[]
   addCategory: (category: string) => Promise<void>
   updateCategory: (oldCategory: string, newCategory: string) => Promise<void>
   deleteCategory: (category: string) => Promise<void>
 
-  getLanguages: () => Language[]
   addLanguage: (language: Language) => Promise<void>
   deleteLanguage: (language: Language) => Promise<void>
-
-  getTranslationGroups: () => TranslationGroup[]
 }
 
 export const RepoStoreContext = createContext<RepoStoreContextType | undefined>(undefined)

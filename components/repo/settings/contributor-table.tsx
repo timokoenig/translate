@@ -3,15 +3,16 @@ import { Box, Heading, VStack } from '@chakra-ui/react'
 import ContributorTableRow from './contributor-table-row'
 
 const ContributorTable = () => {
-  const { contributors } = useRepoStore()
+  const { currentRepo } = useRepoStore()
 
   return (
     <Box>
       <Heading as="h2" size="md" px={8} pt={8}>
-        {contributors.length} {contributors.length > 1 ? 'Contributors' : 'Contributor'}
+        {currentRepo.contributors.length}{' '}
+        {currentRepo.contributors.length > 1 ? 'Contributors' : 'Contributor'}
       </Heading>
       <VStack w="full" p={8}>
-        {contributors.map((user, index) => (
+        {currentRepo.contributors.map((user, index) => (
           <ContributorTableRow key={index} user={user} />
         ))}
       </VStack>
