@@ -2,6 +2,7 @@ import * as Form from '@/components/global/form'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
   Button,
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
@@ -71,8 +72,10 @@ const CreateCategoryModal = () => {
             </ModalBody>
 
             <ModalFooter>
-              <Form.Button label="Close" variant="outline" onClick={onClose} />
-              <Form.Button label="Add Category" variant="primary" />
+              <HStack alignItems="right">
+                <Form.Button label="Close" variant="outline" onClick={onClose} />
+                <Form.Button label="Add Category" variant="primary" />
+              </HStack>
             </ModalFooter>
           </ModalContent>
         </Modal>

@@ -1,6 +1,7 @@
 import * as Form from '@/components/global/form'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
@@ -109,8 +110,10 @@ const CreateTranslationModal = (props: Props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Form.Button label="Close" variant="outline" onClick={props.onClose} />
-            <Form.Button label="Add Key" variant="primary" />
+            <HStack alignItems="right">
+              <Form.Button label="Close" variant="outline" onClick={props.onClose} />
+              <Form.Button label="Add Key" variant="primary" />
+            </HStack>
           </ModalFooter>
         </ModalContent>
       </Modal>

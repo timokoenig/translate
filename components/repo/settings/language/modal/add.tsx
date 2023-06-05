@@ -3,6 +3,7 @@ import languages from '@/utils/resources/languages.json'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
   Button,
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
@@ -88,8 +89,10 @@ const AddLanguageModal = () => {
             </ModalBody>
 
             <ModalFooter>
-              <Form.Button label="Close" variant="outline" onClick={onClose} />
-              <Form.Button label="Add Language" variant="primary" />
+              <HStack alignItems="right">
+                <Form.Button label="Close" variant="outline" onClick={onClose} />
+                <Form.Button label="Add Language" variant="primary" />
+              </HStack>
             </ModalFooter>
           </ModalContent>
         </Modal>
