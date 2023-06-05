@@ -3,7 +3,6 @@
 </div>
 
 <br/>
-<br/>
 
 <div align="center">
   Lightweight simple translation platform to manage your localizations
