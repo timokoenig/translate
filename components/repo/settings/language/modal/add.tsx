@@ -1,23 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import * as Form from '@/components/global/form'
 import languages from '@/utils/resources/languages.json'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
   Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Stack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useFormik } from 'formik'
-import { useEffect } from 'react'
+import { Formik, FormikContextType } from 'formik'
+import { useEffect, useRef } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import * as Yup from 'yup'
 
@@ -36,30 +32,29 @@ const AddLanguageModal = () => {
       .notOneOf(existingLanguages, 'Language already exists'),
   })
 
-  const formik = useFormik({
-    initialValues: {
-      language: availableLanguages[0].code,
-    },
-    validationSchema,
-    onSubmit: async values => {
-      if (!formik.isValid) return
-      try {
-        const newLanguage = languages.find(obj => obj.code == values.language)
-        if (!newLanguage) return
-        await addLanguage({
-          code: newLanguage.code,
-          name: newLanguage.name,
-          emoji: newLanguage.emoji ?? '',
-        })
-        onClose()
-      } catch (err: unknown) {
-        console.log(err)
-      }
-    },
-  })
+  const initialValues: Yup.Asserts<typeof validationSchema> = {
+    language: availableLanguages[0].code,
+  }
+
+  const onSubmit = async (values: Yup.Asserts<typeof validationSchema>) => {
+    try {
+      const newLanguage = languages.find(obj => obj.code == values.language)
+      if (!newLanguage) return
+      await addLanguage({
+        code: newLanguage.code,
+        name: newLanguage.name,
+        emoji: newLanguage.emoji ?? '',
+      })
+      onClose()
+    } catch (err: unknown) {
+      console.log(err)
+    }
+  }
+
+  const formRef = useRef<FormikContextType<Yup.Asserts<typeof validationSchema>>>(null)
 
   useEffect(() => {
-    formik.resetForm()
+    formRef.current?.resetForm()
   }, [isOpen])
 
   return (
@@ -68,46 +63,37 @@ const AddLanguageModal = () => {
         Add Language
       </Button>
 
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Language</ModalHeader>
+      <Formik
+        innerRef={formRef}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Modal onClose={onClose} isOpen={isOpen} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Add Language</ModalHeader>
 
-          <ModalBody>
-            <Stack spacing={4}>
-              <FormControl
-                isRequired
-                isDisabled={formik.isSubmitting}
-                isInvalid={formik.errors.language !== undefined && formik.touched.language}
-              >
-                <FormLabel htmlFor="language">Language</FormLabel>
-                <Select id="language" value={formik.values.language} onChange={formik.handleChange}>
-                  {availableLanguages.map((obj, index) => (
-                    <option key={index} value={obj.code}>
-                      {obj.emoji} {obj.name}
-                    </option>
-                  ))}
-                </Select>
-                <FormErrorMessage>{formik.errors.language}</FormErrorMessage>
-              </FormControl>
-            </Stack>
-          </ModalBody>
+            <ModalBody>
+              <Stack spacing={4}>
+                <Form.Select
+                  id="language"
+                  label="Language"
+                  values={availableLanguages.map(obj => ({
+                    key: obj.code,
+                    value: `${obj.emoji} ${obj.name}`,
+                  }))}
+                />
+              </Stack>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button onClick={onClose} variant="outline" disabled={formik.isSubmitting}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => formik.handleSubmit()}
-              ml={4}
-              isLoading={formik.isSubmitting}
-            >
-              Add Language
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            <ModalFooter>
+              <Form.Button label="Close" variant="outline" onClick={onClose} />
+              <Form.Button label="Add Language" variant="primary" />
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Formik>
     </>
   )
 }

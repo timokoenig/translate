@@ -130,7 +130,7 @@ const ColumnActions = (props: Props) => {
         isOpen={isOpenCreate}
         onClose={onCloseCreate}
         onAdd={onAdd}
-        categoryEnabled={false}
+        translationCategory={translationGroup.category}
       />
       <IconButton
         aria-label="Edit"

@@ -1,30 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import * as Form from '@/components/global/form'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
 import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Stack,
-  Textarea,
 } from '@chakra-ui/react'
-import { useFormik } from 'formik'
-import { useEffect } from 'react'
+import { Formik, FormikContextType } from 'formik'
+import { useEffect, useRef } from 'react'
 import * as Yup from 'yup'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
   onAdd: (key: string, value: string, lang: string, category: string) => Promise<void>
-  categoryEnabled?: boolean
+  translationCategory?: string
 }
 
 const CreateTranslationModal = (props: Props) => {
@@ -45,112 +38,83 @@ const CreateTranslationModal = (props: Props) => {
         currentRepo.languages.map(obj => obj.code),
         'Language not allowed'
       ),
-    category:
-      props.categoryEnabled == false
-        ? Yup.string().optional()
-        : Yup.string().trim().required().oneOf(currentRepo.categories, 'Category not allowed'),
+    category: props.translationCategory
+      ? Yup.string().optional()
+      : Yup.string().trim().required().oneOf(currentRepo.categories, 'Category not allowed'),
   })
 
-  const formik = useFormik({
-    initialValues: {
-      key: '',
-      value: '',
-      lang: currentRepo.languages[0].code,
-      category: currentRepo.categories[0],
-    },
-    validationSchema,
-    onSubmit: async values => {
-      if (!formik.isValid) return
-      try {
-        await props.onAdd(values.key, values.value, values.lang, values.category)
-        props.onClose()
-      } catch (err: unknown) {
-        console.log(err)
-      }
-    },
-  })
+  const initialValues: Yup.Asserts<typeof validationSchema> = {
+    key: '',
+    value: '',
+    lang: currentRepo.languages[0].code,
+    category: currentRepo.categories[0],
+  }
+
+  const onSubmit = async (values: Yup.Asserts<typeof validationSchema>) => {
+    try {
+      await props.onAdd(
+        values.key,
+        values.value ?? '',
+        values.lang,
+        values.category ?? props.translationCategory ?? ''
+      )
+      props.onClose()
+    } catch (err: unknown) {
+      console.log(err)
+    }
+  }
+
+  const formRef = useRef<FormikContextType<Yup.Asserts<typeof validationSchema>>>(null)
 
   useEffect(() => {
-    formik.resetForm()
+    formRef.current?.resetForm()
   }, [props.isOpen])
 
   return (
-    <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Add Translation</ModalHeader>
+    <Formik
+      innerRef={formRef}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Translation</ModalHeader>
 
-        <ModalBody>
-          <Stack spacing={4}>
-            <FormControl
-              isRequired
-              isDisabled={formik.isSubmitting}
-              isInvalid={formik.errors.key !== undefined && formik.touched.key}
-            >
-              <FormLabel htmlFor="key">Key name</FormLabel>
-              <Input id="key" value={formik.values.key} onChange={formik.handleChange} />
-              <FormErrorMessage>{formik.errors.key}</FormErrorMessage>
-            </FormControl>
-            <FormControl
-              isDisabled={formik.isSubmitting}
-              isInvalid={formik.errors.value !== undefined && formik.touched.value}
-            >
-              <FormLabel htmlFor="value">Value</FormLabel>
-              <Textarea id="value" value={formik.values.value} onChange={formik.handleChange} />
-              <FormErrorMessage>{formik.errors.value}</FormErrorMessage>
-            </FormControl>
+          <ModalBody>
+            <Stack spacing={4}>
+              <Form.Input id="key" label="Key name" />
+              <Form.Input id="value" label="Value" />
+              <Form.Select
+                id="lang"
+                label="Language"
+                values={currentRepo.languages.map(obj => ({
+                  key: obj.code,
+                  value: `${obj.emoji} ${obj.name}`,
+                }))}
+              />
 
-            <FormControl
-              isRequired
-              isDisabled={formik.isSubmitting}
-              isInvalid={formik.errors.lang !== undefined && formik.touched.lang}
-            >
-              <FormLabel htmlFor="lang">Language</FormLabel>
-              <Select id="lang" value={formik.values.lang} onChange={formik.handleChange}>
-                {currentRepo.languages.map((obj, index) => (
-                  <option key={index} value={obj.code}>
-                    {obj.emoji} {obj.name}
-                  </option>
-                ))}
-              </Select>
-              <FormErrorMessage>{formik.errors.lang}</FormErrorMessage>
-            </FormControl>
+              {props.translationCategory == undefined && (
+                <Form.Select
+                  id="category"
+                  label="Category"
+                  values={currentRepo.categories.map(obj => ({
+                    key: obj,
+                    value: obj,
+                  }))}
+                />
+              )}
+            </Stack>
+          </ModalBody>
 
-            {(props.categoryEnabled == undefined || props.categoryEnabled == true) && (
-              <FormControl
-                isRequired
-                isDisabled={formik.isSubmitting}
-                isInvalid={formik.errors.category !== undefined && formik.touched.category}
-              >
-                <FormLabel htmlFor="category">Category</FormLabel>
-                <Select id="category" value={formik.values.category} onChange={formik.handleChange}>
-                  {currentRepo.categories.map((obj, index) => (
-                    <option key={index} value={obj}>
-                      {obj}
-                    </option>
-                  ))}
-                </Select>
-                <FormErrorMessage>{formik.errors.category}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Stack>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button onClick={props.onClose} variant="outline" disabled={formik.isSubmitting}>
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => formik.handleSubmit()}
-            ml={4}
-            isLoading={formik.isSubmitting}
-          >
-            Add Key
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          <ModalFooter>
+            <Form.Button label="Close" variant="outline" onClick={props.onClose} />
+            <Form.Button label="Add Key" variant="primary" />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Formik>
   )
 }
 
