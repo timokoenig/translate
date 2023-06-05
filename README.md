@@ -2,11 +2,17 @@
   <img src="./assets/translate-logo.png" width="300px" alt="Logo Translate" />
 </div>
 
-<div align="center" style="font-size: 20px; margin-bottom: 49px">
+<br/>
+<br/>
+
+<div align="center">
   Lightweight simple translation platform to manage your localizations
 </div>
 
-<div align="center" style="font-size: 20px; margin-bottom: 49px">
+<br/>
+<br/>
+
+<div align="center">
   <img src="./public/browser-mockup-dark.png" width="400px" alt="Translate Preview" />
 </div>
 
