@@ -105,23 +105,34 @@ export const createOrUpdateTranslationFile = async (
       : `[Translate] Create translation ${langEmoji} ${category}`,
   ]
 
+  let didModifyVersion = false
   const file = repo.files.find(obj => obj.path == path)
   if (file) {
     const dataDiff = TranslationHelper.getTranslationDataDiff(file.data, data)
     if (dataDiff.added.length > 0) {
       message.push('Added')
       dataDiff.added.forEach(key => message.push(`+ ${key}`))
+      didModifyVersion = true
     }
     if (dataDiff.modified.length > 0) {
       message.push('\n')
       message.push('Modified')
       dataDiff.modified.forEach(key => message.push(`~ ${key}`))
+      didModifyVersion = true
     }
     if (dataDiff.deleted.length > 0) {
       message.push('\n')
       message.push('Deleted')
       dataDiff.deleted.forEach(key => message.push(`- ${key}`))
+      didModifyVersion = true
     }
+  }
+
+  if (!didModifyVersion) {
+    // User did not change anything in this version; skip update
+    // This happens when a user makes a single change to a language and the application tries to
+    // commit the other languages as well
+    return
   }
 
   const octokit = new Octokit({ auth: session.accessToken })
