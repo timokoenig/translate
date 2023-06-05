@@ -32,7 +32,7 @@ const RepositoryHistoryTable = () => {
   return (
     <TableContainer margin={0} padding={2}>
       <Table variant="simple" margin={0}>
-        <Thead>
+        <Thead display={{ base: 'none', md: 'table-header-group' }}>
           <Tr>
             <Th>Message</Th>
             <Th>Date</Th>
