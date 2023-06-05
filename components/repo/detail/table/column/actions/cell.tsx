@@ -1,11 +1,14 @@
 import ConfirmationModal from '@/components/global/modal/confirmation'
 import { TranslationGroup } from '@/utils/models'
 import { useRepoStore } from '@/utils/store/repo/repo-context'
+import { useSettingsStore } from '@/utils/store/settings/settings-context'
 import { useTranslationStore } from '@/utils/store/translation/translation-context'
 import { AddIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Text, useBreakpoint, useDisclosure } from '@chakra-ui/react'
 import { CellContext } from '@tanstack/react-table'
+import { BsTranslate } from 'react-icons/bs'
 import CreateTranslationModal from '../../../modal/create'
+import TranslateModal from '../../../modal/translate'
 
 type Props = {
   data: CellContext<TranslationGroup, unknown>
@@ -13,10 +16,16 @@ type Props = {
 
 const ColumnActions = (props: Props) => {
   const { deleteTranslationGroup, updateTranslationGroup } = useRepoStore()
+  const { hasTranslationApiKey } = useSettingsStore()
   const { selectedTranslationGroup, setSelectedTranslationGroup, isLoading, setLoading } =
     useTranslationStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isOpenCreate, onOpen: onOpenCreate, onClose: onCloseCreate } = useDisclosure()
+  const {
+    isOpen: isOpenTranslate,
+    onOpen: onOpenTranslate,
+    onClose: onCloseTranslate,
+  } = useDisclosure()
   const translationGroup = props.data.getValue() as TranslationGroup
   const breakpoint = useBreakpoint({
     fallback: 'md',
@@ -80,6 +89,8 @@ const ColumnActions = (props: Props) => {
     setSelectedTranslationGroup(null)
   }
 
+  const translateFeatureEnabled = translationGroup.children.length == 0 && hasTranslationApiKey()
+
   if (
     selectedTranslationGroup &&
     selectedTranslationGroup.keyPath.join('.') == translationGroup.keyPath.join('.')
@@ -116,6 +127,23 @@ const ColumnActions = (props: Props) => {
 
   return (
     <HStack className="tr-actions" display={isLoading || breakpoint == 'base' ? 'block' : 'none'}>
+      {translateFeatureEnabled && (
+        <IconButton
+          aria-label="Translate"
+          icon={<BsTranslate />}
+          variant="ghost"
+          isLoading={isLoading}
+          onClick={e => {
+            e.preventDefault()
+            onOpenTranslate()
+          }}
+        />
+      )}
+      <TranslateModal
+        isOpen={isOpenTranslate}
+        onClose={onCloseTranslate}
+        translationGroup={translationGroup}
+      />
       <IconButton
         aria-label="Add"
         icon={<AddIcon />}

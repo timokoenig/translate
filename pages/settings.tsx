@@ -1,5 +1,6 @@
 import HorizontalLine from '@/components/global/horizontal-line'
 import Layout from '@/components/layout'
+import AutomaticTranslation from '@/components/settings/automatic-translation'
 import SettingsHeader from '@/components/settings/header'
 import Preferences from '@/components/settings/preferences'
 import { useAppStore } from '@/utils/store/app/app-context'
@@ -22,6 +23,8 @@ const Settings = () => {
       </Container>
       <HorizontalLine />
       <Preferences />
+      <HorizontalLine />
+      <AutomaticTranslation />
       <HorizontalLine />
       <Container py={8}>
         <Button variant="primary" w="full" onClick={onSignOut}>

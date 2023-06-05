@@ -24,6 +24,8 @@ GITHUB_ID=xxx
 GITHUB_SECRET=xxx
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=xxx
+NEXT_PUBLIC_SECURE_LOCAL_STORAGE_HASH_KEY=xxx
+NEXT_PUBLIC_SECURE_LOCAL_STORAGE_PREFIX=translate
 ```
 
 Then run the following commands to install and build the application.
