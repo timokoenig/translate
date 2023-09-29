@@ -9,10 +9,10 @@ export const fetchRepositories = async (): Promise<Repository[]> => {
   if (!session) throw new Error('Invalid session')
 
   const octokit = new Octokit({ auth: session.accessToken })
-  const res = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser, {
+  const res = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser as any, {
     per_page: 100,
   })
-  return res.map(obj => ({
+  return res.map((obj: any) => ({
     ...obj,
     contributors: [],
     files: [],
