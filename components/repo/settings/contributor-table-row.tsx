@@ -9,8 +9,11 @@ const ContributorTableRow = (props: Props) => {
   return (
     <HStack gap={14} w="full">
       <HStack>
-        <Avatar size="md" name={props.user.login} src={props.user.avatar_url} />
-        <Heading as="h3" size="s">
+        <Avatar.Root size="md">
+          <Avatar.Fallback name={props.user.login} />
+          {/* <AvatarImage src={props.user.avatar_url} /> */}
+        </Avatar.Root>
+        <Heading as="h3" size="sm">
           {props.user.login}
         </Heading>
       </HStack>

@@ -47,7 +47,7 @@ const RepositoryDetailContent = (props: ContentProps) => {
         <Heading as="h2" size="md" mb={8}>
           Others
         </Heading>
-        <Button variant="primary" onClick={onRemoveRepo}>
+        <Button variant="solid" onClick={onRemoveRepo}>
           Remove Repository
         </Button>
       </Box>

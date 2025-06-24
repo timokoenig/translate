@@ -11,7 +11,18 @@ const Preferences = () => {
         </Heading>
         <HStack w="full">
           <Text flex={1}>Dark / Light Mode</Text>
-          <Switch size="lg" onChange={toggleColorMode} isChecked={newColorMode == 'light'} />
+          <Switch.Root
+            size="lg"
+            checked={newColorMode === "light"}
+            onCheckedChange={() => {
+              toggleColorMode()
+            }}
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+          </Switch.Root>
         </HStack>
       </VStack>
     </Container>

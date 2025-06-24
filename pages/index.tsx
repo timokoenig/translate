@@ -8,8 +8,8 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react'
+import { useColorModeValue } from '@chakra-ui/system'
 import { NextPageContext } from 'next'
 import { getSession } from 'next-auth/react'
 
@@ -17,8 +17,8 @@ const Index = () => {
   const { setMobileMenuOpen } = useAppStore()
   return (
     <Layout>
-      <Container as={SimpleGrid} maxW={'xl'} spacing={10} mt={10}>
-        <Stack spacing={2}>
+      <Container as={SimpleGrid} maxW={'xl'} gap={10} mt={10}>
+        <Stack gap={2}>
           <Heading
             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}
             textAlign="center"
@@ -38,7 +38,7 @@ const Index = () => {
             Lightweight simple translation platform to manage your localizations
           </Heading>
           <Center py={8}>
-            <Button variant="primary" onClick={() => setMobileMenuOpen(true)}>
+            <Button variant="solid" onClick={() => setMobileMenuOpen(true)}>
               Select Repository
             </Button>
           </Center>

@@ -27,7 +27,7 @@ const Settings = () => {
       <AutomaticTranslation />
       <HorizontalLine />
       <Container py={8}>
-        <Button variant="primary" w="full" onClick={onSignOut}>
+        <Button variant="solid" w="full" onClick={onSignOut}>
           Sign Out
         </Button>
       </Container>

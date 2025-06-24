@@ -6,8 +6,6 @@ import {
   Heading,
   Input,
   InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Link,
   Text,
   VStack,
@@ -50,28 +48,34 @@ const AutomaticTranslation = () => {
           to enable the translation feature. With a click on a button you can automatically
           translate single translations.
         </Text>
-        <InputGroup>
-          <InputLeftElement>
-            <BsTranslate />
-          </InputLeftElement>
+        <InputGroup
+          startElement={<BsTranslate />}
+          startElementProps={{ pointerEvents: "none" }}
+          endElement={
+            isDirty ? (
+              <Button h="1.75rem" size="sm" onClick={onSaveApiKey}>
+                save
+              </Button>
+            ) : apiKey.length > 0 ? (
+              <CheckIcon color="green.500" />
+            ) : null
+          }
+          endElementProps={isDirty ? { width: "4rem" } : undefined}
+        >
           <Input
-            value={isDirty ? apiKey : apiKey == '' ? '' : `${apiKey.slice(0, 8)}...`}
+            value={
+              isDirty
+                ? apiKey
+                : apiKey === ""
+                ? ""
+                : `${apiKey.slice(0, 8)}…`
+            }
             placeholder="Enter your Google Translate API Key"
             onClick={onFokusInput}
             onChange={e => onChangeApiKey(e.target.value.trim())}
+            ps="2rem"
+            pe={isDirty ? "4rem" : undefined}
           />
-          {isDirty && (
-            <InputRightElement width="4rem">
-              <Button onClick={onSaveApiKey} h="1.75rem" size="sm">
-                save
-              </Button>
-            </InputRightElement>
-          )}
-          {apiKey.length > 0 && !isDirty && (
-            <InputRightElement>
-              <CheckIcon color="green.500" />
-            </InputRightElement>
-          )}
         </InputGroup>
         <Text fontSize={12}>
           (Note: Please read the{' '}

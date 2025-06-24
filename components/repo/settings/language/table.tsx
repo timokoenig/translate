@@ -1,5 +1,5 @@
 import { useRepoStore } from '@/utils/store/repo/repo-context'
-import { Box, HStack, Heading, Table, TableContainer, Tbody } from '@chakra-ui/react'
+import { Box, HStack, Heading, Table } from '@chakra-ui/react'
 import AddLanguageModal from './modal/add'
 import LanguageTableRow from './table-row'
 
@@ -20,15 +20,15 @@ const LanguageTable = () => {
           <AddLanguageModal />
         </HStack>
       </Box>
-      <TableContainer m={0} mb={8} p={2}>
-        <Table variant="simple" margin={0}>
-          <Tbody>
-            {sortedLanguages.map((lang, index) => (
-              <LanguageTableRow key={index} language={lang} />
+      <Box m={0} mb={8} p={2} overflowX="auto">
+        <Table.Root variant='line' m={0}>
+          <Table.Body>
+            {sortedLanguages.map((lang, idx) => (
+              <LanguageTableRow key={idx} language={lang} />
             ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+          </Table.Body>
+        </Table.Root>
+      </Box>
     </>
   )
 }

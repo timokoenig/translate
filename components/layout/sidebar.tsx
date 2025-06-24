@@ -19,7 +19,6 @@ import { useRouter } from 'next/router'
 import { FaGithub } from 'react-icons/fa'
 import { FiPlus, FiSettings } from 'react-icons/fi'
 import License from '../global/license'
-import SupportButton from '../global/support-button'
 import MenuItem from './menu-item'
 
 const Sidebar = () => {
@@ -129,7 +128,7 @@ const Sidebar = () => {
               Settings
             </Button>
           </Box>
-          <SupportButton w="full" />
+          {/* <SupportButton w="full" /> */}
           <Box w="full">
             <Button
               as={Link}
